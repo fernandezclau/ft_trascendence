@@ -1,0 +1,99 @@
+
+.tournament-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+.tournament-container h1, .tournament-container h2 {
+    text-align: center;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    font-size: 1.1em;
+
+}
+.form-group select, .form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+.tournament-container .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+    background-color: #004d99;
+}
+.tournament-container .btn:hover {
+    background-color: #fff;
+}
+.toggle-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.toggle-options label {
+    font-size: 1.1em;
+}
+.toggle-options input {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tabla para equipos */
+        .team-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .team-table td, .team-table th {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #444;
+            background-color: #333;
+        }
+
+        .team-table td {
+            cursor: pointer;
+        }
+
+        .team-table td.dragging {
+            background-color: #888;
+        }
+
+        .team-table th {
+            background-color: #444;
+        }
+
+        .player {
+            padding: 5px;
+            margin: 5px;
+            background-color: #444;
+            border-radius: 4px;
+            cursor: move;
+        }
+
+        .card {
+            background-color: #2c2f3a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .table {
+            color: #fff;
+        }
+        .table thead {
+            background-color: #444;
+        }

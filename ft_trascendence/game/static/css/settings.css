@@ -1,0 +1,202 @@
+/* MAIN CONTAINER */
+.settings {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* HEADER */
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.settings-header-title {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.settings-header-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.settings-header-icons-elem {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 5px;
+}
+
+/* GAME CUSTOMIZATION */
+.settings-options {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    width: 60%;
+}
+
+/* -- BALL SIZE -- */
+
+/* progress bar */
+.form-range {
+    width: 100%;
+    appearance: none;
+    height: 8px;
+    border-radius: 10px;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 10px;
+}
+
+.form-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #000;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+.form-range:active::-webkit-slider-thumb {
+    background: #000;
+}
+
+/* progress bar labels */
+.size-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.size-labels span {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* -- BALL SPEED -- */
+.ball-speed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.speed-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.speed-labels span {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* -- COLOR PICKER -- */
+.color-options {
+    display: flex;
+    justify-content: center;
+    gap: 13px;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.color-option.selected {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.8);
+    border: 2px solid #fff;
+}
+
+.color-option:hover {
+    transform: scale(1.2);
+}
+
+/* -- BACKGROUND PICKER -- */
+.background-picker {
+    margin-top: 20px;
+}
+
+.background-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.background-option {
+    width: auto;
+    height: auto;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.background-option:hover {
+    transform: scale(1.1);
+    border: 2px solid #fff;
+}
+
+.background-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.background-option.selected {
+    border: 3px solid #ff6347;
+}
+
+/* PROFILE EDITOR */
+.settings-profile-editor {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.settings-header-title {
+    display: flex;
+    align-items: left;
+}
+
+.settings-profile-editor-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 30%;
+}
+
+.settings-profile-editor-item label{
+    display:flex;
+    align-items: left;
+    margin: 5px;
+    font-weight: bold;
+}
+
+.settings-profile-editor button{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+

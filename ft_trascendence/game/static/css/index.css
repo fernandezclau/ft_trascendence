@@ -1,0 +1,20 @@
+* {
+ font-family: "Inter", sans-serif;
+}
+/* MENU ITEMS LINKS */
+.btn-link
+{
+    text-decoration: none;
+}
+
+/* LANGUAGE ICON */
+.language-flag-icon
+{
+    width: 25px;
+    height: auto;
+}
+
+/* CONTENT CONTAINER*/
+.content-container{
+    margin: 20px;
+}

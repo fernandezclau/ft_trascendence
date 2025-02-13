@@ -1,0 +1,77 @@
+<div class="home-container">
+    <div class="container my-5">
+        <h2 class="text-black">Selecciona el número de jugadores</h2>
+
+        <!-- Botones de selección de jugadores -->
+        <div class="player-selection">
+            <button class="btn btn-primary" onclick="selectPlayers(2)">2 Jugadores</button>
+            <button class="btn btn-secondary" onclick="selectPlayers(3)">3 Jugadores</button>
+            <button class="btn btn-success" onclick="selectPlayers(4)">4 Jugadores</button>
+        </div>
+
+        <!-- Muestra el número de jugadores seleccionados -->
+        <div class="my-3">
+            Jugadores seleccionados: <span id="playerCount">0</span>
+        </div>
+
+        <!-- Botón para comenzar el juego -->
+        <button class="btn btn-danger" id="startGameBtn" disabled onclick="startGame()">Iniciar Juego</button>
+        <!-- Modal para introducir el nombre y boost -->
+        <div class="modal fade" id="playerModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Jugador <span id="playerNumber"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="playerName" class="form-label">Nombre del jugador:</label>
+                        <input type="text" id="playerName" class="form-control" required>
+
+                        <h6 class="mt-3">Selecciona tu boost:</h6>
+                        <div class="boost-selection">
+                            <span class="boost-option" onclick="selectBoost('Velocidad', this)">Velocidad</span>
+                            <span class="boost-option" onclick="selectBoost('Fuerza', this)">Fuerza</span>
+                            <span class="boost-option" onclick="selectBoost('Defensa', this)">Defensa</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" onclick="savePlayerData()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marcador -->
+    <div class="scoreboard">
+        <div>
+            <h3>Jugador 1</h3>
+            <div id="scorePlayer1" class="score">0</div>
+        </div>
+        <div>
+            <h3>Jugador 2</h3>
+            <div id="scorePlayer2" class="score">0</div>
+        </div>
+    </div>
+
+    <!-- Zona de Juego -->
+    <div class="game-container">
+        <!-- Botones de hechizos (izquierda) -->
+        <div class="spells-container">
+            <button class="spell-btn" onclick="applySpell('slow')">🌀 Lento</button>
+            <button class="spell-btn" onclick="applySpell('fast')">⚡ Rápido</button>
+            <button class="spell-btn" onclick="applySpell('curve')">🔄 Curva</button>
+        </div>
+
+        <!-- Canvas -->
+        <canvas id="pongCanvas" width="800" height="400"></canvas>
+
+        <!-- Botones de hechizos (derecha) -->
+        <div class="spells-container">
+            <button class="spell-btn" onclick="applySpell('reverse')">🔄 Invertir</button>
+            <button class="spell-btn" onclick="applySpell('big')">⬆️ Aumentar</button>
+            <button class="spell-btn" onclick="applySpell('small')">⬇️ Reducir</button>
+        </div>
+    </div>
+</div>
