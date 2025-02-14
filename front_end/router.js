@@ -1,69 +1,79 @@
 
+/* MAIN FUNCTION */
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializamos el router
-    initializeRouter();
-    console.log("Inicializado...")
-});
 
-// Función para inicializar el router
-function initializeRouter() {
-    // Escucha los cambios de URL sin recargar la página
     window.addEventListener('popstate', handleRouteChange);
-
-    // Controla la ruta actual al cargar la página
     handleRouteChange();
-}
+
+});
 
 // Función para manejar el cambio de ruta
 function handleRouteChange() {
-    const path = window.location.hash || "#/home";  // Usa el hash (#) para determinar la ruta
+    const path = window.location.hash || "/#/home";  // Usa el hash (#) para determinar la ruta
 
     // Mostrar contenido basado en la ruta actual
     switch (path) {
-        case '#/home':
+        case '/#/home':
             loadHomePage();
             break;
-        case '#/tournament':
+        case '/#/tournament':
             loadTournamentPage();
             break;
-        case '#/dashboard':
+        case '/#/dashboard':
             loadDashboardPage();
             break;
-        case '#/info':
+        case '/#/info':
             loadInfoPage();
             break;
-        case '#/login':
+        case '/#/login':
             loadLoginPage();
             break;
-        case '#/settings':
+        case '/#/settings':
             loadSettingsPage();
             break;
         default:
-            loadHomePage(); // Ruta predeterminada
+            loadHomePage();
             break;
     }
 }
 
-// Función para cargar el contenido de la página de inicio
+/* HOME PAGE */
 function loadHomePage() {
-    fetch('pages/home.html')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al cargar el archivo HTML');
-        }
-        return response.text();
-    })
-    .then(data => {
-        document.getElementById('content-container').innerHTML = data;
-    })
-    .catch(error => {
-        console.error('Hubo un problema con la carga del contenido:', error);
-    });
+    loadPage('pages/home.html')
 }
 
-// Función para cargar el contenido de la página de crear torneo
+/* TOURNAMENT PAGE */
 function loadTournamentPage() {
-    fetch('pages/tournament.html')
+    loadPage('pages/tournament.html')
+}
+
+/* DASHBOARD PAGE */
+function loadDashboardPage() {
+    loadPage('pages/dashboard.html')
+}
+
+/* INFO PAGE */
+function loadInfoPage() {
+    loadPage('pages/info.html')
+}
+
+/* LOGIN PAGE */
+function loadLoginPage() {
+    loadPage('pages/login.html')
+}
+
+/* SETTINGS PAGE */
+function loadSettingsPage() {
+    loadPage('pages/settings.html')
+}
+
+function loadNotFoundPage() {
+    loadPage('pages/not_found.html')
+}
+
+/* GENERIC LOADING FUNCTION */
+function loadPage(path) {
+    fetch(path)
     .then(response => {
         if (!response.ok) {
             throw new Error('Error al cargar el archivo HTML');
@@ -76,36 +86,4 @@ function loadTournamentPage() {
     .catch(error => {
         console.error('Hubo un problema con la carga del contenido:', error);
     });
-}
-
-// Función para cargar el contenido del dashboard
-function loadDashboardPage() {
-    document.getElementById('content-container').innerHTML = `
-        <h1>Dashboard</h1>
-        <p>Revisa tus estadísticas y detalles del torneo.</p>
-    `;
-}
-
-// Función para cargar la página de "How to play?"
-function loadInfoPage() {
-    document.getElementById('content-container').innerHTML = `
-        <h1>How to Play?</h1>
-        <p>Instrucciones para jugar Pong.</p>
-    `;
-}
-
-// Función para cargar la página de inicio de sesión
-function loadLoginPage() {
-    document.getElementById('content-container').innerHTML = `
-        <h1>Inicio de Sesión</h1>
-        <p>Por favor, ingresa para continuar.</p>
-    `;
-}
-
-// Función para cargar la página de configuración
-function loadSettingsPage() {
-    document.getElementById('content-container').innerHTML = `
-        <h1>Configuración</h1>
-        <p>Aquí puedes cambiar la configuración de tu cuenta.</p>
-    `;
 }
