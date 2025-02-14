@@ -1,13 +1,13 @@
-{% load static %}
 <div class="settings">
     <!-- Sound/ Dark Mode -->
     <div class="settings-header">
         <h2 class="settings-header-title">Game Customization</h2>
         <div class="settings-header-icons">
             <i class="fas fa-bell settings-header-icons-elem" id="soundIcon" onclick="toggleSound()"></i>
-            <i class="fas fa-sun settings-header-icons-elem" id="theme-toggle" onclick="toggleMode()"></i>
+            <i class="fas fa-sun settings-header-icons-elem" id="modeIcon" onclick="toggleMode()"></i>
         </div>
     </div>
+
 
     <!-- Opciones del Juego -->
     <div class="settings-options">
@@ -83,6 +83,4 @@
     </div>
     <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
 </div>
-
-
 </div>

@@ -9,30 +9,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función para manejar el cambio de ruta
 function handleRouteChange() {
-    const path = window.location.hash || "/#/home";  // Usa el hash (#) para determinar la ruta
+    const path = window.location.hash || "#/home";  // Usa el hash (#) para determinar la ruta
 
     // Mostrar contenido basado en la ruta actual
     switch (path) {
-        case '/#/home':
+        case '#/home':
             loadHomePage();
             break;
-        case '/#/tournament':
+        case '#/tournament':
             loadTournamentPage();
             break;
-        case '/#/dashboard':
+        case '#/dashboard':
             loadDashboardPage();
             break;
-        case '/#/info':
+        case '#/info':
             loadInfoPage();
             break;
-        case '/#/login':
+        case '#/login':
             loadLoginPage();
             break;
-        case '/#/settings':
+        case '#/settings':
             loadSettingsPage();
             break;
         default:
-            loadHomePage();
+            loadNotFoundPage();
             break;
     }
 }
