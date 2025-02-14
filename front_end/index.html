@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pong</title>
+
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+        <!-- CSS Styles -->
+        <link rel="stylesheet" href="app.css">
+
+        <!-- JS Script -->
+        <script defer src="router.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body class="text-center">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+
+                <!-- Title -->
+                <a class="navbar-brand" href="#/home">Pong</a>
+
+                <!-- Menu (responsive view) -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menu items -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+
+                        <!-- Language Options-->
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-white" id="changeLangBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img id="languageIcon" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" class="language-flag-icon" alt="Español">
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="changeLangBtn">
+                                    <li><button class="dropdown-item" onclick="changeLanguage('es')">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" class="language-flag-icon" alt="Español"> Español
+                                    </button></li>
+                                    <li><button class="dropdown-item" onclick="changeLanguage('en')">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" class="language-flag-icon" alt="Inglés"> English
+                                    </button></li>
+                                    <li><button class="dropdown-item" onclick="changeLanguage('de')">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" class="language-flag-icon" alt="Alemán"> Deutsch
+                                    </button></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <!-- Tournament -->
+                        <li class="nav-item">
+                            <a class="btn btn-link text-white" id="createTournamentBtn" href="#/tournament">Crear Torneo</a>
+                        </li>
+
+                        <!-- Dashboard -->
+                        <li class="nav-item">
+                            <a class="btn btn-link text-white" id="dashboardBtn" href="#/dashboard">Dashboard</a>
+                        </li>
+
+                        <!-- Info -->
+                        <li class="nav-item">
+                            <a class="btn btn-link text-white" id="infoBtn" href="#/info">How to play?</a>
+                        </li>
+
+                        <!-- Login -->
+                        <li class="nav-item">
+                            <a class="btn btn-link text-white" id="loginBtn" href="#/login">Inicio de Sesión</a>
+                        </li>
+
+                        <!-- Settings -->
+                        <li class="nav-item">
+                            <a class="btn btn-link text-white" id="settingsBtn" href="#/settings">Configuración</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!--  Dynamic content -->
+        <div class="content-container" id="content-container"></div>
+
+        <!-- Footer -->
+        <footer class="py-3">
+            <div class="container">
+                <p class="m-0">Copyright &copy; Pong 2023</p>
+            </div>
+        </footer>
+    </body>
+</html>
