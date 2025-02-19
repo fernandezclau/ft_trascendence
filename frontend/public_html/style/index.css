@@ -1,0 +1,143 @@
+/* Fuente retro con estilo */
+@font-face {
+    font-family: 'retro';
+    src: url('../font/retro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    color: white;
+    letter-spacing: 4px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000;
+    margin: 0;
+}
+
+
+/* Estilo para el menú */
+.index-navbar {
+    font-family: 'retro';
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    background-color: #000;
+    border-bottom: 2px solid white;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+/* Menu items links */
+.navbar {
+    background-color: #000;
+    border-bottom: 3px solid #5800dd;
+    width: 100%;
+}
+
+.nav-link, .navbar-brand {
+    color: #5800dd !important;
+}
+
+.nav-link:hover {
+    color: #5800dd !important;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+.config-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+    
+}
+
+.selection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.selection-element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.player-btn {
+    margin: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #5800dd;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.player-btn:hover {
+    background-color: #5800dd;
+    color: #fff;
+}
+
+.points-btn-group.selected {
+    background-color: #ff2200;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 2px #ff0404;
+}
+
+.players-btn-group.selected {
+    background-color: #ff2200;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 2px #ff0404;
+}
+
+
+/* DISABLED BUTTON */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+#playerRegistrationContainer {
+    text-align: center;
+}
+
+/* Estilos para los formularios de los jugadores */
+#playerFormsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Círculos de selección de color */
+.color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    margin: 5px;
+}

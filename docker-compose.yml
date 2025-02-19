@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: backend
+    container_name: django-api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/api:/code
+    ports:
+      - "8000:8000" # Para pruebas, acceso a backend
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  frontend:
+    build: frontend
+    container_name: apache-web
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/public_html:/var/www/html/
+      - ./frontend/certs:/etc/ssl/certs/
+      - ./frontend/pong-ssl.conf:/etc/apache2/sites-available/pong-ssl.conf
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
