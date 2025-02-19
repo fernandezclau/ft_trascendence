@@ -2,19 +2,31 @@
     <!-- Sound/ Dark Mode -->
     <div class="settings-header">
         <h2 class="settings-header-title">Game Customization</h2>
+        
         <div class="settings-header-icons">
+            <!-- Iconos existentes -->
             <i class="fas fa-bell settings-header-icons-elem" id="soundIcon" onclick="toggleSound()"></i>
             <i class="fas fa-sun settings-header-icons-elem" id="modeIcon" onclick="toggleMode()"></i>
+    
+            <!-- Selector de idioma con iconos de banderas -->
+            <select onchange="setLanguage(this.value)" class="language-select">
+                <option value="en" class="flag-icon flag-icon-us"> English</option>
+                <option value="es" class="flag-icon flag-icon-es"> Español</option>
+                <option value="fr" class="flag-icon flag-icon-fr"> Français</option>
+            </select>
         </div>
     </div>
-
+    
+    
+    <hr>
+  
 
     <!-- Opciones del Juego -->
     <div class="settings-options">
         <!-- BALL SIZE -->
         <div class="size-picker mb-4">
             <h5>Ball Size</h5>
-            <input type="range" class="form-range" id="sizeRange" min="30" max="90" step="30" value="60" oninput="updateBallSize(this)">
+            <input type="range" class="form-range" id="sizeRange" min="10" max="30" step="10" value="10" oninput="updateBallSize(this.value)">
             <div class="size-labels">
                 <span>Small</span>
                 <span>Medium</span>
@@ -25,7 +37,7 @@
         <!-- BALL SPEED -->
         <div class="ball-speed mb-4">
             <h5>Ball Speed</h5>
-            <input type="range" class="form-range" id="ballSpeed" min="1" max="5" value="3">
+            <input type="range" class="form-range" id="ballRange" min="400" max="600" step="50" value="500" oninput="updateBallSpeed(this.value)">
             <div class="speed-labels">
                 <span>1</span>
                 <span>2</span>
@@ -37,50 +49,72 @@
 
         <!-- BALL COLOR -->
         <div class="color-picker mb-4">
-            <h5>Choose Ball Color</h5>
+            <h5>Ball Color</h5>
             <div class="color-options">
-                <button class="color-option" style="background-color: red;"></button>
-                <button class="color-option" style="background-color: green;"></button>
-                <button class="color-option" style="background-color: blue;"></button>
-                <button class="color-option" style="background-color: yellow;"></button>
-                <button class="color-option" style="background-color: purple;"></button>
+                <button class="color-option" style="background-color: red;" onclick="updateBallColor('red')"></button>
+                <button class="color-option" style="background-color: green;" onclick="updateBallColor('green')"></button>
+                <button class="color-option" style="background-color: blue;" onclick="updateBallColor('blue')"></button>
+                <button class="color-option" style="background-color: yellow;" onclick="updateBallColor('yellow')"></button>
+                <button class="color-option" style="background-color: purple;" onclick="updateBallColor('purple')"></button>
+                <button class="color-option" style="background-color: rgb(255, 255, 255);" onclick="updateBallColor('white')"></button>
             </div>
         </div>
+        
 
         <!-- BACKGROUND -->
         <div class="background-picker mb-4">
-            <h5>Choose a background for the game</h5>
+            <h5>Background</h5>
             <div class="background-options">
-                <button class="background-option" onclick="changeBackground('bg1', this)">
-                    <img src="{% static 'images/background.png' %}" alt="Background 1" class="background-thumbnail">
+                <button class="background-option" data-color="black" onclick="changeBackground('black', this)">
+                    <img src="images/background_1.png" alt="Background 1" class="background-thumbnail">
                 </button>
-                <button class="background-option" onclick="changeBackground('bg2', this)">
-                    <img src="{% static 'images/background.png' %}" alt="Background 2" class="background-thumbnail">
+                <button class="background-option" data-color="pink" onclick="changeBackground('pink', this)">
+                    <img src="images/background_2.png" alt="Background 2" class="background-thumbnail">
                 </button>
-                <button class="background-option" onclick="changeBackground('bg3', this)">
-                    <img src="{% static 'images/background.png' %}" alt="Background 3" class="background-thumbnail">
+                <button class="background-option" data-color="gray" onclick="changeBackground('gray', this)">
+                    <img src="images/background_3.png" alt="Background 3" class="background-thumbnail">
                 </button>
-                <button class="background-option" onclick="changeBackground('bg4', this)">
-                    <img src="{% static 'images/background.png' %}" alt="Background 4" class="background-thumbnail">
+                <button class="background-option" data-color="lightblue" onclick="changeBackground('lightblue', this)">
+                    <img src="images/background_4.png" alt="Background 4" class="background-thumbnail">
                 </button>
             </div>
+        </div>        
+        
+    </div>
+
+    <!-- Edit Profile Section -->
+    <div class="account-settings">
+        <div class="settings-header">
+            <h2>Configuración de la Cuenta</h2>
+        </div>
+        <hr>
+    
+        <div class="settings-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" placeholder="Tu nombre de usuario">
+            <button class="save-btn">Guardar</button>
+        </div>
+    
+        <div class="settings-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" placeholder="Tu correo electrónico">
+            <button class="save-btn">Guardar</button>
+        </div>
+    
+        <div class="settings-group">
+            <label for="password">Nueva Contraseña</label>
+            <input type="password" id="password" placeholder="Nueva contraseña">
+            <button class="save-btn">Actualizar</button>
+        </div>
+    
+        <div class="settings-group">
+            <button class="twofa-btn">Activar 2FA</button>
+        </div>
+    
+        <div class="danger-zone">
+            <button class="delete-btn">Eliminar Cuenta</button>
+            <button class="logout-btn">Cerrar Sesión</button>
         </div>
     </div>
-    <!-- Edit Profile Section -->
-<div id="editProfileSection" class="settings-profile-editor mb-4">
-    <h2 class="settings-header-title">Edit profile</h2>
-    <div class="mb-3 settings-profile-editor-item">
-        <label for="editUsername" class="form-label">Username</label>
-        <input type="text" class="form-control" id="editUsername" placeholder="Enter new username">
-    </div>
-    <div class="mb-3 settings-profile-editor-item">
-        <label for="editEmail" class="form-label">Email</label>
-        <input type="email" class="form-control" id="editEmail" placeholder="Enter new email">
-    </div>
-    <div class="mb-3 settings-profile-editor-item">
-        <label for="editPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="editPassword" placeholder="Enter new password">
-    </div>
-    <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
-</div>
+    
 </div>

@@ -1,33 +1,69 @@
+/* Main Container */
 .info {
-    margin: 20px;
-    font-family: 'Inter', sans-serif;
-    color: #e0e0e0;
+    max-width: 800px;
+    padding: 25px;
+    color: #292831;
 }
 
-.info h5 {
+/* Header */
+.info h1 {
+    font-size: 2.5em;
+    text-align: center;
     color: #ffffff;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
 }
-.card {
-    background-color: #ffffff00;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    color: #ffffff;
+
+/* Card Styles */
+.info .card {
+    background: #eeeeee;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    border-left: 5px solid #c2b8a3;
 }
-.card ul {
-    padding-left: 1.5rem;
+
+/* Subtitles */
+.info h3 {
+    font-size: 1.6em;
+    color: #292831;
+    font-weight: 600;
+    margin-bottom: 10px;
 }
-.card ul li {
-    margin-bottom: 0.5rem;
+
+/* Text Styling */
+.info p, .info li {
+    font-size: 1.1em;
     line-height: 1.6;
-    list-style-type: none;
+    color: #292831;
 }
-.card p {
-    line-height: 1.6;
-    color: #555;
+
+/* Lists */
+.info ul {
+    padding-left: 20px;
 }
-.card strong {
-    color: #000;
+
+.info li{
+    margin-bottom: 8px;
+    color: #292831;
+}
+.info li strong {
+    color: #292831;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .info {
+        padding: 20px;
+        max-width: 95%;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.4em;
+    }
 }

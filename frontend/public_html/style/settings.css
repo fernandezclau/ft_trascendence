@@ -1,0 +1,269 @@
+.settings {
+    margin: 20px;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings h2 {
+    font-weight: bold;
+    margin: 10px 10px 10px 0px;
+}
+
+.settings-header-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.settings-header-icons-elem {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 5px;
+}
+.language-select {
+    border: none;
+    font-size: 16px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+}
+
+.language-select option {
+    font-size: 16px;
+    padding: 5px;
+}
+
+.language-select {
+    border: none;
+    font-size: 16px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+}
+/* Estilo para el select */
+.language-select {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    font-size: 16px;
+    padding: 5px;
+    cursor: pointer;
+    color: black;
+}
+
+/* Estilo para las opciones dentro del select */
+.language-select option {
+    font-size: 16px;
+    color: black;
+    background-color: #fff;
+}
+
+.language-select::-ms-expand, .language-select option:checked {
+    color: black;
+}
+
+/* -- BALL SIZE -- */
+
+/* progress bars */
+.form-range::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 10px;
+}
+
+.form-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #5900ff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px #5900ff;
+    transition: background-color 0.3s ease;
+}
+
+.form-range:active::-webkit-slider-thumb {
+    background: #5900ff;
+}
+
+/* progress bar labels */
+.size-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.size-labels span {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* -- BALL SPEED -- */
+.ball-speed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.speed-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.speed-labels span {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.color-option.selected {
+    border: 2px solid #ffffff;  /* Borde negro cuando está seleccionado */
+    transform: scale(1.2);    /* Aumenta un poco el tamaño del botón seleccionado */
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+
+/* -- BACKGROUND PICKER -- */
+.background-picker {
+    margin-top: 20px;
+}
+
+.background-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.background-option {
+    width: auto;
+    height: auto;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.background-option:hover {
+    transform: scale(1.1);
+    border: 2px solid #744646;
+}
+
+.background-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.background-option.selected {
+    border: 3px solid #ff0000;
+    transform: scale(1.2);
+}
+
+/* PROFILE EDITOR */
+.account-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin: 0;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.account-settings input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #fff;
+    max-width: 500px;
+}
+
+.account-settings input.disabled {
+    background-color: #bbb;
+}
+
+.account-settings label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #bbb;
+}
+
+.account-settings button {
+    margin-top: 8px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    max-width: 500px;
+}
+
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.save-btn {
+    background: #28a745;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #218838;
+}
+
+.twofa-btn {
+    background: #007bff;
+    color: white;
+}
+
+.twofa-btn:hover {
+    background: #0056b3;
+}
+
+.danger-zone {
+    margin-top: 20px;
+    display: flex;
+    justify-content: start;
+    gap: 30px;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+.logout-btn {
+    background: #ffcc00;
+    color: black;
+}
+
+.logout-btn:hover {
+    background: #d4a800;
+}
+

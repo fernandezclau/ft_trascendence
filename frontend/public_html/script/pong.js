@@ -1,3 +1,5 @@
+let players = [];
+let palleteColor;
 const canvas = document.getElementById('pongCanvas');
 const context = canvas.getContext('2d');
 const player1Score = document.getElementById('player1Score');
@@ -26,11 +28,12 @@ let wPressed = false, sPressed = false;                 // Controla si se están
 let upPressed = false, downPressed = false;             // Controla si se están pulsando las teclas Arriba/Abajo
 
 // # SECCIÓN DE PELOTA
-const ballSize = 10;                                    // Dimensiones de la pelota
-const ballBSpeed = 500;                                 // Velocidad base de la pelota
+let ballSize = 10;                                    // Dimensiones de la pelota
+let ballBSpeed = 500;                                 // Velocidad base de la pelota
 let ballX = canvas.width / 2 - ballSize / 2;            // Posición de la pelota
 let ballY = canvas.height / 2 - ballSize / 2;
-let ballSpeedX = 500, ballSpeedY = 500 ;                // Velocidades en X e Y de la pelota
+let ballSpeedX = 500, ballSpeedY = 500;                // Velocidades en X e Y de la pelota
+let ballColor = '#fff';
 
 // # SECCIÓN DE SONIDO
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -200,7 +203,7 @@ function drawGameBoard() {
     context.fillStyle = "#BD3535";
     context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
     // Dibujar perlota
-    context.fillStyle = '#fff';
+    context.fillStyle = ballColor;
     context.beginPath();
     context.arc(ballX + ballSize / 2, ballY + ballSize / 2, ballSize / 2, 0, Math.PI * 2);
     context.fill();
@@ -264,11 +267,10 @@ gameLoop();
 
 // Función para seleccionar el número de jugadores
 function selectPlayers(players) {
-    let playersButtons = document.querySelectorAll('.players-btn-group');
+    let playersButtons = document.querySelect// Añadir la clase 'selected' al botón que fue clicado
+    // Ajuste de índice para que coincida con los valores disponibles (1, 2, 4 jugadores)orAll('.players-btn-group');
     playersButtons.forEach(button => button.classList.remove('selected'));
 
-    // Añadir la clase 'selected' al botón que fue clicado
-    // Ajuste de índice para que coincida con los valores disponibles (1, 2, 4 jugadores)
     let selectedButton;
     if (players === 1) {
         selectedButton = playersButtons[0]; // Selecciona el botón de 1 jugador
@@ -326,16 +328,217 @@ function disableSelectionButtons()
     pointsButtons.forEach(button => button.disabled = true);
 }
 
-// Start button
-startButton.addEventListener('click', () => {
+// start button
+document.getElementById("startButton").addEventListener("click", function() {
+
+    let iPlayers = 1;   // Jugadores registrados
     
-    console.log("Points to win: " + pointsToWin)
-    console.log("Number of players: " + playersToPlay)
-    
-    
-    // 1. Deshabilitamos botones
+    // 1. Deshabilitar botones seleccion
     disableSelectionButtons();
 
-    // 2. 
+    // Abrir pop up
+    function openPopup(playerNumber) {
+
+        // Extraer campos
+        const modal = document.getElementById("popupContainer");
+        const modalTitle = document.getElementById("modalTitle");
+        const usernameInput = document.getElementById("usernameInput");
+        const boostSpell = document.getElementById("boostSelect");
+        const saveButton = document.getElementById("saveButton");
+        
+        // 1. Set title
+        modalTitle.innerText = `Player ${playerNumber}`;
+        usernameInput.value = '';
+
+        // 2. Show modal
+        modal.style.display = 'block';
+
+        // 3. Save name
+        saveButton.onclick = function() {
+            const playerName = usernameInput.value.trim();
+            const playerBoost = boostSpell.value;
+
+            if (playerName && playerBoost) {
+                const player = {
+                    name: playerName,
+                    boost: playerBoost,
+                    color: palleteColor
+                };
+                
+                // 3. Añadimos jugador
+                if (isPlayerValid(players, player))        
+                    players.push(player);
+                else
+                {
+                    alert(`Nombre invalido: ${playerName}`);
+                    return ;
+                }
+                
+                alert(`Jugador ${playerNumber} registrado: ${playerName}`);
+                modal.style.display = 'none'; // Cerrar el popup
+                iPlayers++;
+                
+                // Si hay más jugadores, abrir el siguiente popup
+                if (iPlayers <= playersToPlay) {
+                    openPopup(iPlayers);
+                }
+            } else {
+                alert("Por favor ingresa un nombre.");
+            }
+        };
+    }
+    // Cerrar el popup
+    document.getElementById("closeButton").addEventListener("click", function() {
+        
+        document.getElementById("popupContainer").style.display = 'none';
+        players = []
+        
+    });
+
+    // 2. Abrir pop up
+    openPopup(iPlayers);
+
+    console.log(players);
+
+    // Cuenta atrás empezar juego
+
+    // 4. INicio juego
 });
 
+
+// Verificamos que el username sea único
+function isPlayerValid(players, player) {
+
+    if (players.some(p => p.name === player.name))
+        return false; // Si el nombre ya existe, no es válido
+    return true;
+}
+// ---------------------------------------------------
+
+// ACTUALIZAR TAMAÑO BOLA
+function updateBallSize(value) {
+
+    console.log("Este es el size input " + value)
+    ballSize = parseInt(value);
+    ballX = canvas.width / 2 - ballSize / 2;
+    ballY = canvas.height / 2 - ballSize / 2;
+    localStorage.setItem("ballSize", ballSize);
+
+    drawGameBoard();
+}
+
+// ACTUALIZAR VELOCIDAD
+function updateBallSpeed(value) {
+    
+    console.log("Este es el speed input " + value)
+
+    ballSpeedX = value, ballSpeedY = value;
+    localStorage.setItem("ballSpeed", value);
+
+    drawGameBoard();
+}
+
+// ACTUALIZAR COLOR
+function updateBallColor(value) {
+    
+    console.log("Este es el color input " + value)
+
+    ballColor = value;
+    localStorage.setItem("ballColor", ballColor);
+
+    drawGameBoard();
+
+    // Update selected color
+    UpdateColorSelection(value);
+}
+
+function UpdateColorSelection(value) {
+    const buttons = document.querySelectorAll('.color-option');
+    
+    buttons.forEach(button => {
+        button.classList.remove('selected');
+    });
+    
+    const selectedButton = Array.from(buttons).find(button => button.style.backgroundColor === value);
+    if (selectedButton) {
+        selectedButton.classList.add('selected');
+    }
+}
+
+// ACTUALIZAR FONDO
+function updateBackground(value) {
+console.log("Este es el color input " + value)
+
+    ballColor = value;
+    localStorage.setItem("ballColor", ballColor);
+
+    drawGameBoard();
+
+    // Update selected color
+    UpdateColorSelection(value);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // size
+    const savedSize = localStorage.getItem("ballSize");
+    
+    console.log("Save size " + savedSize)
+    if (savedSize == 20 || savedSize == 10 || savedSize == 30) {
+        updateBallSize(savedSize)
+    }
+
+    // speed
+    const savedSpeed = localStorage.getItem("ballSpeed");
+
+    console.log("Save speed " + savedSpeed)
+    if (savedSpeed >= 400 && savedSpeed <= 600) {
+        updateBallSpeed(savedSpeed)
+    }
+
+    // color
+    const savedColor = localStorage.getItem("ballColor");
+
+    console.log("Save color " + savedColor)
+    if (savedColor) {
+        updateBallColor(savedColor)
+    }
+
+    // backgroundColor
+    const savedBackground = localStorage.getItem("backgroundColor")
+    const canvas = document.querySelector("canvas");
+    console.log("Saved background " + savedBackground)
+    if (savedBackground && canvas){
+        canvas.style.backgroundColor = savedBackground;
+    }
+
+    // dark mode
+    const savedMode = localStorage.getItem("darkMode");
+
+    console.log("Saved mode ", savedMode)
+    if (savedMode)
+    {
+        if (savedMode == "disabled")
+        {
+            document.body.classList.remove("light-mode");
+            
+            let canvasBorders = document.querySelectorAll('.canvas-border');
+            canvasBorders.forEach(function(element) {
+                element.classList.remove("light-mode");
+            });
+        }
+        else
+        {
+            document.body.classList.add("light-mode");
+
+            let canvasBorders = document.querySelectorAll('.canvas-border');
+            canvasBorders.forEach(function(element) {
+                element.classList.add("light-mode");
+           });
+        }
+    }
+
+    // lenguaje
+    loadTranslations();
+    const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    changeLanguage(savedLanguage);
+});

@@ -1,0 +1,53 @@
+/* MAIN CONTAINER */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.register-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    min-width: 490px;
+}
+
+.register-box h2, .register-elem label{
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.register-box p {
+    color: #000;
+}
+
+.register-elem {
+    text-align: left;
+    font-weight: bold;
+    margin: 15px 0px 15px 0px;
+}
+
+.input-container {
+    position: relative;
+}
+
+#toggleNewPassword, #toggleConfirmPassword {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.btn-hover {
+    background-color: #e7e7e7;
+    transition: background-color 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.btn-hover:hover {
+    background-color: #e0e0e0;
+}
