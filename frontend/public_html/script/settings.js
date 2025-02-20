@@ -85,7 +85,14 @@ function changeLanguage(language) {
     document.querySelectorAll('[data-key]').forEach(function(element) {
         const key = element.getAttribute('data-key');
         if (translation[key]) {
-            element.textContent = translation[key];
+            if (element.tagName === "INPUT") {
+                // Si es un input, cambiar el placeholder
+                element.placeholder = translation[key];
+            } else {
+                // Para otros elementos, cambiar el texto
+                element.textContent = translation[key];
+            }
+            
         } else {
             console.warn(`Clave de traducción no encontrada para: ${key}`);
         }

@@ -98,6 +98,6 @@
     content: url("/frontend/public_html/images/s_42_icon.png");
 }
 
-.login-box p {
+.login-box span {
     color: #000;
 }

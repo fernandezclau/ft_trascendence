@@ -1,7 +1,7 @@
 <div class="settings">
     <!-- Sound/ Dark Mode -->
     <div class="settings-header">
-        <h2 class="settings-header-title">Game Customization</h2>
+        <h2 class="settings-header-title" data-key="game_customization">Game Customization</h2>
         
         <div class="settings-header-icons">
             <!-- Iconos existentes -->
@@ -16,27 +16,24 @@
             </select>
         </div>
     </div>
-    
-    
     <hr>
-  
 
-    <!-- Opciones del Juego -->
+    <!-- Game options -->
     <div class="settings-options">
         <!-- BALL SIZE -->
         <div class="size-picker mb-4">
-            <h5>Ball Size</h5>
+            <h5 data-key="ball_size">Ball Size</h5>
             <input type="range" class="form-range" id="sizeRange" min="10" max="30" step="10" value="10" oninput="updateBallSize(this.value)">
             <div class="size-labels">
-                <span>Small</span>
-                <span>Medium</span>
-                <span>Large</span>
+                <span data-key="small">Small</span>
+                <span data-key="medium">Medium</span>
+                <span data-key="large">Large</span>
             </div>
         </div>
 
         <!-- BALL SPEED -->
         <div class="ball-speed mb-4">
-            <h5>Ball Speed</h5>
+            <h5 data-key="ball_speed">Ball Speed</h5>
             <input type="range" class="form-range" id="ballRange" min="400" max="600" step="50" value="500" oninput="updateBallSpeed(this.value)">
             <div class="speed-labels">
                 <span>1</span>
@@ -49,7 +46,7 @@
 
         <!-- BALL COLOR -->
         <div class="color-picker mb-4">
-            <h5>Ball Color</h5>
+            <h5 data-key="ball_color">Ball Color</h5>
             <div class="color-options">
                 <button class="color-option" style="background-color: red;" onclick="updateBallColor('red')"></button>
                 <button class="color-option" style="background-color: green;" onclick="updateBallColor('green')"></button>
@@ -63,7 +60,7 @@
 
         <!-- BACKGROUND -->
         <div class="background-picker mb-4">
-            <h5>Background</h5>
+            <h5 data-key="background">Background</h5>
             <div class="background-options">
                 <button class="background-option" data-color="black" onclick="changeBackground('black', this)">
                     <img src="images/background_1.png" alt="Background 1" class="background-thumbnail">
@@ -85,35 +82,35 @@
     <!-- Edit Profile Section -->
     <div class="account-settings">
         <div class="settings-header">
-            <h2>Configuración de la Cuenta</h2>
+            <h2 data-key="account_settings">Account Settings</h2>
         </div>
         <hr>
     
         <div class="settings-group">
-            <label for="username">Usuario</label>
-            <input type="text" id="username" placeholder="Tu nombre de usuario">
-            <button class="save-btn">Guardar</button>
+            <label for="username" data-key="username_label">Username</label>
+            <input type="text" id="username" placeholder="Your username" data-key="username_placeholder">
+            <button class="save-btn" data-key="save">Save</button>
         </div>
     
         <div class="settings-group">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" id="email" placeholder="Tu correo electrónico">
-            <button class="save-btn">Guardar</button>
+            <label for="email" data-key="email_label">Email</label>
+            <input type="email" id="email" placeholder="Your email" data-key="email_placeholder">
+            <button class="save-btn" data-key="save">Save</button>
         </div>
     
         <div class="settings-group">
-            <label for="password">Nueva Contraseña</label>
-            <input type="password" id="password" placeholder="Nueva contraseña">
-            <button class="save-btn">Actualizar</button>
+            <label for="password" data-key="new_password_label">New Password</label>
+            <input type="password" id="password" placeholder="New password" data-key="new_password_placeholder">
+            <button class="save-btn" data-key="update">Update</button>
         </div>
     
         <div class="settings-group">
-            <button class="twofa-btn">Activar 2FA</button>
+            <button class="twofa-btn" data-key="enable_2fa">Enable 2FA</button>
         </div>
     
         <div class="danger-zone">
-            <button class="delete-btn">Eliminar Cuenta</button>
-            <button class="logout-btn">Cerrar Sesión</button>
+            <button class="delete-btn" data-key="delete_account">Delete Account</button>
+            <button class="logout-btn" data-key="logout">Log Out</button>
         </div>
     </div>
     
