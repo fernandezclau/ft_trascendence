@@ -1,0 +1,259 @@
+/* Fuente retro con estilo */
+@font-face {
+    font-family: 'retro';
+    src: url('../font/retro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    color: white;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+}
+
+/* DARK MODE */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* LIGHT MODE */
+body.light-mode {
+    background-color: #d2d1d1b7;
+    color: #000000;
+}
+
+/* CONTENT CONTAINER */
+.content-container {
+    width: 75%;
+    max-width: 1000px;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+
+/* NAV */
+.index-navbar {
+    width: 100%;
+    background-color: #000;
+    border-bottom: 2px solid white;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+/* Menu items links */
+.navbar {
+    background-color: #000;
+    border-bottom: 3px solid #ffffff;
+    width: 100%;
+}
+
+.nav-link, .navbar-brand {
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    color: #1212f8 !important;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+.config-icon {
+    width: 24px;
+    height: 24px;
+}
+
+
+/* WIP */
+.selection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.selection-element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.player-btn {
+    margin: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #eeeeee;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    color: #000;
+}
+
+.player-btn:hover {
+    background-color: #c4c8cd;
+    color: #000;
+}
+
+.points-btn-group.selected {
+    background-color: #658991;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 2px #7e4fb7;
+}
+
+.players-btn-group.selected {
+    background-color: #658991;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 2px #7e4fb7;
+}
+
+
+/* DISABLED BUTTON */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+#playerRegistrationContainer {
+    text-align: center;
+}
+
+/* Estilos para los formularios de los jugadores */
+#playerFormsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* START BUTTON */
+#startButton{
+    margin: 20px;
+    padding: 10px 20px 10px 20px;
+    color: #000;
+    font-weight: bold;
+    background-color: #ff6868;
+    border: 2px solid rgb(179, 1, 1);
+}
+
+
+/* POP UPS */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e3e3e3;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: auto;
+    text-align: center;
+    display: none;
+    color: #000;
+}
+
+.modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    border: none;
+    gap: 10px;
+    background-color: #e3e3e3;
+}
+
+.modal-content h3 {
+    font-weight: bold;
+}
+
+.modal input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #45a049;
+}
+
+/* Botón de cerrar en forma de X */
+.close-btn {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #000;
+}
+
+/* Botones */
+.modal button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #45a049;
+}
+
+/* Opciones de color */
+.game-color-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.game-color-option {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.game-color-option.selected {
+    border: 2px solid #e20101;  /* Borde negro cuando está seleccionado */
+    transform: scale(1.2);    /* Aumenta un poco el tamaño del botón seleccionado */
+}
+
+.game-color-option:hover {
+    transform: scale(1.1);
+}
+
+

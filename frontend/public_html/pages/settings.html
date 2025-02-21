@@ -1,0 +1,117 @@
+<div class="settings">
+    <!-- Sound/ Dark Mode -->
+    <div class="settings-header">
+        <h2 class="settings-header-title" data-key="game_customization">Game Customization</h2>
+        
+        <div class="settings-header-icons">
+            <!-- Iconos existentes -->
+            <i class="fas fa-bell settings-header-icons-elem" id="soundIcon" onclick="toggleSound()"></i>
+            <i class="fas fa-sun settings-header-icons-elem" id="modeIcon" onclick="toggleMode()"></i>
+    
+            <!-- Selector de idioma con iconos de banderas -->
+            <select onchange="setLanguage(this.value)" class="language-select">
+                <option value="en" class="flag-icon flag-icon-us"> English</option>
+                <option value="es" class="flag-icon flag-icon-es"> Español</option>
+                <option value="fr" class="flag-icon flag-icon-fr"> Français</option>
+            </select>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Game options -->
+    <div class="settings-options">
+        <!-- BALL SIZE -->
+        <div class="size-picker mb-4">
+            <h5 data-key="ball_size">Ball Size</h5>
+            <input type="range" class="form-range" id="sizeRange" min="10" max="30" step="10" value="10" oninput="updateBallSize(this.value)">
+            <div class="size-labels">
+                <span data-key="small">Small</span>
+                <span data-key="medium">Medium</span>
+                <span data-key="large">Large</span>
+            </div>
+        </div>
+
+        <!-- BALL SPEED -->
+        <div class="ball-speed mb-4">
+            <h5 data-key="ball_speed">Ball Speed</h5>
+            <input type="range" class="form-range" id="ballRange" min="400" max="600" step="50" value="500" oninput="updateBallSpeed(this.value)">
+            <div class="speed-labels">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+            </div>
+        </div>
+
+        <!-- BALL COLOR -->
+        <div class="color-picker mb-4">
+            <h5 data-key="ball_color">Ball Color</h5>
+            <div class="color-options">
+                <button class="color-option" style="background-color: red;" onclick="updateBallColor('red')"></button>
+                <button class="color-option" style="background-color: green;" onclick="updateBallColor('green')"></button>
+                <button class="color-option" style="background-color: blue;" onclick="updateBallColor('blue')"></button>
+                <button class="color-option" style="background-color: yellow;" onclick="updateBallColor('yellow')"></button>
+                <button class="color-option" style="background-color: purple;" onclick="updateBallColor('purple')"></button>
+                <button class="color-option" style="background-color: rgb(255, 255, 255);" onclick="updateBallColor('white')"></button>
+            </div>
+        </div>
+        
+
+        <!-- BACKGROUND -->
+        <div class="background-picker mb-4">
+            <h5 data-key="background">Background</h5>
+            <div class="background-options">
+                <button class="background-option" data-color="black" onclick="changeBackground('black', this)">
+                    <img src="images/background_1.png" alt="Background 1" class="background-thumbnail">
+                </button>
+                <button class="background-option" data-color="pink" onclick="changeBackground('pink', this)">
+                    <img src="images/background_2.png" alt="Background 2" class="background-thumbnail">
+                </button>
+                <button class="background-option" data-color="gray" onclick="changeBackground('gray', this)">
+                    <img src="images/background_3.png" alt="Background 3" class="background-thumbnail">
+                </button>
+                <button class="background-option" data-color="lightblue" onclick="changeBackground('lightblue', this)">
+                    <img src="images/background_4.png" alt="Background 4" class="background-thumbnail">
+                </button>
+            </div>
+        </div>        
+        
+    </div>
+
+    <!-- Edit Profile Section -->
+    <div class="account-settings">
+        <div class="settings-header">
+            <h2 data-key="account_settings">Account Settings</h2>
+        </div>
+        <hr>
+    
+        <div class="settings-group">
+            <label for="username" data-key="username_label">Username</label>
+            <input type="text" id="username" placeholder="Your username" data-key="username_placeholder">
+            <button class="save-btn" data-key="save">Save</button>
+        </div>
+    
+        <div class="settings-group">
+            <label for="email" data-key="email_label">Email</label>
+            <input type="email" id="email" placeholder="Your email" data-key="email_placeholder">
+            <button class="save-btn" data-key="save">Save</button>
+        </div>
+    
+        <div class="settings-group">
+            <label for="password" data-key="new_password_label">New Password</label>
+            <input type="password" id="password" placeholder="New password" data-key="new_password_placeholder">
+            <button class="save-btn" data-key="update">Update</button>
+        </div>
+    
+        <div class="settings-group">
+            <button class="twofa-btn" data-key="enable_2fa">Enable 2FA</button>
+        </div>
+    
+        <div class="danger-zone">
+            <button class="delete-btn" data-key="delete_account">Delete Account</button>
+            <button class="logout-btn" data-key="logout">Log Out</button>
+        </div>
+    </div>
+    
+</div>

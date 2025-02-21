@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Title -->
+        <title>PONG | · |</title>
+        
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.6.0/css/flag-icon.min.css">
+
+
+        <!-- CSS Styles -->
+        <link rel="stylesheet" href="style/index.css">
+        <link rel="stylesheet" href="style/pong.css">
+        <link rel="stylesheet" href="style/settings.css">
+        <link rel="stylesheet" href="style/login.css">
+        <link rel="stylesheet" href="style/register.css">
+        <link rel="stylesheet" href="style/info.css">
+    </head>
+    
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" onclick="loadPage('home')" data-key="navbarBrand">PONG</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" onclick="loadPage('tournament')" data-key="tournament">Tournament</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="loadPage('dashboard')" data-key="dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="loadPage('info')" data-key="info">Info</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="loadPage('login')" data-key="login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="loadSettings()" data-key="settings">Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+
+        <!-- Dynamic content -->
+        <div class="content-container" id="content-container">
+        </div>
+        
+        
+        <div id="playerSelection" class="selection">
+            <div class="selection-element">
+                <h4 data-key="numPlayers">Number of players</h4>
+                <div>
+                    <button class="player-btn players-btn-group selected" onclick="selectPlayers(1)">1</button>
+                    <button class="player-btn players-btn-group" onclick="selectPlayers(2)">2</button>
+                    <button class="player-btn players-btn-group" onclick="selectPlayers(4)">4</button>
+                </div>
+            </div>
+        
+            <div class="selection-element">
+                <h4 data-key="numPoints">Points to win</h4>
+                <div>
+                    <button class="player-btn points-btn-group" onclick="selectPoints(5)">5</button>
+                    <button class="player-btn points-btn-group selected" onclick="selectPoints(10)">10</button>
+                    <button class="player-btn points-btn-group" onclick="selectPoints(15)">15</button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div id="playerRegistrationContainer">
+            <button id="startButton" data-key="playButton">Start</button>
+        </div>
+        
+        <!-- Contenedor de los modales -->
+        <div id="popupContainer" class="modal">
+            <div class="modal-content">
+                <span id="closeButton" class="close-btn">&times;</span>
+                
+                <h3 id="modalTitle"></h3>
+                
+                <!-- Username Input -->
+                <div class="game-input">
+                    <label for="newUsername" class="form-label">User</label>
+                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="User" required>
+                </div>
+                
+                <!-- Boost Selection -->
+                <div class="game-input">
+                    <label for="boost" class="form-label" data-key="chooseBost">Choose a Boost</label>
+                    <select id="boostSelect" class="form-control" required>
+                        <option value="speed" data-key="speedBoost">Speed Boost</option>
+                        <option value="power" data-key="powerBoost">Power Boost</option>
+                        <option value="defense" data-key="defenseBoost">Defense Boost</option>
+                    </select>
+                </div>
+        
+                <!-- Color Palette Selection -->
+                <div class="game-input">
+                    <label for="colorPalette" class="form-label" data-key="chooseColor">Choose a Color</label>
+                    <div class="game-color-options">
+                        <div class="game-color-option" style="background-color: #ff6f61;" onclick="setColor('#ff6f61')"></div>
+                        <div class="game-color-option" style="background-color: #6fffc0;" onclick="setColor('#6fffc0')"></div>
+                        <div class="game-color-option" style="background-color: #d9a7c7;" onclick="setColor('#d9a7c7')"></div>
+                        <div class="game-color-option" style="background-color: #8aacc8;" onclick="setColor('#8aacc8')"></div>
+                    </div>
+                </div>
+                
+                <!-- Save Button -->
+                <button id="saveButton" data-key="saveButton">Save</button>
+            </div>
+        </div>
+        
+        
+        <!-- Game -->
+        <div id="game">
+            <div id="score">
+                <h1 id="player1Score">0</h1>
+                <h1 id="player2Score">0</h1>
+            </div>
+
+            <h1 id="debugMessage" class="paused" data-key="pressSpace">Press Space</h1>
+            <id id="canvasBorder" class="canvas-border">
+                <canvas id="pongCanvas" width="800" height="400"></canvas>
+            </id>
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-3">
+            <div class="container">
+                <p class="m-0">Copyright &copy; Pong 2025</p>
+            </div>
+        </footer>
+    
+    </body>
+
+    <script src="script/pong.js"></script>
+    <script src="app.js"></script>
+    <script src="script/settings.js"></script>
+    <script src="script/login.js"></script>
+
+</html>
