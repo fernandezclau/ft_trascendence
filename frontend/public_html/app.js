@@ -10,9 +10,8 @@ function loadPage(page, callback) {
         playerSelection.style.display = 'flex';
         playerSelection.style.visibility = 'visible';
 
-        playerSelection.offsetHeight; 
+        playerSelection.offsetHeight;
         playerSelection.style.justifyContent = 'center';
-
     } else {
         fetch(`pages/${page}.html`)
             .then(response => response.text())
@@ -24,14 +23,30 @@ function loadPage(page, callback) {
                 const playerSelection = document.getElementById('playerSelection');
                 playerSelection.style.display = 'none';
                 playerSelection.style.visibility = 'hidden';
-                const savedLanguage = localStorage.getItem('preferredLanguage')
+
+                const savedLanguage = localStorage.getItem('preferredLanguage');
                 changeLanguage(savedLanguage);
+
+                // Verifica si estamos en "animate" y carga Three.js si es necesario
+                if (page === "animate") {
+                    if (typeof THREE === "undefined") {
+                        const script = document.createElement("script");
+                        script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+                        script.onload = function () {
+                            console.log("Three.js cargado correctamente.");
+                            startAnimation(); // Inicia la animación después de cargar Three.js
+                        };
+                        document.head.appendChild(script);
+                    } else {
+                        startAnimation(); // Si ya está cargado, inicia la animación directamente
+                    }
+                }
+
                 if (callback) callback();
             })
             .catch(error => console.error('Error loading page:', error));
     }
 }
-
 
 // LOADING SETTINGS
 function loadSettings() {
