@@ -1,0 +1,177 @@
+.
+├── .git
+│   ├── COMMIT_EDITMSG
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── ORIG_HEAD
+│   ├── branches
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   └── main
+│   │       └── remotes
+│   │           └── origin
+│   │               ├── HEAD
+│   │               └── main
+│   ├── objects
+│   │   ├── 04
+│   │   │   └── 9b97ddd7f921d29ffdef794cdd602ade6b25be
+│   │   ├── 06
+│   │   │   └── 2e3cfc83a62ba3e183639709e32c2f41b12db6
+│   │   ├── 0e
+│   │   │   └── 7f1042eb3fc168aed63dbd43e9fc83b1a13545
+│   │   ├── 18
+│   │   │   └── 34d80d0179b9df9180aa27dd8462637170ec50
+│   │   ├── 1c
+│   │   │   └── a720af277c250f2c2112b62de24af2b55bcde9
+│   │   ├── 25
+│   │   │   └── 6ec99f7f4f202d30ac6ce8b27d32ec227ceb08
+│   │   ├── 2b
+│   │   │   └── 274f0f5e27fc505c94287776c6e5130a32e5b0
+│   │   ├── 3e
+│   │   │   └── e3aa0781597c03028984b93b903e190b6711fc
+│   │   ├── 44
+│   │   │   └── 08d9133810688c9380c6f4550fc4b25b24f741
+│   │   ├── 5b
+│   │   │   └── 3e70a684c578b3d65aaa44c7ee9c347f12470a
+│   │   ├── 5f
+│   │   │   └── 0ac5726a9a6a769597c8f3b87716118e240622
+│   │   ├── 63
+│   │   │   └── 3bae36a956c7aa809df6688380a86513fcc0d5
+│   │   ├── 8e
+│   │   │   └── 7cdad910bf26809bd5a38018f720ebfe520c12
+│   │   ├── a3
+│   │   │   └── 6f01501eb85466a0c423cb711c3ea356800f77
+│   │   ├── c5
+│   │   │   └── 7e34aa9c291381e2b7132635f76535b512f13e
+│   │   ├── c8
+│   │   │   └── b05079935bd8ea4f95cb7598cbd53ebb2abf4e
+│   │   ├── cf
+│   │   │   └── d4e9951aa6c91b621e30d8e237748ef65a910a
+│   │   ├── d3
+│   │   │   └── d72edd5ac61f2a0b2831fe6fe7ac51859916c5
+│   │   ├── d8
+│   │   │   ├── 6e4f06101ca30d98251ba8b31063af30c8f33a
+│   │   │   └── 96b90936de085e3b44ee8f8d95394fae16dfa1
+│   │   ├── db
+│   │   │   └── 7e743e6997edfd5c4c46bc73741e76a91e820a
+│   │   ├── e4
+│   │   │   └── c79d0abbb54235d8ea8625cc333936dc2bd160
+│   │   ├── e8
+│   │   │   └── 0c1aae2dc45b40a2fd3052da36af90f8e271e8
+│   │   ├── f3
+│   │   │   └── dbf0347369fb1591dd58d9b2e1443fd5e3bcdb
+│   │   ├── fb
+│   │   │   └── 5cb2de6ce25b9afdfdb859dbae0166c94ee464
+│   │   ├── fd
+│   │   │   └── 4a1ef780401d3e70b46441158c59f3c18b624f
+│   │   ├── info
+│   │   └── pack
+│   │       ├── pack-23155a428c7199d7b986c4dfd271cf42058a34b5.idx
+│   │       └── pack-23155a428c7199d7b986c4dfd271cf42058a34b5.pack
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       │   └── main
+│       ├── remotes
+│       │   └── origin
+│       │       ├── HEAD
+│       │       └── main
+│       └── tags
+├── .gitignore
+├── LICENSE
+├── Makefile
+├── README.md
+├── Transcendence.xlsx
+├── backend
+│   ├── Dockerfile
+│   ├── api
+│   │   ├── api
+│   │   │   ├── __init__.py
+│   │   │   ├── asgi.py
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── settings.py
+│   │   │   ├── templates
+│   │   │   ├── urls.py
+│   │   │   ├── views.py
+│   │   │   └── wsgi.py
+│   │   └── manage.py
+│   └── requirements.txt
+├── docker-compose.yml
+├── en.subject.pdf
+├── frontend
+│   ├── Dockerfile
+│   ├── certs
+│   │   ├── cert.crt
+│   │   └── cert.key
+│   ├── pong-ssl.conf
+│   └── public_html
+│       ├── api.html
+│       ├── app.js
+│       ├── font
+│       │   └── retro.ttf
+│       ├── images
+│       │   ├── 42_icon.png
+│       │   ├── b_config_icon.png
+│       │   ├── background_1.png
+│       │   ├── background_2.png
+│       │   ├── background_3.png
+│       │   ├── background_4.png
+│       │   ├── background_5.png
+│       │   ├── s_42_icon.png
+│       │   └── w_config_icon.png
+│       ├── index.html
+│       ├── pages
+│       │   ├── animate.html
+│       │   ├── dashboard.html
+│       │   ├── game.html
+│       │   ├── info.html
+│       │   ├── login.html
+│       │   ├── register.html
+│       │   ├── settings.html
+│       │   └── tournament.html
+│       ├── script
+│       │   ├── animate.js
+│       │   ├── home.js
+│       │   ├── login.js
+│       │   ├── pong.js
+│       │   ├── settings.js
+│       │   └── translations.json
+│       ├── sound
+│       │   ├── bound.wav
+│       │   ├── gameover.mp3
+│       │   ├── pause.mp3
+│       │   ├── resume.mp3
+│       │   └── score.mp3
+│       └── style
+│           ├── index.css
+│           ├── info.css
+│           ├── login.css
+│           ├── pong.css
+│           ├── register.css
+│           └── settings.css
+├── init.bat
+└── out
+
+55 directories, 119 files

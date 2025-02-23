@@ -77,5 +77,6 @@ function animate() {
 
     renderer.render(scene, camera);
 }
+window.addEventListener('load', startAnimation);
 
 startAnimation();

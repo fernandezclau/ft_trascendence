@@ -24,6 +24,8 @@ services:
       - ./backend/api:/code
     ports:
       - "8000:8000" # Para pruebas, acceso a backend
+    environment:
+      - PYTHONPATH=/code
     depends_on:
       db:
         condition: service_healthy
