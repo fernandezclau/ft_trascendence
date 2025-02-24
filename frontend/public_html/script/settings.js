@@ -25,6 +25,11 @@ function toggleMode() {
         canvasBorders.forEach(function(element) {
             element.classList.remove("light-mode");
         });
+
+        let navbar = document.querySelectorAll('.navbar');
+        navbar.forEach(function(element) {
+            element.classList.remove("light-mode");
+        });
     } else {
         document.body.classList.add("light-mode");
         modeIcon.classList.replace("fa-sun", "fa-moon");
@@ -32,6 +37,10 @@ function toggleMode() {
 
         let canvasBorders = document.querySelectorAll('.canvas-border');
         canvasBorders.forEach(function(element) {
+            element.classList.add("light-mode");
+        });
+        let navbar = document.querySelectorAll('.navbar');
+        navbar.forEach(function(element) {
             element.classList.add("light-mode");
         });
     }

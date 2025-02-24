@@ -1,4 +1,5 @@
 #game {
+    font-family: 'retro';
     position: relative;
     z-index: 1;
 }
@@ -15,6 +16,7 @@
 }
   
 #score h1 {
+    font-family: 'retro';
     font-size: 32px;
     margin: 0;
     width: 50%;
@@ -31,11 +33,11 @@
 .canvas-border {
     display: inline-block;
     padding: 2px 6px 2px 2px;
-    background-color: #000000;
+    background-color: #161618;
 }
 
 .canvas-border.light-mode{
-    background-color: #dcdadab7;
+    background-color: #74748d;
 }
 
 canvas {
@@ -44,7 +46,7 @@ canvas {
     height: 100%;
     border: 2px solid #fff;
     border-radius: 5px;
-    background-color: #000000;
+    background-color: #161618;
 }
 
 :root {
@@ -67,6 +69,7 @@ canvas {
 }
 
 #debugMessage {
+    font-family: 'retro';
     font-size: 50px;
     color: white;
     position: absolute;

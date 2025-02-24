@@ -16,7 +16,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.6.0/css/flag-icon.min.css">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
         <!-- CSS Styles -->
         <link rel="stylesheet" href="style/index.css">
@@ -25,100 +26,52 @@
         <link rel="stylesheet" href="style/login.css">
         <link rel="stylesheet" href="style/register.css">
         <link rel="stylesheet" href="style/info.css">
+        <link rel="stylesheet" href="style/game.css">
     </head>
     
     <body>
 
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar navbar-expand-lg shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#" onclick="loadPage('home')" data-key="navbarBrand">PONG</a>
+
+                <!-- Navbar brand -->
+                <a class="navbar-brand" onclick="loadPage('game')" data-key="navbarBrand">PONG</a>
+                
+                <!-- Navbar toggler -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">  
-                        <li  class="nav-item"><a class="nav-link" onclick="loadPage('tournament')" data-key="tournament">Tournament</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="loadPage('dashboard')" data-key="dashboard">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="loadPage('info')" data-key="info">Info</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="loadPage('login')" data-key="login">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="loadPage('animate')" data-key="animate">Animate</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="loadSettings()" data-key="settings">Settings</a></li>
+                
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="loadPage('tournament')" data-key="tournament">Tournament</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="loadPage('info')" data-key="info">Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="loadPage('animate')" data-key="animate">Animate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="loadSettings()" data-key="settings">Settings</a>
+                        </li>
                     </ul>
+                    <div class="button-container">
+                        <button class="btn login-button" onclick="loadPage('login')" data-key="login">Log in</button>
+                        <button class="btn signup-button" onclick="loadPage('register')" data-key="signup">Sign up</button>
+                    </div>
+
                 </div>
             </div>
-        </nav>
-        
+        </nav>    
 
         <!-- Dynamic content -->
         <div class="content-container" id="content-container">
         </div>
-        
-        
-        <div id="playerSelection" class="selection">
-            <div class="selection-element">
-                <h4 data-key="numPlayers">Number of players</h4>
-                <div>
-                    <button class="player-btn players-btn-group selected" onclick="selectPlayers(1)">1</button>
-                    <button class="player-btn players-btn-group" onclick="selectPlayers(2)">2</button>
-                    <button class="player-btn players-btn-group" onclick="selectPlayers(4)">4</button>
-                </div>
-            </div>
-        
-            <div class="selection-element">
-                <h4 data-key="numPoints">Points to win</h4>
-                <div>
-                    <button class="player-btn points-btn-group" onclick="selectPoints(5)">5</button>
-                    <button class="player-btn points-btn-group selected" onclick="selectPoints(10)">10</button>
-                    <button class="player-btn points-btn-group" onclick="selectPoints(15)">15</button>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div id="playerRegistrationContainer">
-            <button id="startButton" data-key="playButton">Start</button>
-        </div>
-        
-        <!-- Contenedor de los modales -->
-        <div id="popupContainer" class="modal">
-            <div class="modal-content">
-                <span id="closeButton" class="close-btn">&times;</span>
-                
-                <h3 id="modalTitle"></h3>
-                
-                <!-- Username Input -->
-                <div class="game-input">
-                    <label for="newUsername" class="form-label">User</label>
-                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="User" required>
-                </div>
-                
-                <!-- Boost Selection -->
-                <div class="game-input">
-                    <label for="boost" class="form-label" data-key="chooseBost">Choose a Boost</label>
-                    <select id="boostSelect" class="form-control" required>
-                        <option value="speed" data-key="speedBoost">Speed Boost</option>
-                        <option value="power" data-key="powerBoost">Power Boost</option>
-                        <option value="defense" data-key="defenseBoost">Defense Boost</option>
-                    </select>
-                </div>
-        
-                <!-- Color Palette Selection -->
-                <div class="game-input">
-                    <label for="colorPalette" class="form-label" data-key="chooseColor">Choose a Color</label>
-                    <div class="game-color-options">
-                        <div class="game-color-option" style="background-color: #ff6f61;" onclick="setColor('#ff6f61')"></div>
-                        <div class="game-color-option" style="background-color: #6fffc0;" onclick="setColor('#6fffc0')"></div>
-                        <div class="game-color-option" style="background-color: #d9a7c7;" onclick="setColor('#d9a7c7')"></div>
-                        <div class="game-color-option" style="background-color: #8aacc8;" onclick="setColor('#8aacc8')"></div>
-                    </div>
-                </div>
-                
-                <!-- Save Button -->
-                <button id="saveButton" data-key="saveButton">Save</button>
-            </div>
-        </div>
-        
         
         <!-- Game -->
         <div id="game">
@@ -127,7 +80,7 @@
                 <h1 id="player2Score">0</h1>
             </div>
 
-            <h1 id="debugMessage" class="paused" data-key="pressSpace">Press Space</h1>
+            <h1 id="debugMessage" class="paused"></h1>
             <id id="canvasBorder" class="canvas-border">
                 <canvas id="pongCanvas" width="800" height="400"></canvas>
             </id>
@@ -146,5 +99,6 @@
     <script src="app.js"></script>
     <script src="script/settings.js"></script>
     <script src="script/login.js"></script>
-    <script src="script/animate.js"></script>
+    <!-- <script src="script/animate.js"></script> -->
+    <script src="script/onLoad.js"></script>
 </html>

@@ -1,1 +1,49 @@
 
+<!-- Game Container -->
+<div class="game-selection">
+
+    <!-- Game Title -->
+    <h3 data-key="gameTitle">Game options</h3>
+    <hr>
+
+    <!-- Game options -->
+    <div id="playerSelection" class="game-selection-options">
+        <div class="game-selection-option">
+            <h4 data-key="numPlayers">Players</h4>
+            <div class="game-selection-option-players">
+                <!-- <button class="option-btn players-btn-group selected" onclick="selectPlayers(1)">1</button> -->
+                <button class="option-btn players-btn-group" onclick="selectPlayers(2)">2</button>
+                <button class="option-btn players-btn-group" onclick="selectPlayers(4)">4</button>
+            </div>
+        </div>
+    
+        <div class="game-selection-option">
+            <h4 data-key="numPoints">Points</h4>
+            <div>
+                <button class="option-btn points-btn-group" onclick="selectPoints(5)">5</button>
+                <button class="option-btn points-btn-group button-selected" onclick="selectPoints(10)">10</button>
+                <button class="option-btn points-btn-group" onclick="selectPoints(15)">15</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Players Registration  -->
+    <form id="playerForm" class="game-register-global">
+        
+        <div class="game-register" id="gameRegister">
+        </div>
+        
+        <div id="game-registration-error" class="game-error" style="display: none;">
+            Failed to register players. Please try again.
+        </div>
+    
+        <!-- Start button -->
+        <div id="playerRegistrationContainer" class="game-selection-start">
+            <button type="submit" data-key="playButton" id="startButton" onclick="startGame()">READY</button>
+            <button id="RELOAD" onclick="location.reload();">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+    </form>
+</div>
+

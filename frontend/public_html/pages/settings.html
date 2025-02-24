@@ -48,12 +48,12 @@
         <div class="color-picker mb-4">
             <h5 data-key="ball_color">Ball Color</h5>
             <div class="color-options">
-                <button class="color-option" style="background-color: red;" onclick="updateBallColor('red')"></button>
-                <button class="color-option" style="background-color: green;" onclick="updateBallColor('green')"></button>
-                <button class="color-option" style="background-color: blue;" onclick="updateBallColor('blue')"></button>
-                <button class="color-option" style="background-color: yellow;" onclick="updateBallColor('yellow')"></button>
-                <button class="color-option" style="background-color: purple;" onclick="updateBallColor('purple')"></button>
-                <button class="color-option" style="background-color: rgb(255, 255, 255);" onclick="updateBallColor('white')"></button>
+                <button class="color-option" style="background-color: #B63A4B;" onclick="updateBallColor('#B63A4B')"></button>
+                <button class="color-option" style="background-color: #5A9F6B;" onclick="updateBallColor('#5A9F6B')"></button>
+                <button class="color-option" style="background-color: #516A99;" onclick="updateBallColor('#516A99')"></button>
+                <button class="color-option" style="background-color: #ECE570;" onclick="updateBallColor('#ECE570')"></button>
+                <button class="color-option" style="background-color: #9C77C1;" onclick="updateBallColor('#9C77C1')"></button>
+                <button class="color-option selected" style="background-color: #fff2f2;" onclick="updateBallColor('#fff2f2')"></button>
             </div>
         </div>
         
@@ -62,17 +62,15 @@
         <div class="background-picker mb-4">
             <h5 data-key="background">Background</h5>
             <div class="background-options">
-                <button class="background-option" data-color="black" onclick="changeBackground('black', this)">
-                    <img src="images/background_1.png" alt="Background 1" class="background-thumbnail">
+                <button class="background-option" style="background-color: #161618;" data-color="black" onclick="changeBackground('#161618', this)">
                 </button>
-                <button class="background-option" data-color="pink" onclick="changeBackground('pink', this)">
-                    <img src="images/background_2.png" alt="Background 2" class="background-thumbnail">
+                <button class="background-option" style="background-color: #70b8b1;" data-color="pink" onclick="changeBackground('#70b8b1', this)">
                 </button>
-                <button class="background-option" data-color="gray" onclick="changeBackground('gray', this)">
-                    <img src="images/background_3.png" alt="Background 3" class="background-thumbnail">
+                <button class="background-option" style="background-color: #b2afb1;" data-color="gray" onclick="changeBackground('#b2afb1', this)">
                 </button>
-                <button class="background-option" data-color="lightblue" onclick="changeBackground('lightblue', this)">
-                    <img src="images/background_4.png" alt="Background 4" class="background-thumbnail">
+                <button class="background-option" style="background-color: #f4a6b1;" data-color="lightblue" onclick="changeBackground('#f4a6b1', this)">
+                </button>
+                <button class="background-option" style="background-color: #74748d;" data-color="lightblue" onclick="changeBackground('#74748d', this)">
                 </button>
             </div>
         </div>        
@@ -85,32 +83,50 @@
             <h2 data-key="account_settings">Account Settings</h2>
         </div>
         <hr>
-    
-        <div class="settings-group">
-            <label for="username" data-key="username_label">Username</label>
-            <input type="text" id="username" placeholder="Your username" data-key="username_placeholder">
-            <button class="save-btn" data-key="save">Save</button>
-        </div>
-    
-        <div class="settings-group">
-            <label for="email" data-key="email_label">Email</label>
-            <input type="email" id="email" placeholder="Your email" data-key="email_placeholder">
-            <button class="save-btn" data-key="save">Save</button>
-        </div>
-    
-        <div class="settings-group">
-            <label for="password" data-key="new_password_label">New Password</label>
-            <input type="password" id="password" placeholder="New password" data-key="new_password_placeholder">
-            <button class="save-btn" data-key="update">Update</button>
-        </div>
-    
-        <div class="settings-group">
-            <button class="twofa-btn" data-key="enable_2fa">Enable 2FA</button>
+
+        <div class="account-settings-forms">
+            <form>
+                <label for="username" data-key="username_label">Username</label>
+                <div class="settings-group">
+                    <input type="text" id="username" placeholder="Your username" data-key="username_placeholder">
+                    <button class="save-btn">
+                        <i class="fas fa-save"></i>
+                    </button>                 
+                </div>
+            </form>
+            
+            <form>
+                <label for="email" data-key="email_label">Email</label>
+                <div class="settings-group">
+                    <input type="email" id="email" placeholder="Your email" data-key="email_placeholder">
+                    <button class="save-btn">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+            </form>
+            
+            <form>
+                <label for="password" data-key="new_password_label">Change Password</label>
+                <div class="settings-group">
+                    <input type="password" id="password" placeholder="Old password" data-key="old_password_placeholder">
+                    <input type="password" id="password" placeholder="New password" data-key="new_password_placeholder">
+                    <input type="password" id="password" placeholder="Confirm password" data-key="confirm_password_placeholder">
+                    <button class="save-btn">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     
         <div class="danger-zone">
-            <button class="delete-btn" data-key="delete_account">Delete Account</button>
-            <button class="logout-btn" data-key="logout">Log Out</button>
+            <button class="delete-btn">
+                <i class="fas fa-trash-alt"></i>
+                <span data-key="delete_account">Delete Account</span>
+            </button>
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span data-key="logout">Log Out</span>
+            </button>    
         </div>
     </div>
     

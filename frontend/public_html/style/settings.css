@@ -1,14 +1,18 @@
 .settings {
     margin: 20px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .settings-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #fff2f2;
 }
 
 .settings h2 {
+    font-family: 'retro';
     font-weight: bold;
     margin: 10px 10px 10px 0px;
 }
@@ -24,6 +28,7 @@
     transition: transform 0.3s ease;
     margin-left: 5px;
 }
+
 .language-select {
     border: none;
     font-size: 16px;
@@ -46,6 +51,7 @@
     cursor: pointer;
     color: black;
 }
+
 /* Estilo para el select */
 .language-select {
     background-color: rgb(255, 255, 255);
@@ -68,7 +74,6 @@
 }
 
 /* -- BALL SIZE -- */
-
 /* progress bars */
 .form-range::-webkit-slider-runnable-track {
     height: 8px;
@@ -106,8 +111,12 @@
 .ball-speed {
     display: flex;
     flex-direction: column;
-    align-items: center;
     width: 100%;
+}
+
+.ball-speed h5, .size-picker h5, .color-picker h5, .background-picker h5 {
+    font-family: 'retro';
+    margin: 10px;
 }
 
 .speed-labels {
@@ -125,14 +134,16 @@
 .color-option {
     width: 30px;
     height: 30px;
+    margin: 10px;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
+    border: 2px solid white;
 }
 
 .color-option.selected {
-    border: 2px solid #ffffff;  /* Borde negro cuando está seleccionado */
+    border: 2px solid #f4a6b1;  /* Borde negro cuando está seleccionado */
     transform: scale(1.2);    /* Aumenta un poco el tamaño del botón seleccionado */
 }
 
@@ -142,39 +153,30 @@
 
 
 /* -- BACKGROUND PICKER -- */
-.background-picker {
-    margin-top: 20px;
-}
-
 .background-options {
     display: flex;
     justify-content: space-between;
+    height: fit-content;
     gap: 15px;
+    margin: 20px;
 }
 
 .background-option {
-    width: auto;
-    height: auto;
     border: 2px solid transparent;
-    border-radius: 10px;
+    width: 50px;
+    height: 50px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease, border 0.3s ease;
+    border: 2px solid white;
 }
 
 .background-option:hover {
-    transform: scale(1.1);
-    border: 2px solid #744646;
-}
-
-.background-thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    transform: scale(1.2);
 }
 
 .background-option.selected {
-    border: 3px solid #ff0000;
+    border: 3px solid #e2a66b;
     transform: scale(1.2);
 }
 
@@ -188,82 +190,95 @@
     font-family: Arial, sans-serif;
 }
 
+.account-settings-forms {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px;
+}
+
+.account-settings-forms  form {
+    display: flex;
+    flex-direction: column;
+}
+
 .account-settings input {
     padding: 8px;
     border-radius: 5px;
-    border: 1px solid #444;
-    background: #2a2a2a;
-    color: #fff;
-    max-width: 500px;
+    border: none;
+    background: #41414e;
+    margin: 4px 10px 4px 0px;
+    color: #fff2f2;
+    width: fit-content;
 }
 
 .account-settings input.disabled {
-    background-color: #bbb;
+    color: #fff2f2;
 }
 
 .account-settings label {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #bbb;
+    font-size: 1rem;
+    margin: 4px 10px 4px 0px;
+    color: #fff2f2;
+    font-weight: bolder;
 }
 
-.account-settings button {
-    margin-top: 8px;
-    padding: 10px;
-    border: none;
+.account-settings form button {
+    padding: 8px;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
-    max-width: 500px;
+    border: 1px solid #111111;
+    background: #f4a6b1;
+    margin: 4px 10px 4px 0px;
+    color: #161618;
+    max-width: 100px;
+}
+
+.account-settings form button:hover{
+    background: #f5f598;
 }
 
 .settings-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin-bottom: 15px;
 }
 
-.save-btn {
-    background: #28a745;
-    color: white;
-}
-
-.save-btn:hover {
-    background: #218838;
-}
-
-.twofa-btn {
-    background: #007bff;
-    color: white;
-}
-
-.twofa-btn:hover {
-    background: #0056b3;
-}
-
 .danger-zone {
+    padding: 10px;
     margin-top: 20px;
     display: flex;
     justify-content: start;
+    width: 100%;
     gap: 30px;
 }
 
+.delete-btn, .logout-btn {
+    width: fit-content;
+    padding: 10px;
+    color: #161618;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
 .delete-btn {
-    background: #dc3545;
-    color: white;
+    background: #B63A4B;
+    border: 2px solid #5e1f27;
 }
 
 .delete-btn:hover {
-    background: #c82333;
+    background: rgb(211, 72, 90);
+    color: #5e1f27;
 }
 
 .logout-btn {
-    background: #ffcc00;
-    color: black;
+    background: #b2afb1;
+    border: 2px solid #6d6b6c;
 }
 
 .logout-btn:hover {
-    background: #d4a800;
+    background: #FFF2F2;
+    border: 2px solid #b2afb1;
+    color: #6d6b6c;
 }
 

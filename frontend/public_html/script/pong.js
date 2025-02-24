@@ -1,12 +1,12 @@
 let players = [];
-let palleteColor;
 const canvas = document.getElementById('pongCanvas');
 const context = canvas.getContext('2d');
 const player1Score = document.getElementById('player1Score');
 const player2Score = document.getElementById('player2Score');
 const debugMessage = document.getElementById('debugMessage');
 
-// # SECCIÓN DE JUEGO
+// # SECCIÓN DE 
+let started = false;
 let paused = true;                                      // Guarda si el juego está pausado
 let winner = 0;                                         // Guarda si hay un ganador (0:No, 1:Jugador1, 2:Jugador2)
 let lastTime = performance.now();                       // Contadores de tiempo
@@ -16,23 +16,28 @@ let animation = false;                                  // Guarda si se está ac
 let animationColor;                                     // Color del jugador que provocó la animación
 let UIColor = '#fff';                                   // Color actual de la interfaz
 let pointsToWin = 10;                                   // Puntos para ganar
-let playersToPlay = 1;                                  // Numero de jugadores
-let countDownValue = 3;                                 // Inicia la cuenta atrás 3
+let playersToPlay = null;                                  // Numero de jugadores
 
 // # SECCIÓN DE JUGADOR
 const paddleWidth = 10, paddleHeight = 100;             // Dimensiones de los rectángulos
 const paddleSpeed = 600;                                // Velocidad de los jugadores
 let player1Y = canvas.height / 2 - paddleHeight / 2;    // Posiciones de ambos jugadores
 let player2Y = player1Y;
+let player3Y = player1Y;
+let player4Y = player1Y;
+let playerDistance = 100;
 let wPressed = false, sPressed = false;                 // Controla si se están pulsando las teclas W/S
 let upPressed = false, downPressed = false;             // Controla si se están pulsando las teclas Arriba/Abajo
+let iPressed = false, kPressed = false;                 // Controla si se están pulsando las teclas I/K
+let np8Pressed = false, np5Pressed = false;
 
 // # SECCIÓN DE PELOTA
 let ballSize = 10;                                    // Dimensiones de la pelota
-let ballBSpeed = 500;                                 // Velocidad base de la pelota
+let ballBSpeed = 50;                                 // Velocidad base de la pelota
 let ballX = canvas.width / 2 - ballSize / 2;            // Posición de la pelota
 let ballY = canvas.height / 2 - ballSize / 2;
-let ballSpeedX = 500, ballSpeedY = 500;                // Velocidades en X e Y de la pelota
+let ballSpeedX = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed;       // Velocidad de la pelota
+let ballSpeedY = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed; 
 let ballColor = '#fff';
 
 // # SECCIÓN DE SONIDO
@@ -87,33 +92,80 @@ function moveBall(time) {
         playSound('bounce');
     }
 
-    // Zona del jugador 1
-    if (ballX <= paddleWidth) {
-        // Gol
-        if (ballX + ballSize <= 0)
-            playerScore(2);
+    if (playersToPlay == 4) {
+        // Zona del equipo 1
+        if (deltaX < 0 && ballX <= playerDistance + paddleWidth) {
+            // Gol del equipo 1
+            if (ballX + ballSize <= 0)
+                playerScore(2);
 
-        // Rebote
-        else if (ballY >= player1Y && ballY <= player1Y + paddleHeight) {
-            ballX = paddleWidth;
-            ballSpeedX = -ballSpeedX * (Math.random() * 0.2 + 0.9);
-            ballSpeedY = ballSpeedY * (Math.random() * 0.2 + 0.9);
-            playSound('bounce');
+            // Colisi贸n con el jugador 3
+            else if (ballX >= playerDistance && ballY + ballSize >= player3Y && ballY <= player3Y + paddleHeight) {
+                ballX = playerDistance + paddleWidth;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
+
+            // Colisi贸n con el jugador 1
+            else if (ballX <= paddleWidth && ballY + ballSize >= player1Y && ballY <= player1Y + paddleHeight) {
+                ballX = paddleWidth;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
+
+        // Zona del equipo 2 
+        } else if (deltaX > 0 && ballX + ballSize >= canvas.width - playerDistance - paddleWidth) {
+            // Gol del equipo 2
+            if (ballX >= canvas.width)
+                playerScore(1);
+
+            // Colisi贸n con el jugador 4
+            else if (ballX + ballSize <= canvas.width - playerDistance && ballY + ballSize >= player4Y && ballY <= player4Y + paddleHeight) {
+                ballX = canvas.width - playerDistance - paddleWidth - ballSize;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
+
+            // Colisi贸n con el jugador 2
+            else if (ballX + ballSize >= canvas.width - paddleWidth && ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight) {
+                ballX = canvas.width - paddleWidth - ballSize;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
         }
-    }
+    } else {
+        // Zona del jugador 1
+        if (ballX <= paddleWidth) {
+            // Gol
+            if (ballX + ballSize <= 0)
+                playerScore(2);
 
-    // Zona del jugador 2
-    if (ballX + ballSize >= canvas.width) {
-        // Gol
-        if (ballX >= canvas.width)
-            playerScore(1);
+            // Rebote
+            else if (ballY + ballSize >= player1Y && ballY <= player1Y + paddleHeight) {
+                ballX = paddleWidth;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
+        }
 
-        // Rebote
-        else if (ballY >= player2Y && ballY <= player2Y + paddleHeight) {
-            ballX = canvas.width - paddleWidth - ballSize;
-            ballSpeedX = -ballSpeedX * (Math.random() * 0.2 + 0.9);
-            ballSpeedY = ballSpeedY * (Math.random() * 0.2 + 0.9);
-            playSound('bounce');
+        // Zona del jugador 2
+        if (ballX + ballSize >= canvas.width - paddleWidth) {
+            // Gol
+            if (ballX >= canvas.width)
+                playerScore(1);
+
+            // Rebote
+            else if (ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight) {
+                ballX = canvas.width - paddleWidth - ballSize;
+                ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
+                ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
+                playSound('bounce');
+            }
         }
     }
 }
@@ -122,7 +174,7 @@ function playerScore(player) {
     // Comprobar victoria
     if (player == 1) {
         player1Score.textContent = parseInt(player1Score.textContent) + 1;
-        animationColor = "#357ABD";
+        animationColor = "#8BB9F7";
         if (parseInt(player1Score.textContent) >= pointsToWin) {
             winner = 1;
             debugMessage.classList.add('winner');
@@ -132,7 +184,7 @@ function playerScore(player) {
     }
     else {
         player2Score.textContent = parseInt(player2Score.textContent) + 1;
-        animationColor = "#BD3535";
+        animationColor = "#DA5C5C";
         if (parseInt(player2Score.textContent) >= pointsToWin) {
             winner = 2;
             debugMessage.classList.add('winner');
@@ -159,28 +211,40 @@ function playerScore(player) {
 function movePlayers(time) {
     player1Y = Math.min(canvas.height - paddleHeight, Math.max(0, player1Y + paddleSpeed * time * (sPressed - wPressed)));
     player2Y = Math.min(canvas.height - paddleHeight, Math.max(0, player2Y + paddleSpeed * time * (downPressed - upPressed)));
+    if (playersToPlay == 4) {
+        player3Y = Math.min(canvas.height - paddleHeight, Math.max(0, player3Y + paddleSpeed * time * (kPressed - iPressed)));
+        player4Y = Math.min(canvas.height - paddleHeight, Math.max(0, player4Y + paddleSpeed * time * (np5Pressed - np8Pressed)));
+    }
 }
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'w' || event.key === 'W') wPressed = true;
-    if (event.key === 's' || event.key === 'S') sPressed = true;
-    if (event.key === 'ArrowUp') upPressed = true;
-    if (event.key === 'ArrowDown') downPressed = true;
-    if (event.key === ' ' && winner == 0) {
-        paused = !paused;
-        if (paused) {
-            // Guardar el momento de pausa
-            pauseTime = performance.now();
+    if (started) {
+        if (event.key === 'w' || event.key === 'W') wPressed = true;
+        if (event.key === 's' || event.key === 'S') sPressed = true;
+        if (event.key === 'ArrowUp') upPressed = true;
+        if (event.key === 'ArrowDown') downPressed = true;
+        if (playersToPlay == 4) {
+            if (event.key === 'i' || event.key === 'I') iPressed = true;
+            if (event.key === 'k' || event.key === 'K') kPressed = true;
+            if (event.code === 'Numpad8') np8Pressed = true;
+            if (event.code === 'Numpad5') np5Pressed = true;
+        }
+        if (event.key === ' ' && winner == 0) {
+            paused = !paused;
+            if (paused) {
+                // Guardar el momento de pausa
+                pauseTime = performance.now();
 
-            // Pausar
-            playSound('pause');
-            debugMessage.textContent = "PAUSED";
-            debugMessage.classList.add('paused');
-        } else {
-            // Continuar
-            playSound('resume');
-            debugMessage.textContent = "";
-            debugMessage.classList.remove('paused');
+                // Pausar
+                playSound('pause');
+                debugMessage.textContent = "PAUSED";
+                debugMessage.classList.add('paused');
+            } else {
+                // Continuar
+                playSound('resume');
+                debugMessage.textContent = "";
+                debugMessage.classList.remove('paused');
+            }
         }
     }
 });
@@ -190,6 +254,12 @@ document.addEventListener('keyup', (event) => {
     if (event.key === 's' || event.key === 'S') sPressed = false;
     if (event.key === 'ArrowUp') upPressed = false;
     if (event.key === 'ArrowDown') downPressed = false;
+    if (playersToPlay == 4) {
+        if (event.key === 'i' || event.key === 'I') iPressed = false;
+        if (event.key === 'k' || event.key === 'K') kPressed = false;
+        if (event.code === 'Numpad8') np8Pressed = false;
+        if (event.code === 'Numpad5') np5Pressed = false;
+    }
 });
 
 function drawGameBoard() {
@@ -197,16 +267,20 @@ function drawGameBoard() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Dibujar Jugador 1
-    context.fillStyle = "#357ABD";
+    context.fillStyle = "#4C6A90";
     context.fillRect(0, player1Y, paddleWidth, paddleHeight);
     // Dibujar Jugador 2
-    context.fillStyle = "#BD3535";
+    context.fillStyle = "#DA5C5C";
     context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
-    // Dibujar perlota
-    context.fillStyle = ballColor;
-    context.beginPath();
-    context.arc(ballX + ballSize / 2, ballY + ballSize / 2, ballSize / 2, 0, Math.PI * 2);
-    context.fill();
+    
+    if (playersToPlay == 4) {
+        // Dibujar Jugador 3
+        context.fillStyle = "#625286";
+        context.fillRect(playerDistance, player3Y, paddleWidth, paddleHeight);
+        // Dibujar Jugador 4
+        context.fillStyle = "#BE4F8A";
+        context.fillRect(canvas.width - playerDistance - paddleWidth, player4Y, paddleWidth, paddleHeight);
+    }
 
     // Dibujar línea discontinua en el centro
     context.setLineDash([7, 7]);
@@ -217,11 +291,17 @@ function drawGameBoard() {
     context.lineWidth = 2;
     context.stroke();
     context.setLineDash([]);
+
+    // Dibujar perlota
+    context.fillStyle = ballColor;
+    context.beginPath();
+    context.arc(ballX + ballSize / 2, ballY + ballSize / 2, ballSize / 2, 0, Math.PI * 2);
+    context.fill(); 
 }
 
 function gameLoop() {
     // Controlar pausa
-    if (paused) {
+    if (paused || !started) {
         requestAnimationFrame(gameLoop);
         lastTime = performance.now();
         return;
@@ -263,31 +343,41 @@ function gameLoop() {
 
 // Iniciar juego
 drawGameBoard();
-gameLoop();
+//gameLoop();
 
 // Función para seleccionar el número de jugadores
 function selectPlayers(players) {
-    let playersButtons = document.querySelect// Añadir la clase 'selected' al botón que fue clicado
-    // Ajuste de índice para que coincida con los valores disponibles (1, 2, 4 jugadores)orAll('.players-btn-group');
-    playersButtons.forEach(button => button.classList.remove('selected'));
+    let playersButtons = document.querySelectorAll('.players-btn-group');
+    playersButtons.forEach(button => button.classList.remove('button-selected'));
 
     let selectedButton;
-    if (players === 1) {
-        selectedButton = playersButtons[0]; // Selecciona el botón de 1 jugador
-    } else if (players === 2) {
-        selectedButton = playersButtons[1]; // Selecciona el botón de 2 jugadores
+    if (players === 2) {
+        selectedButton = playersButtons[0]; // Selecciona el botón de 2 jugador
     } else if (players === 4) {
-        selectedButton = playersButtons[2]; // Selecciona el botón de 4 jugadores
+        selectedButton = playersButtons[1]; // Selecciona el botón de 4 jugadores
+    } else {
+        selectedButton = playersButtons[0]; // Selecciona el botón de 2 jugador
+        players = 2;
     }
 
     if (selectedButton) {
-        selectedButton.classList.add('selected');
+        selectedButton.classList.add('button-selected');
     } else {
         console.error('No se pudo encontrar el botón para los jugadores:', players);
     }
-
+    
     playersToPlay = players;
+    const startButton = document.getElementById('startButton');
+    
+    if (playersToPlay && startButton) {
+        startButton.disabled = false;
+        generatePlayerForms(playersToPlay);
+    }
+    else if (startButton){
+        startButton.disabled = true;
+    }
     console.log(`Selected ${playersToPlay} players`);
+    drawGameBoard();
 }
 
 // Función para seleccionar el número de puntos necesarios para ganar
@@ -316,7 +406,62 @@ function selectPoints(points) {
     console.log(`Selected ${pointsToWin} points to win`);
 }
 
-const startButton = document.getElementById('startButton');
+function startGame() {
+    const form = document.getElementById("playerForm");
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        const error = document.getElementById("game-registration-error")
+        error.style.display = "block";
+        error.style.visibility = "visible";
+        return;
+    }
+
+    const playerForms = document.querySelectorAll(".game-register-content");
+    let playersData = [];
+
+    playerForms.forEach((form, index) => {
+        const usernameInput = document.getElementById(`usernameInput${index + 1}`);
+        //const boostInput = document.getElementById(`boostInput${index + 1}`);
+
+        playersData.push({
+            username: usernameInput.value.trim(),
+            //boost: boostInput.value
+        });
+    });
+
+    console.log("Player Data Submitted:", playersData);
+    
+    // Quitar jugadores
+    const gameRegister = document.getElementById("gameRegister")
+    gameRegister.style.display = "none";
+    gameRegister.style.visibility = "visible";
+
+    if (playersToPlay != null && pointsToWin)
+    {
+        
+        console.log("Starting game");
+
+        // 2 . Disabled players/points buttons
+        disableSelectionButtons();
+        
+        // 3. Disabled start button
+        if (startButton)
+            startButton.disabled = true;
+
+        // 4. Start game
+        started = true;
+        playSound('resume');
+        debugMessage.textContent = "PRESS SPACEBAR";
+
+        
+        gameLoop();
+    } else {
+        error_element = document.getElementById('game-error');
+        error_element.style.display = 'block';
+        error_element.textContent = 'Please select the number of players and points to win';
+    }
+}
 
 // Deshabilitar botones inicio juego
 function disableSelectionButtons()
@@ -327,91 +472,69 @@ function disableSelectionButtons()
     playerButtons.forEach(button => button.disabled = true);
     pointsButtons.forEach(button => button.disabled = true);
 }
-
-// start button
-document.getElementById("startButton").addEventListener("click", function() {
-
-    let iPlayers = 1;   // Jugadores registrados
+// Deshabilitar botones inicio juego
+function disableSelectionButtons()
+{
+    let playerButtons = document.querySelectorAll('.players-btn-group');
+    let pointsButtons = document.querySelectorAll('.points-btn-group');
     
-    // 1. Deshabilitar botones seleccion
-    disableSelectionButtons();
+    playerButtons.forEach(button => button.disabled = true);
+    pointsButtons.forEach(button => button.disabled = true);
+}
 
-    // Abrir pop up
-    function openPopup(playerNumber) {
+// Generación de formularios de registro
+function generatePlayerForms(num_players) {
+    const popupContainer = document.getElementById("gameRegister");
+    popupContainer.innerHTML = ""; // Limpiar contenido previo
 
-        // Extraer campos
-        const modal = document.getElementById("popupContainer");
-        const modalTitle = document.getElementById("modalTitle");
-        const usernameInput = document.getElementById("usernameInput");
-        const boostSpell = document.getElementById("boostSelect");
-        const saveButton = document.getElementById("saveButton");
-        
-        // 1. Set title
-        modalTitle.innerText = `Player ${playerNumber}`;
-        usernameInput.value = '';
+    let teamNumber = num_players == 2 ? 2 : 2;
+    let title = num_players == 2 ? "Player" : "Team";
 
-        // 2. Show modal
-        modal.style.display = 'block';
-
-        // 3. Save name
-        saveButton.onclick = function() {
-            const playerName = usernameInput.value.trim();
-            const playerBoost = boostSpell.value;
-
-            if (playerName && playerBoost) {
-                const player = {
-                    name: playerName,
-                    boost: playerBoost,
-                    color: palleteColor
-                };
-                
-                // 3. Añadimos jugador
-                if (isPlayerValid(players, player))        
-                    players.push(player);
-                else
-                {
-                    alert(`Nombre invalido: ${playerName}`);
-                    return ;
-                }
-                
-                alert(`Jugador ${playerNumber} registrado: ${playerName}`);
-                modal.style.display = 'none'; // Cerrar el popup
-                iPlayers++;
-                
-                // Si hay más jugadores, abrir el siguiente popup
-                if (iPlayers <= playersToPlay) {
-                    openPopup(iPlayers);
-                }
-            } else {
-                alert("Por favor ingresa un nombre.");
-            }
-        };
+    for (let i = 1; i <= teamNumber; i++) {
+        const playerForm = document.createElement("div");
+        playerForm.classList.add("game-register-content");
+        playerForm.innerHTML =`
+            <h3 id="modalTitle">${title} ${i}</h3>
+            <div class="game-register-content-input">
+                <label for="usernameInput${i}" class="game-register-content-label">Username</label>
+                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="Username" required>
+            </div>
+            <div class="game-register-content-input">
+                <label class="game-register-content-label" data-key="chooseBoost">Choose a Boost</label>
+                <div class="boost-options">
+                    <div class="boost-option game-option-selected" data-boost="speed" onclick="selectBoost('speed', ${i})">
+                        <img src="images/speed.png" alt="Speed Boost">
+                    </div>
+                    <div class="boost-option" data-boost="power" onclick="selectBoost('power', ${i})">
+                        <img src="images/power.png" alt="Power Boost">
+                    </div>
+                    <div class="boost-option" data-boost="defense" onclick="selectBoost('defense', ${i})">
+                        <img src="images/shield.png" alt="Defense Boost">
+                    </div>
+                </div>
+            </div>
+        `;
+        popupContainer.appendChild(playerForm);
     }
-    // Cerrar el popup
-    document.getElementById("closeButton").addEventListener("click", function() {
-        
-        document.getElementById("popupContainer").style.display = 'none';
-        players = []
-        
+}
+
+// Selección del bost
+function selectBoost(boostType, playerId) {
+    // Selecciona todos los boost-options del jugador correspondiente
+    const playerBoosts = document.querySelectorAll(`.game-register-content:nth-child(${playerId}) .boost-option`);
+
+    // Remueve la clase 'selected' de todos los boosts del jugador
+    playerBoosts.forEach(boost => boost.classList.remove('game-option-selected'));
+
+    // Encuentra el boost seleccionado y agrégale la clase 'selected'
+    playerBoosts.forEach(boost => {
+        if (boost.dataset.boost === boostType) {
+            
+            boost.classList.add('game-option-selected');
+        }
     });
 
-    // 2. Abrir pop up
-    openPopup(iPlayers);
-
-    console.log(players);
-
-    // Cuenta atrás empezar juego
-
-    // 4. INicio juego
-});
-
-
-// Verificamos que el username sea único
-function isPlayerValid(players, player) {
-
-    if (players.some(p => p.name === player.name))
-        return false; // Si el nombre ya existe, no es válido
-    return true;
+    console.log(`Player ${playerId} selected boost: ${boostType}`);
 }
 // ---------------------------------------------------
 
@@ -449,20 +572,34 @@ function updateBallColor(value) {
     drawGameBoard();
 
     // Update selected color
-    UpdateColorSelection(value);
+    updateColorSelection(value);
 }
 
-function UpdateColorSelection(value) {
+function updateColorSelection(value) {
     const buttons = document.querySelectorAll('.color-option');
     
     buttons.forEach(button => {
         button.classList.remove('selected');
     });
     
-    const selectedButton = Array.from(buttons).find(button => button.style.backgroundColor === value);
+    const selectedButton = Array.from(buttons).find(button => 
+        button.style.backgroundColor === value || button.style.backgroundColor === hexToRgb(value)
+    );
     if (selectedButton) {
         selectedButton.classList.add('selected');
     }
+}
+
+function hexToRgb(hex) {
+    // Elimina el "#" si está presente
+    hex = hex.replace(/^#/, '');
+    
+    // Convierte a RGB
+    let r = parseInt(hex.substring(0, 2), 16);
+    let g = parseInt(hex.substring(2, 4), 16);
+    let b = parseInt(hex.substring(4, 6), 16);
+
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 // ACTUALIZAR FONDO
@@ -475,10 +612,12 @@ console.log("Este es el color input " + value)
     drawGameBoard();
 
     // Update selected color
-    UpdateColorSelection(value);
+    updateColorSelection(value);
 }
 
+// ON LOAD PAGE
 document.addEventListener("DOMContentLoaded", () => {
+
     // size
     const savedSize = localStorage.getItem("ballSize");
     
@@ -525,6 +664,10 @@ document.addEventListener("DOMContentLoaded", () => {
             canvasBorders.forEach(function(element) {
                 element.classList.remove("light-mode");
             });
+            let navbar = document.querySelectorAll('.navbar');
+            navbar.forEach(function(element) {
+                element.classList.remove("light-mode");
+            });
         }
         else
         {
@@ -533,7 +676,11 @@ document.addEventListener("DOMContentLoaded", () => {
             let canvasBorders = document.querySelectorAll('.canvas-border');
             canvasBorders.forEach(function(element) {
                 element.classList.add("light-mode");
-           });
+            });
+            let navbar = document.querySelectorAll('.navbar');
+            navbar.forEach(function(element) {
+               element.classList.add("light-mode");
+            });
         }
     }
 

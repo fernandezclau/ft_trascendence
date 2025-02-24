@@ -1,31 +1,64 @@
 /* Main Container */
 .info {
+    width: 80%;
     max-width: 800px;
     padding: 25px;
-    color: #292831;
+    color: #161618;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Header */
 .info h1 {
+    font-family: 'retro';
     font-size: 2.5em;
     text-align: center;
-    color: #ffffff;
+    color: #fff2f2;
     font-weight: 700;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
 }
 
 /* Card Styles */
 .info .card {
-    background: #eeeeee;
+    background: #fff2f2;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px;
-    border-left: 5px solid #c2b8a3;
+}
+
+.info strong {
+    font-weight: bolder;
+}
+.red {
+    border: 5px solid #f4a6b1;
+}
+
+.blue {
+    border: 5px solid #70b8b1;
+}
+
+.yellow {
+    border: 5px solid #f4d35e;
+}
+
+.green {
+    border: 5px solid #70b888;
+}
+
+.dark-blue {
+    border: 5px solid #54545f;
+}
+
+.orange {
+    border: 5px solid #e2a66b;
 }
 
 /* Subtitles */
 .info h3 {
+    font-family: 'retro';
     font-size: 1.6em;
     color: #292831;
     font-weight: 600;

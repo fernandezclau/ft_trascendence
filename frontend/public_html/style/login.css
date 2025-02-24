@@ -4,19 +4,24 @@
     justify-content: center;
     align-items: center;
     margin: 20px;
-    color: #000;
+    color: #161618;
+    font-weight: bolder;
 }
 
 .login-box {
-    background: white;
+    background-color: #fff2f2;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     gap: 10px;
 }
 
+.login-box h2 {
+    font-family: 'retro';
+}
+
 .login-box h2, .login-elem label{
-    color: #000;
+    color: #161618;
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -48,10 +53,10 @@
 #togglePassword {
     position: absolute;
     right: 14px;
-    top: 37%;
+    top: 39%;
     transform: translateY(-63%);
     cursor: pointer;
-    color: #000;
+    color: #41414e;
     font-size: 1.2em;
 }
 
@@ -67,7 +72,7 @@
 .sign-up {
     font-weight: bold;
     text-decoration: none;
-    color: #000;
+    color: #161618;
 }
 
 .sign-up:hover {
@@ -99,5 +104,5 @@
 }
 
 .login-box span {
-    color: #000;
+    color: #161618;
 }
