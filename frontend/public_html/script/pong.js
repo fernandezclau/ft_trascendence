@@ -472,6 +472,7 @@ function disableSelectionButtons()
     playerButtons.forEach(button => button.disabled = true);
     pointsButtons.forEach(button => button.disabled = true);
 }
+
 // Deshabilitar botones inicio juego
 function disableSelectionButtons()
 {
@@ -523,13 +524,10 @@ function selectBoost(boostType, playerId) {
     // Selecciona todos los boost-options del jugador correspondiente
     const playerBoosts = document.querySelectorAll(`.game-register-content:nth-child(${playerId}) .boost-option`);
 
-    // Remueve la clase 'selected' de todos los boosts del jugador
     playerBoosts.forEach(boost => boost.classList.remove('game-option-selected'));
 
-    // Encuentra el boost seleccionado y agrégale la clase 'selected'
     playerBoosts.forEach(boost => {
-        if (boost.dataset.boost === boostType) {
-            
+        if (boost.dataset.boost === boostType) {            
             boost.classList.add('game-option-selected');
         }
     });
@@ -682,6 +680,12 @@ document.addEventListener("DOMContentLoaded", () => {
                element.classList.add("light-mode");
             });
         }
+    }
+    //sound 
+    if (localStorage.getItem("sound") === "muted") {
+        audioContext.suspend();  // Silencia el sonido
+    } else {
+        audioContext.resume();   // Activa el sonido
     }
 
     // lenguaje
