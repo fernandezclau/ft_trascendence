@@ -22,8 +22,8 @@ def addItem(request):
 
 
 
-CLIENT_ID = "u-s4t2ud-7456ff4f1b1c4670f566f8f9ba5ca586461a68cc7935c230a7d415d55f0aae94"
-CLIENT_SECRET = "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"
+CLIENT_ID = "u-s4t2ud-13c0bdb3fc88012225da7e3db230a8b5fa8f5861b8723570c02d496846e8dc7a"
+CLIENT_SECRET = "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"
 REDIRECT_URI = "http://localhost:8000/api/auth/callback"
 
 def login_42(request):
