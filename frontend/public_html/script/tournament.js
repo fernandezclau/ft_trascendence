@@ -79,38 +79,97 @@ function selectTournamentPoints(points) {
     teamPlayersButtons.forEach(button => button.classList.remove('button-selected'));
 
     let selectedButton;
-    if (points === 1){
+    if (points === 5){
         selectedButton = teamPlayersButtons[0]; // Selecciona el boton de 1 jugador por equipo
-    } else if (points === 2) {
+    } else if (points === 10) {
         selectedButton = teamPlayersButtons[1]; // Selecciona el boton de 2 jugador por equipo
-    } else {
-        points = 2;
+    } else if (points === 15) {
+        selectedButton = teamPlayersButtons[2]; // Selecciona el boton de 3 jugador por equipo
+    } 
+    else {
+        points = 10;
         selectedButton = teamPlayersButtons[0]; // Selecciona el boton de 1 jugador por equipo
     }
 
+    pointsToWin = points;
     selectedButton.classList.add('button-selected');
 }
 
-function updateGraph(players, tournamentData)
-{
-    const tournamentGraph = document.getElementById("tournamentGrapgh")
+function startTournament() {
+
+    //1. Obtener y validar información del torneo
+    let tournamentData = getFormData("tournamentForm", "game-tournament-error")
+    if (!tournamentData) {
+        return; // Datos inválidos
+    }
     
-    if (players == 4)
-    {
-        showRoundsFourPlayers();
-        fillFourPlayers(tournamentData);
+    // 2. Desahbilitar botones
+    disableTournamentSelectionButtons();
+
+    // 3. Generar peleas
+    fights = generateFights(tournamentData);
+    
+    // 4. Mostramos peleas
+    updateGraph(numplayers, fights.fights);
+
+    // 5. Tournament loop
+    let winner = startFights(fights['fights']);
+    
+    //gameLoop();
+}
+
+function disableTournamentSelectionButtons()
+{
+    let teamplayerButtons = document.querySelectorAll('.team-players-btn-group');
+    let tournamentPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
+    let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
+    const startButton = document.getElementById('tournamenButton');
+    
+    teamplayerButtons.forEach(button => button.disabled = true);
+    tournamentPlayersButtons.forEach(button => button.disabled = true);
+    pointsButtons.forEach(button => button.disabled = true);
+    startButton.disabled = true;
+}
+
+function generateFights(players) {
+    let fights = [];
+    
+    for (let i = 0; i < players.length; i += 2) {
+        if (i + 1 < players.length) {
+            fights.push({
+                player1: players[i],
+                player2: players[i + 1],
+                result: "pending"
+            });
+        }
     }
-    else if (players == 8){
-        showRoundsEightPlayers();
-        fillEightPlayers(tournamentData);
+    
+    return { fights };
+}
+
+function updateGraph(players, fights)
+{
+    const tournamentGraph = document.getElementById("tournamentGraph")
+    
+    switch (players) {
+        case 4:
+            showRoundsFourPlayers();
+            fillPlayers(fights, 4);
+            break;
+        case 8:
+            showRoundsEightPlayers();
+            fillPlayers(fights, 8);
+            break;
+        case 2:
+        default:
+            showRoundsTwoPlayers();
+            fillPlayers(fights, 2);
+            break;
     }
-    else {
-        showRoundsTwoPlayers();
-        fillTwoPlayers(tournamentData);
-    }
+
     showElement(tournamentGraph);
     tournamentGraph.style.display = "flex";
-    
+    return fights;
 }
 
 function showRoundsTwoPlayers() {
@@ -211,135 +270,114 @@ function showRoundsEightPlayers() {
     });
 }
 
-function fillTwoPlayers(tournamentData) {
-    const player1 = document.getElementById("round-3-1");
-    const player2 = document.getElementById("round-3-2");
+function fillPlayers(fights) {
+    const rounds = { 2: 3, 4: 2, 8: 1 }; // Mapeo de número de jugadores a ronda
+    const players = fights.length * 2; // Doble de peleas = jugadores
+    const round = rounds[players] || 1; // Determina la ronda, por defecto 1 si no está en el objeto
 
-    player1.innerHTML = tournamentData[0]['username']
-    player2.innerHTML = tournamentData[1]['username']
-}
+    fights.forEach((fight, index) => {
+        let position1 = getPosition(players, index * 2 + 1);
+        let position2 = getPosition(players, index * 2 + 2);
 
-function fillFourPlayers(tournamentData) {
-    const player1 = document.getElementById("round-2-1-1");
-    const player2 = document.getElementById("round-2-1-2");
-    const player3 = document.getElementById("round-2-2-1");
-    const player4 = document.getElementById("round-2-2-2");
+        fight.player1.round = round;
+        fight.player1.position = position1;
 
-    player1.innerHTML = tournamentData[0]['username']
-    player2.innerHTML = tournamentData[1]['username']
-    player3.innerHTML = tournamentData[2]['username']
-    player4.innerHTML = tournamentData[3]['username']
-}
+        fight.player2.round = round;
+        fight.player2.position = position2;
 
-function fillEightPlayers(tournamentData) {
-    const player1 = document.getElementById("round-1-1-1");
-    const player2 = document.getElementById("round-1-1-2");
-    const player3 = document.getElementById("round-1-1-3");
-    const player4 = document.getElementById("round-1-1-4");
-    const player5 = document.getElementById("round-1-2-1");
-    const player6 = document.getElementById("round-1-2-2");
-    const player7 = document.getElementById("round-1-2-3");
-    const player8 = document.getElementById("round-1-2-4");
+        const playerElement1 = document.getElementById(`round-${round}-${position1}`);
+        const playerElement2 = document.getElementById(`round-${round}-${position2}`);
 
-    player1.innerHTML = tournamentData[0]['username']
-    player2.innerHTML = tournamentData[1]['username']
-    player3.innerHTML = tournamentData[2]['username']
-    player4.innerHTML = tournamentData[3]['username']
-    player5.innerHTML = tournamentData[4]['username']
-    player6.innerHTML = tournamentData[5]['username']
-    player7.innerHTML = tournamentData[6]['username']
-    player8.innerHTML = tournamentData[7]['username']
-}
-
-function startTournament() {
-
-    //1. Obtener y validar información del torneo
-    let tournamentData = getTournamentData()
-    if (!tournamentData) {
-        return; // Datos inválidos
-    }
-    
-    // 2. Desahbilitar botones
-    disableTournamentSelectionButtons();
-
-    // 3. Mostramos peleas
-    updateGraph(numplayers, tournamentData);
-    
-    gameLoop();
-}
-
-// unificar
-function getTournamentData() {
-    let playersData = [];
-
-    // 1. Obtener formulario
-    const form = document.getElementById("tournamentForm");
-    const error_element = document.getElementById("game-tournament-error");   // Campo error
-
-    // 2. Limpiar campo error de ejecuciones previas
-    hideElement(error_element);
-    
-    // 2. Comprobamos que los campos cumplen las restricciones
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        error_element.innerHTML = "Error: Missing fields";
-        showElement(error_element);
-        return null;
-    }
-
-    const playerForms = document.querySelectorAll(".game-register-content");
-
-    // 3. Extraemos y validamos información
-    let usernamesSet = new Set();
-    let validBoosts = new Set(["speed", "power", "defense"]);
-    let isValid = true;
-    let errorMsg;
-
-    playerForms.forEach((form, index) => {
-        const usernameInput = document.getElementById(`usernameInput${index + 1}`);
-        const selectedBoost = form.querySelector(".boost-option.game-option-selected");
-        
-        let username = usernameInput.value.trim();
-        let boost = selectedBoost ? selectedBoost.getAttribute("data-boost") : "speed";
-
-        // Nombre de usuario único
-        if (usernamesSet.has(username)) {
-            errorMsg = "Error: El username " + username + " está duplicado."
-            isValid = false;
-        } else {
-            usernamesSet.add(username);
+        if (playerElement1) {
+            playerElement1.innerHTML = fight.player1.username;
+            playerElement1.setAttribute("id", `player-${round}-${position1}`);
         }
 
-        // Boost válido
-        if (!validBoosts.has(boost)) {
-            errorMsg = "Error: Boost "  + boost + " no es válido."
-            isValid = false;
+        if (playerElement2) {
+            playerElement2.innerHTML = fight.player2.username;
+            playerElement2.setAttribute("id", `player-${round}-${position2}`);
         }
-
-        playersData.push({ username, boost });
     });
-
-    // 4. Comprobamos validez
-    if (!isValid)
-    {
-        error_element.innerHTML = errorMsg
-        showElement(error_element);
-        return null;
-    }
-
-    console.log("Player Data Submitted:", playersData);
-    return playersData;
 }
 
-function disableTournamentSelectionButtons()
-{
-    let teamplayerButtons = document.querySelectorAll('.team-players-btn-group');
-    let tournamentPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
-    let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
-    const startButton = document.getElementById('tournamenButton');
-    
-    teamplayerButtons.forEach(button => button.disabled = true);
-    tournamentPlayersButtons.forEach(button => button.disabled = true);
-    pointsButtons.forEach(button => button.disabled = true);
-    startButton.disabled = true;
+function getPosition(players, index) {
+    if (players === 4 || players === 8) {
+        const half = players / 2;
+        const group = index <= half ? 1 : 2;
+        const posInGroup = index - (group - 1) * half;
+        return `${group}-${posInGroup}`;
+    }
+    return index;
+}
+
+
+function startFights(matches) {
+    let winners = [];
+
+    while (matches.length >= 1) {
+        winners = [];
+
+        matches.forEach((match) => {
+            highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
+
+            // Jugar
+            started = true;
+            playSound('resume');
+            debugMessage.textContent = "PRESS SPACEBAR";
+            
+            // 6. Bucle
+            winner = gameLoop();
+            
+            let winner = gameLoop() == 1 ? match.player1 : match.player2;
+            // let winner = determineWinner(match.player1, match.player2);
+            winners.push(winner);
+            match.winner = winner;
+
+            resetHighlight(match.player1, match.player2);
+        });
+
+        nextRoundMatches = []; // Reiniciar la lista de partidos para la nueva ronda
+
+        for (let i = 0; i < winners.length; i += 2) {
+             if (winners[i + 1]) {
+                nextRoundMatches.push({
+                    player1: winners[i],
+                    player2: winners[i + 1],
+                    result: "pending",
+                    winner: null
+                });
+            }
+        }
+
+        matches = nextRoundMatches;
+
+        fillPlayers(matches);
+    }
+
+    const element1 = document.getElementById(`player-3-${winners[0].position}`);
+    element1.style.background = 'red';
+}
+
+
+function highlightMatch(player1, player2) {
+    const element1 = document.getElementById(getPlayerId(player1));
+    const element2 = document.getElementById(getPlayerId(player2));
+    if (element1) element1.style.backgroundColor = 'red';
+        
+    if (element2) element2.style.backgroundColor = 'red';
+}
+
+function resetHighlight(player1, player2) {
+    const element1 = document.getElementById(getPlayerId(player1));
+    const element2 = document.getElementById(getPlayerId(player2));
+    if (element1) element1.style.backgroundColor = '';
+    if (element2) element2.style.backgroundColor = '';
+}
+
+function getPlayerId(player) {
+    return `player-${player.round}-${player.position}`;
+}
+
+function determineWinner(player1, player2) {
+    return Math.random() > 0.5 ? player1 : player2; // Simulación de ganador aleatorio
 }

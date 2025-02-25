@@ -469,7 +469,7 @@ function selectPoints(points) {
 // FUNCION INICIO
 function startGame() {
     // 1. Obtenemos datos de registro
-    registerData = getRegisterFormData()
+    registerData = getFormData("playerForm", "game-registration-error")
     if (!registerData) {
         return; // Datos inválidos
     }
@@ -515,12 +515,12 @@ function disableSelectionButtons()
 }
 
 // Obtener información formulario registro
-function getRegisterFormData() {
+function getFormData(form_id, error_id) {
     let playersData = [];
 
     // 1. Obtener formulario
-    const form = document.getElementById("playerForm");
-    const error_element = document.getElementById("game-registration-error");   // Campo error
+    const form = document.getElementById(form_id);
+    const error_element = document.getElementById(error_id);   // Campo error
 
     // 2. Limpiar campo error de ejecuciones previas
     hideElement(error_element);
