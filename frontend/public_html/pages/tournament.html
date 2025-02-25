@@ -1,80 +1,117 @@
 <div class="tournament-container">
-    <h1>Create Pong Tournament</h1>
-    <form id="createTournamentForm">
-        <!-- Tournament Options -->
-        <div class="form-group">
-            <label for="numParticipants">Number of Participants</label>
-            <select id="numParticipants" name="numParticipants">
-                <option value="4">4 Players</option>
-                <option value="8">8 Players</option>
-                <option value="16">16 Players</option>
-                <option value="32">32 Players</option>
-            </select>
-        </div>
+    <h1>Tournament</h1>
 
-        <div class="form-group">
-            <label for="rounds">Number of Rounds (Best of)</label>
-            <select id="rounds" name="rounds">
-                <option value="3">Best of 3</option>
-                <option value="5">Best of 5</option>
-                <option value="7">Best of 7</option>
-            </select>
+    <div id="tournamentSect" class="game-selection-options">
+        <div class="game-selection-option">
+            <h4>Player per Team</h4>
+            <div class="game-selection-option-players">
+                <button class="option-btn team-players-btn-group" onclick="selectTeamPlayers(1)">1</button>
+                <button class="option-btn team-players-btn-group" onclick="selectTeamPlayers(2)">2</button>
+            </div>
         </div>
+    
+        <div class="game-selection-option">
+            <h4>Total Players</h4>
+            <div>
+                <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(2)">2</button>
+                <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(4)">4</button>
+                <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(8)">8</button>
+            </div>
+        </div>
+        <div class="game-selection-option">
+            <h4>Points</h4>
+            <div>
+                <button class="option-btn tour-points-btn-group" onclick="selectTournamentPoints(5)">5</button>
+                <button class="option-btn tour-points-btn-group button-selected" onclick="selectTournamentPoints(10)">10</button>
+                <button class="option-btn tour-points-btn-group" onclick="selectTournamentPoints(15)">15</button>
+            </div>
+        </div>
+    </div>
 
-        <div class="form-group toggle-options">
-            <label for="matchmaking">Enable Matchmaking</label>
-            <input type="checkbox" id="matchmaking" name="matchmaking">
+    <!-- Players Registration  -->
+    <form id="tournamentForm" class="game-register-global">
+        
+        <div class="game-register" id="gameRegister">
         </div>
-         <!-- Team Setup Table (Visible if Matchmaking is Off) -->
-        <div id="teamTable" style="">
-            <h3>Manage Players by Team</h3>
-            <table class="team-table" id="teamsTable">
-                <thead>
-                    <tr>
-                        <th>Team 1</th>
-                        <th>Team 2</th>
-                        <th>Team 3</th>
-                        <th>Team 4</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 1</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 2</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 3</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 4</div></td>
-                    </tr>
-                    <tr>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 5</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 6</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 7</div></td>
-                        <td><div class="player" draggable="true" ondragstart="drag(event)">Player 8</div></td>
-                    </tr>
-                </tbody>
-            </table>
+        
+        <div id="game-tournament-error" class="game-error" style="display: none;">
+            Failed to register players. Please try again.
         </div>
-
-        <!-- Team Setup -->
-        <div id="teamSetup" class="form-group">
-            <label for="teamSize">Team Size (if not matchmaking)</label>
-            <select id="teamSize" name="teamSize">
-                <option value="1">1 Player per Team</option>
-                <option value="2">2 Players per Team</option>
-                <option value="3">3 Players per Team</option>
-            </select>
+    
+        <!-- Start button -->
+        <div class="tournament-start">
+            <button type="submit" id="tournamenButton" onclick="startTournament()">READY</button>
+            <button id="RELOAD" onclick="location.reload();">
+                <i class="fas fa-redo"></i>
+            </button>
         </div>
-
-        <!-- Tournament Type -->
-        <div class="form-group">
-            <label for="tournamentType">Tournament Type</label>
-            <select id="tournamentType" name="tournamentType">
-                <option value="elimination">Elimination</option>
-                <option value="roundRobin">Round Robin</option>
-                <option value="mixed">Mixed</option>
-            </select>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="button" class="btn" onclick="createTournament()">Create Tournament</button>
     </form>
+    
+    <!-- Graphs -->
+    <div class="tournament-graph" id="tournamentGrapgh">
+        <!-- Round 1 -->
+        <div class="tournament-round" id="round-1-1">
+            <div class="tournament-round-boxes">
+                <div class="tournament-player ready" id="round-1-1-1"> Player 1</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player ready" id="round-1-1-2"> Player 2</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-1-3"> Player 3</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-1-4"> Player 4</div>
+            </div>
+        </div>
+
+        <!-- Round 2 -->
+        <div class="tournament-round-2" id="round-2-1">
+            <div class="tournament-round-2-boxes">
+                <div class="tournament-player" id="round-2-1-1">Winner (1 vs 2)</div>
+            </div>
+            <div class="tournament-round-2-boxes">
+                <div class="tournament-player" id="round-2-1-2"> Winner (3 vs 4)</div>
+            </div>
+        </div>
+
+        <!-- Round 3 -->
+        <div class="tournament-round-3" id="round-3">
+            <div class="tournament-player" id="round-3-1">
+                Winner ()
+            </div>
+            <div class="tournament-player" id="round-3-2">
+                Winner ()
+            </div>
+        </div>
+
+        <!-- Round 2 -->
+        <div class="tournament-round-2" id="round-2-2">
+            <div class="tournament-round-2-boxes">
+                <div class="tournament-player" id="round-2-2-1"> Winner (5 vs 6)</div>
+            </div>
+            <div class="tournament-round-2-boxes">
+                <div class="tournament-player" id="round-2-2-2"> Winner (7 vs 8)</div>
+            </div>
+        </div>
+        
+        <!-- Round 1 -->
+        <div class="tournament-round" id="round-1-2">
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-2-1"> Player 5</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-2-2"> Player 6</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-2-3"> Player 7</div>
+            </div>
+            <div class="tournament-round-boxes">
+                <div class="tournament-player" id="round-1-2-4"> Player 8</div>
+            </div>
+        </div>
+    </div>
+  
+    
+    
 </div>

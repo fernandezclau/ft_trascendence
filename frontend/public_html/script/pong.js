@@ -33,7 +33,7 @@ let np8Pressed = false, np5Pressed = false;
 
 // # SECCIÓN DE PELOTA
 let ballSize = 10;                                    // Dimensiones de la pelota
-let ballBSpeed = 50;                                 // Velocidad base de la pelota
+let ballBSpeed = 500;                                 // Velocidad base de la pelota
 let ballX = canvas.width / 2 - ballSize / 2;            // Posición de la pelota
 let ballY = canvas.height / 2 - ballSize / 2;
 let ballSpeedX = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed;       // Velocidad de la pelota
@@ -273,6 +273,7 @@ function drawGameBoard() {
     context.fillStyle = "#DA5C5C";
     context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
     
+    console.log(" Playerss " + playersToPlay)
     if (playersToPlay == 4) {
         // Dibujar Jugador 3
         context.fillStyle = "#625286";
@@ -371,7 +372,7 @@ function selectPlayers(players) {
     
     if (playersToPlay && startButton) {
         startButton.disabled = false;
-        generatePlayerForms(playersToPlay);
+        generatePlayerForms(playersToPlay, false, false);
     }
     else if (startButton){
         startButton.disabled = true;
@@ -380,116 +381,21 @@ function selectPlayers(players) {
     drawGameBoard();
 }
 
-// Función para seleccionar el número de puntos necesarios para ganar
-function selectPoints(points) {
-    
-    let pointsButtons = document.querySelectorAll('.points-btn-group');
-    pointsButtons.forEach(button => button.classList.remove('selected'));
-
-    
-    let selectedButton;
-    if (points === 5) {
-        selectedButton = pointsButtons[0];
-    } else if (points === 10) {
-        selectedButton = pointsButtons[1];
-    } else if (points === 15) {
-        selectedButton = pointsButtons[2];
-    }
-
-    if (selectedButton) {
-        selectedButton.classList.add('selected');
-    } else {
-        console.error('No se pudo encontrar el botón para los puntos:', points);
-    }
-
-    pointsToWin = points;
-    console.log(`Selected ${pointsToWin} points to win`);
-}
-
-function startGame() {
-    const form = document.getElementById("playerForm");
-
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        const error = document.getElementById("game-registration-error")
-        error.style.display = "block";
-        error.style.visibility = "visible";
-        return;
-    }
-
-    const playerForms = document.querySelectorAll(".game-register-content");
-    let playersData = [];
-
-    playerForms.forEach((form, index) => {
-        const usernameInput = document.getElementById(`usernameInput${index + 1}`);
-        //const boostInput = document.getElementById(`boostInput${index + 1}`);
-
-        playersData.push({
-            username: usernameInput.value.trim(),
-            //boost: boostInput.value
-        });
-    });
-
-    console.log("Player Data Submitted:", playersData);
-    
-    // Quitar jugadores
-    const gameRegister = document.getElementById("gameRegister")
-    gameRegister.style.display = "none";
-    gameRegister.style.visibility = "visible";
-
-    if (playersToPlay != null && pointsToWin)
-    {
-        
-        console.log("Starting game");
-
-        // 2 . Disabled players/points buttons
-        disableSelectionButtons();
-        
-        // 3. Disabled start button
-        if (startButton)
-            startButton.disabled = true;
-
-        // 4. Start game
-        started = true;
-        playSound('resume');
-        debugMessage.textContent = "PRESS SPACEBAR";
-
-        
-        gameLoop();
-    } else {
-        error_element = document.getElementById('game-error');
-        error_element.style.display = 'block';
-        error_element.textContent = 'Please select the number of players and points to win';
-    }
-}
-
-// Deshabilitar botones inicio juego
-function disableSelectionButtons()
-{
-    let playerButtons = document.querySelectorAll('.players-btn-group');
-    let pointsButtons = document.querySelectorAll('.points-btn-group');
-    
-    playerButtons.forEach(button => button.disabled = true);
-    pointsButtons.forEach(button => button.disabled = true);
-}
-
-// Deshabilitar botones inicio juego
-function disableSelectionButtons()
-{
-    let playerButtons = document.querySelectorAll('.players-btn-group');
-    let pointsButtons = document.querySelectorAll('.points-btn-group');
-    
-    playerButtons.forEach(button => button.disabled = true);
-    pointsButtons.forEach(button => button.disabled = true);
-}
-
 // Generación de formularios de registro
-function generatePlayerForms(num_players) {
+function generatePlayerForms(num_players, isTournament, isTeamGame) {
     const popupContainer = document.getElementById("gameRegister");
     popupContainer.innerHTML = ""; // Limpiar contenido previo
 
     let teamNumber = num_players == 2 ? 2 : 2;
     let title = num_players == 2 ? "Player" : "Team";
+
+    // Si es torneo
+    if (isTournament)
+    {
+        teamNumber = num_players;
+        console.log("Is team game" + isTeamGame);
+        title = isTeamGame ? "Team" : "Player";    
+    }
 
     for (let i = 1; i <= teamNumber; i++) {
         const playerForm = document.createElement("div");
@@ -521,7 +427,6 @@ function generatePlayerForms(num_players) {
 
 // Selección del bost
 function selectBoost(boostType, playerId) {
-    // Selecciona todos los boost-options del jugador correspondiente
     const playerBoosts = document.querySelectorAll(`.game-register-content:nth-child(${playerId}) .boost-option`);
 
     playerBoosts.forEach(boost => boost.classList.remove('game-option-selected'));
@@ -534,6 +439,176 @@ function selectBoost(boostType, playerId) {
 
     console.log(`Player ${playerId} selected boost: ${boostType}`);
 }
+
+// Función para seleccionar el número de puntos necesarios para ganar
+function selectPoints(points) {
+    
+    let pointsButtons = document.querySelectorAll('.points-btn-group');
+    pointsButtons.forEach(button => button.classList.remove('button-selected'));
+
+    
+    let selectedButton;
+    if (points === 5) {
+        selectedButton = pointsButtons[0];
+    } else if (points === 10) {
+        selectedButton = pointsButtons[1];
+    } else if (points === 15) {
+        selectedButton = pointsButtons[2];
+    }
+
+    if (selectedButton) {
+        selectedButton.classList.add('button-selected');
+    } else {
+        console.error('No se pudo encontrar el botón para los puntos:', points);
+    }
+
+    pointsToWin = points;
+    console.log(`Selected ${pointsToWin} points to win`);
+}
+
+// FUNCION INICIO
+function startGame() {
+    // 1. Obtenemos datos de registro
+    registerData = getRegisterFormData()
+    if (!registerData) {
+        return; // Datos inválidos
+    }
+
+    // 3. Actualizar hechizos
+    displayPlayerBoosts(registerData)
+
+    // 2. Quitar registro jugadores
+    hideElement(document.getElementById("gameRegister"));
+
+    // 3. Comienza el juego
+    if (playersToPlay != null && pointsToWin)
+    {
+        console.log("Starting game");
+
+        // 4. Deshabilitamos botones seleccion
+        disableSelectionButtons();
+
+        // 5. Inicio de juego
+        started = true;
+        playSound('resume');
+        debugMessage.textContent = "PRESS SPACEBAR";
+        
+        // 6. Bucle
+        gameLoop();
+    } else {
+        const error_element = document.getElementById('game-error');
+        showElement(error_element)
+        error_element.textContent = 'Please select the number of players and points to win';
+    }
+}
+
+// Deshabilitar botones inicio juego
+function disableSelectionButtons()
+{
+    let playerButtons = document.querySelectorAll('.players-btn-group');
+    let pointsButtons = document.querySelectorAll('.points-btn-group');
+    const startButton = document.getElementById('startButton');
+    
+    playerButtons.forEach(button => button.disabled = true);
+    pointsButtons.forEach(button => button.disabled = true);
+    startButton.disabled = true;
+}
+
+// Obtener información formulario registro
+function getRegisterFormData() {
+    let playersData = [];
+
+    // 1. Obtener formulario
+    const form = document.getElementById("playerForm");
+    const error_element = document.getElementById("game-registration-error");   // Campo error
+
+    // 2. Limpiar campo error de ejecuciones previas
+    hideElement(error_element);
+    
+    // 2. Comprobamos que los campos cumplen las restricciones
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        error_element.innerHTML = "Error: Missing fields";
+        showElement(error_element);
+        return null;
+    }
+
+    const playerForms = document.querySelectorAll(".game-register-content");
+
+    // 3. Extraemos y validamos información
+    let usernamesSet = new Set();
+    let validBoosts = new Set(["speed", "power", "defense"]);
+    let isValid = true;
+    let errorMsg;
+
+    playerForms.forEach((form, index) => {
+        const usernameInput = document.getElementById(`usernameInput${index + 1}`);
+        const selectedBoost = form.querySelector(".boost-option.game-option-selected");
+        
+        let username = usernameInput.value.trim();
+        let boost = selectedBoost ? selectedBoost.getAttribute("data-boost") : "speed";
+
+        // Nombre de usuario único
+        if (usernamesSet.has(username)) {
+            errorMsg = "Error: El username " + username + " está duplicado."
+            isValid = false;
+        } else {
+            usernamesSet.add(username);
+        }
+
+        // Boost válido
+        if (!validBoosts.has(boost)) {
+            errorMsg = "Error: Boost "  + boost + " no es válido."
+            isValid = false;
+        }
+
+        playersData.push({ username, boost });
+    });
+
+    // 4. Comprobamos validez
+    if (!isValid)
+    {
+        error_element.innerHTML = errorMsg
+        showElement(error_element);
+        return null;
+    }
+
+    console.log("Player Data Submitted:", playersData);
+    return playersData;
+}
+
+// Mostrar hechizos de jugador
+function displayPlayerBoosts(playersData) {
+    const gameBoosts = document.getElementById("gameBoosts");
+    const boostImages = {
+        speed: "images/speed.png",
+        power: "images/power.png",
+        defense: "images/shield.png"
+    };
+
+    playersData.forEach((player, index) => {
+        let button = gameBoosts.children[index];
+        if (button) {
+            button.innerHTML = `<img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">`;
+        }
+    });
+    gameBoosts.style.display = "flex";
+    gameBoosts.style.visibility = "visible";
+    gameBoosts.style.margin = "20px";
+    const score = document.getElementById("score")
+    score.style.top = "90px";
+}
+
+function showElement(element) {
+    element.style.display = "block";
+    element.style.visibility = "visible";
+}
+
+function hideElement(element) {
+    element.style.display = "none";
+    element.style.visibility = "hidden";
+}
+
 // ---------------------------------------------------
 
 // ACTUALIZAR TAMAÑO BOLA

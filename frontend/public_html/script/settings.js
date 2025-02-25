@@ -113,7 +113,3 @@ function setLanguage(language) {
     localStorage.setItem('preferredLanguage', language);
     changeLanguage(language);
 }
-
-
-
-

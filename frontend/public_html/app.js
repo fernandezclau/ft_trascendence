@@ -3,12 +3,14 @@
 let currentPage = null; // Variable para rastrear la página actual
 
 function loadPage(page, callback) {
+
     // No recargar si ya está en la página solicitada
     if (page === currentPage) {
         console.log(`La página ${page} ya está cargada.`);
         return;
     }
 
+    // Obtener la página solicitada
     fetch(`pages/${page}.html`)
         .then(response => response.text())
         .then(html => {
@@ -16,10 +18,18 @@ function loadPage(page, callback) {
             currentPage = page; // Actualizar la página actual
             
             // Ocultar el juego si no está en la página del juego
-            if (page !== 'game') {
+            if (page !== 'game' && page !== 'tournament') {
                 document.getElementById('game').style.display = 'none';
                 document.getElementById('game').style.visibility = 'hidden';
-            } else {
+            } else if (page == 'tournament')
+            {
+                const pointsButtons = document.querySelectorAll('.tour-players-btn-group')
+                pointsButtons.forEach(button => button.disabled = true);
+                document.getElementById("tournamentForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+            });
+            } 
+            else {
                 loadGame(); // Cargar el juego si está en la página del juego
                 document.getElementById('game').style.display = 'block';
                 document.getElementById('game').style.visibility = 'visible';
@@ -57,18 +67,6 @@ function loadGame() {
     document.getElementById("playerForm").addEventListener("submit", function(event) {
         event.preventDefault();
     });
-}
-
-function hexToRgb(hex) {
-    // Elimina el "#" si está presente
-    hex = hex.replace(/^#/, '');
-    
-    // Convierte a RGB
-    let r = parseInt(hex.substring(0, 2), 16);
-    let g = parseInt(hex.substring(2, 4), 16);
-    let b = parseInt(hex.substring(4, 6), 16);
-
-    return `rgb(${r}, ${g}, ${b})`;
 }
 
 /* LOADING SETTINGS */
