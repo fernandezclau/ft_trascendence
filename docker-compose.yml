@@ -8,6 +8,10 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # añado esto ^ para que inicialice con un archivo las bases de datos de backend y backend2
+      # si al final no necesitamos dos bases de datos, quitamos una y borramos la parte de
+      # DATABASES del settings.py de backend
     networks:
       - app_network
     healthcheck:
@@ -16,14 +20,30 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
+  auth-42-api:
     build: backend
-    container_name: django-api
+    container_name: django-auth-42-api
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend/api:/code
     ports:
       - "8000:8000" # Para pruebas, acceso a backend
+    environment:
+      - PYTHONPATH=/code
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  auth-db-api:
+    build: backend2
+    container_name: django-auth-db-api
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
+    volumes:
+      - ./backend2:/code
+    ports:
+      - "8001:8001" # Para pruebas, acceso a backend
     environment:
       - PYTHONPATH=/code
     depends_on:
@@ -39,7 +59,8 @@ services:
       - "8080:80"
       - "8443:443"
     depends_on:
-      - backend
+      - auth-42-api
+      - auth-db-api
     volumes:
       - ./frontend/public_html:/var/www/html/
       - ./frontend/certs:/etc/ssl/certs/
