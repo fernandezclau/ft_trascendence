@@ -1,3 +1,8 @@
 .idea
-backend/.gitignore
-backend2/.gitignore
+backend/api/api/__pycache__
+backend/api/api/migrations
+backend2/api/api/__pycache__
+backend2/api/api/migrations
+**/__pycache__
+# backend/.gitignore
+# backend2/.gitignore
