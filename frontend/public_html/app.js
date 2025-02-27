@@ -24,22 +24,6 @@ function loadPage(page, callback) {
                 document.getElementById('game').style.display = 'block';
                 document.getElementById('game').style.visibility = 'visible';
             }
-
-            // Verifica si estamos en "animate" y carga Three.js si es necesario
-            if (page === "animate") {
-                if (typeof THREE === "undefined") {
-                    const script = document.createElement("script");
-                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-                    script.onload = function () {
-                        console.log("Three.js cargado correctamente.");
-                        startAnimation(); // Inicia la animación después de cargar Three.js
-                    };
-                    document.head.appendChild(script);
-                } else {
-                    startAnimation(); // Si ya está cargado, inicia la animación directamente
-                }
-            }
-            
             // Traducir el contenido de la página solicitada
             const savedLanguage = localStorage.getItem('preferredLanguage');
             changeLanguage(savedLanguage);
