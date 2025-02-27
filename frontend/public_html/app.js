@@ -99,13 +99,16 @@ function loadTournament() {
     const startButton = document.getElementById('tournamentButton'); 
     startButton.disabled = true;
 
+    const totalTeams = document.getElementById('tournamentButton'); 
+    startButton.disabled = true;
+
     // Disable default start button option
     document.getElementById("tournamentButton").addEventListener("submit", function(event) {
         event.preventDefault();
     });
-    document.getElementById("RELOAD2").addEventListener("submit", function(event) {
+    document.getElementById("tournamentForm").addEventListener("submit", function(event) {
         event.preventDefault();
-    });
+    });    
 
     //Reload game
     if (reload)

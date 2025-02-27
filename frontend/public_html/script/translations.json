@@ -87,7 +87,8 @@
         "update": "Update",
         "enable_2fa": "Enable 2FA",
         "delete_account": "Delete Account",
-        "logout": "Log Out"
+        "logout": "Log Out",
+        "gameRegisterError": "Failed to register players. Please try again."
     },
     "es": {
         "navbarBrand": "PONG",
@@ -177,7 +178,8 @@
         "update": "Actualizar",
         "enable_2fa": "Activar 2FA",
         "delete_account": "Eliminar Cuenta",
-        "logout": "Cerrar Sesión"
+        "logout": "Cerrar Sesión",
+        "gameRegisterError": "Error al registrar los jugadores. Prueba otra vez."
     },
     "fr": {
         "navbarBrand": "PONG",
@@ -267,6 +269,7 @@
         "update": "Mettre à jour",
         "enable_2fa": "Activer 2FA",
         "delete_account": "Supprimer le Compte",
-        "logout": "Se Déconnecter"
+        "logout": "Se Déconnecter",
+        "gameRegisterError": "No se."
     }
 }

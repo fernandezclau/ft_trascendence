@@ -275,7 +275,6 @@ function drawGameBoard() {
     context.fillStyle = "#DA5C5C";
     context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
     
-    console.log(" Playerss " + playersToPlay)
     if (playersToPlay == 4) {
         // Dibujar Jugador 3
         context.fillStyle = "#625286";
@@ -359,9 +358,9 @@ function reloadGame(page) {
     drawGameBoard();
 
     if (page == "game")
-        reloadingGamePage()
+        reloadingGamePage();
     else if (page == "tournament")
-        reloadingGameTournament()
+        reloadingGameTournament();
 }
 
 function reloadingGamePage() {
@@ -656,6 +655,13 @@ function displayPlayerInfo(playersData) {
                 button.innerHTML = `
                     <img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">
                 `;
+                
+                // Asegurar que no haya eventos previos duplicados
+                button.replaceWith(button.cloneNode(true));
+                button = playerContainer.querySelector("button");
+
+                // Asignar la función del boost correspondiente
+                button.addEventListener("click", () => activateBoost(player.boost, player.username, button));
             }
         }
     });
@@ -663,9 +669,36 @@ function displayPlayerInfo(playersData) {
     gameBoosts.style.display = "flex";
     gameBoosts.style.visibility = "visible";
     const score = document.getElementById("score");
-    score.style.top = "115px";
+    score.style.top = "105px";
 }
 
+// Función para activar el boost
+function activateBoost(boostType, playerName, button) {
+    if (!paused)
+    {
+        switch (boostType) {
+            case "speed":
+                console.log(`${playerName} activó el Boost de Velocidad!`);
+                ballSpeedX *= 5, ballSpeedY *= 5;
+                setTimeout(() => {
+                        ballSpeedX /= 5;
+                        ballSpeedY /= 5;
+                }, 150);
+                button.disabled = true;
+                break;
+            case "power":
+                console.log(`${playerName} activó el Boost de Poder!`);
+                // Lógica específica del boost de poder
+                break;
+            case "defense":
+                console.log(`${playerName} activó el Boost de Defensa!`);
+                // Lógica específica del boost de defensa
+                break;
+            default:
+                console.log("Boost desconocido.");
+        }
+    }
+}
 // ---------------------------------------------------
 
 // ACTUALIZAR TAMAÑO BOLA

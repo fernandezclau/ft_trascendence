@@ -122,9 +122,11 @@ function reloadingGameTournament() {
     score.style.top = "10px";
 
     // Enable selection buttons
-    let playerButtons = document.querySelectorAll('.players-btn-group');
-    let pointsButtons = document.querySelectorAll('.points-btn-group');
+    let playerButtons = document.querySelectorAll('.team-players-btn-group');
+    let teamPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
+    let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
     playerButtons.forEach(button => button.disabled = false);
+    teamPlayersButtons.forEach(button => button.disabled = true);
     pointsButtons.forEach(button => button.disabled = false);
     
     // Reset num playeers
@@ -133,7 +135,9 @@ function reloadingGameTournament() {
 
 // Empezar torneos
 function startTournament() {
-
+    document.getElementById("tournamentButton").addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
     //1. Obtener y validar información del torneo
     let tournamentData = getFormData("tournamentForm", "game-tournament-error")
     if (!tournamentData) {
@@ -436,6 +440,12 @@ function displayPlayerInfoTour(playersData) {
             button.innerHTML = `
                 <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
             `;
+            // Asegurar que no haya eventos previos duplicados
+            button.replaceWith(button.cloneNode(true));
+            button = playerContainer1.querySelector("button");
+
+            // Asignar la función del boost correspondiente
+            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username));
         }
     }
     if (playerContainer2) {
@@ -449,6 +459,12 @@ function displayPlayerInfoTour(playersData) {
             button.innerHTML = `
                 <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
             `;
+            // Asegurar que no haya eventos previos duplicados
+            button.replaceWith(button.cloneNode(true));
+            button = playerContainer2.querySelector("button");
+
+            // Asignar la función del boost correspondiente
+            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username));
         }
     }
 
