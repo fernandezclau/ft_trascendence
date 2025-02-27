@@ -39,13 +39,12 @@ services:
   auth-db-api:
     build: backend2
     container_name: django-auth-db-api
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
     volumes:
-      - ./backend2:/code
+      - ./backend2:/app
     ports:
       - "8001:8001" # Para pruebas, acceso a backend
     environment:
-      - PYTHONPATH=/code
+      - PYTHONPATH=/app
     depends_on:
       db:
         condition: service_healthy
