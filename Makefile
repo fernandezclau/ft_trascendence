@@ -1,12 +1,12 @@
 # Variables
-CONTAINERS_NAMES=apache-web django-api postgres-db
-IMAGES_NAMES=ft_trascendence-frontend ft_trascendence-backend postgres:15
+CONTAINERS_NAMES=apache-web django-api postgres-db django-auth-42-api django-auth-db-api
+IMAGES_NAMES=ft_trascendence-frontend ft_trascendence-backend postgres:15 ft_trascendence-auth-42-api ft_trascendence-auth-db-api
 VOLUME_NAME=pong_postgres_data ft_trascendence_postgres_data
 
 # Levantar contenedores
 all:
 	@echo "\033[1;34mStarting containers...\033[0m"
-	docker-compose up -d
+	docker compose up -d
 	@echo "\033[1;32mContainers started successfully.\033[0m"
 
 # Listar contenedores, volúmenes e imágenes
