@@ -1,72 +1,115 @@
 
 
 let currentPage = null; // Variable para rastrear la página actual
+let reload = true;
 
-function loadPage(page, callback) {
+async function loadPage(page, callback) {
 
-    // No recargar si ya está en la página solicitada
     if (page === currentPage) {
         console.log(`La página ${page} ya está cargada.`);
         return;
     }
 
-    // Obtener la página solicitada
-    fetch(`pages/${page}.html`)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('content-container').innerHTML = html;
-            currentPage = page; // Actualizar la página actual
-            
-            // Ocultar el juego si no está en la página del juego
-            if (page !== 'game' && page !== 'tournament') {
-                document.getElementById('game').style.display = 'none';
-                document.getElementById('game').style.visibility = 'hidden';
-            } else if (page == 'tournament')
-            {
-                const pointsButtons = document.querySelectorAll('.tour-players-btn-group')
-                pointsButtons.forEach(button => button.disabled = true);
-                document.getElementById("tournamentForm").addEventListener("submit", function(event) {
-                event.preventDefault();
-            });
-            } 
-            else {
-                loadGame(); // Cargar el juego si está en la página del juego
-                document.getElementById('game').style.display = 'block';
-                document.getElementById('game').style.visibility = 'visible';
-            }
+    try {
+        const response = await fetch(`pages/${page}.html`);
+        const html = await response.text();
+        document.getElementById('content-container').innerHTML = html;
+        currentPage = page; // Actualizar la página actual
 
-            // Verifica si estamos en "animate" y carga Three.js si es necesario
-            if (page === "animate") {
-                if (typeof THREE === "undefined") {
-                    const script = document.createElement("script");
-                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-                    script.onload = function () {
-                        console.log("Three.js cargado correctamente.");
-                        startAnimation(); // Inicia la animación después de cargar Three.js
-                    };
-                    document.head.appendChild(script);
-                } else {
-                    startAnimation(); // Si ya está cargado, inicia la animación directamente
-                }
-            }
-            
-            // Traducir el contenido de la página solicitada
-            const savedLanguage = localStorage.getItem('preferredLanguage');
-            changeLanguage(savedLanguage);
+        // Manejo de visibilidad y carga de contenido según la página
+        switch (page) {
+            case "game":
+                loadGame();
+                toggleGameVisibility(true);
+                break;
 
-            // Ejecutar la función de devolución de llamada si se proporciona
-            if (callback) callback();
-        })
-        .catch(error => console.error('Error loading page:', error));
+            case "tournament":
+                loadTournament();
+                toggleGameVisibility(true);
+                break;
+
+            case "animate":
+                loadThreeJS();
+                toggleGameVisibility(false);
+                break;
+
+            default:
+                toggleGameVisibility(false);
+                break;
+        }
+
+        // Traducir la página según el idioma guardado
+        changeLanguage(localStorage.getItem('preferredLanguage'));
+
+        // Ejecutar callback si se proporciona
+        if (callback) callback();
+    } catch (error) {
+        console.error('Error loading page:', error);
+    }
+
+    // Implementar lógica recarga juego (solo en pong y tournament)
 }
 
+// Función para cargar Three.js si no está cargado
+function loadThreeJS() {
+    if (typeof THREE === "undefined") {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+        script.onload = () => {
+            console.log("Three.js cargado correctamente.");
+            startAnimation();
+        };
+        document.head.appendChild(script);
+    } else {
+        startAnimation();
+    }
+}
+
+// Función para mostrar u ocultar el juego
+function toggleGameVisibility(show) {
+    const gameElement = document.getElementById('game');
+    if (gameElement) {
+        gameElement.style.display = show ? 'block' : 'none';
+        gameElement.style.visibility = show ? 'visible' : 'hidden';
+    }
+}
+
+/* LOADING GAME */
 function loadGame() {
+    // Disable startButton
     const startButton = document.getElementById('startButton'); 
     startButton.disabled = true;
-    
+        
+    // Disable default start button option
     document.getElementById("playerForm").addEventListener("submit", function(event) {
         event.preventDefault();
     });
+    document.getElementById("RELOAD").addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
+
+    //Reload game
+    if (reload)
+        reloadGame("game");
+}
+
+/* LOADING TOURNAMENT */
+function loadTournament() {
+    // Disable startButton
+    const startButton = document.getElementById('tournamentButton'); 
+    startButton.disabled = true;
+
+    // Disable default start button option
+    document.getElementById("tournamentButton").addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
+    document.getElementById("RELOAD2").addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
+
+    //Reload game
+    if (reload)
+        reloadGame("tournament");
 }
 
 /* LOADING SETTINGS */

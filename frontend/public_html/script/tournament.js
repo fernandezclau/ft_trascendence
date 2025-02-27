@@ -1,27 +1,11 @@
 let isTeamPlay = false;
-let numplayers = 2; 
+let numplayers = null; 
 
+// Seleccionar numero de jugadores por equipo
 function selectTeamPlayers(teamPlayers) {
-    let originalButtonValues = [2, 4, 8];
 
     let teamPlayersButtons = document.querySelectorAll('.team-players-btn-group');
     teamPlayersButtons.forEach(button => button.classList.remove('button-selected'));
-
-    // Actualizamos botones de numero de jugadores
-    const buttons = document.querySelectorAll('.tour-players-btn-group')
-    buttons.forEach((button, index) => {
-        let buttonValue = parseInt(button.textContent);
-
-        if (teamPlayers === 2) {
-            if (buttonValue === originalButtonValues[index]) {
-                buttonValue *= 2;
-            }
-        } 
-        else if (teamPlayers === 1) {
-            buttonValue = originalButtonValues[index];
-        }
-        button.textContent = buttonValue;
-    });
 
     let selectedButton;
     if (teamPlayers === 1){
@@ -47,8 +31,11 @@ function selectTeamPlayers(teamPlayers) {
     
     // Dibujamos el mapa actualizado
     drawGameBoard();
+    if (numplayers)
+        generatePlayerForms(numplayers, true, isTeamPlay);
 }
 
+// Seleccionar número de equipos/personas
 function selectTournamentPlayers(players) {
     let playersButtons = document.querySelectorAll('.tour-players-btn-group');
     playersButtons.forEach(button => button.classList.remove('button-selected'));
@@ -65,15 +52,21 @@ function selectTournamentPlayers(players) {
         selectedButton = playersButtons[0]; // Selecciona el boton de 1 jugador por equipo
     }
     
-    numplayers = players;
-    console.log("Jugadores que han sido seleccionads" + numplayers)
-    console.log("Jugadores que han " + players)
+    numplayers = players; // variable local global
     selectedButton.classList.add('button-selected');
-
-    // Generate form
-    generatePlayerForms(players, true, isTeamPlay);
+    const startButton = document.getElementById('tournamentButton');
+    
+    if (numplayers && startButton) {
+        startButton.disabled = false;
+        // Generate form
+        generatePlayerForms(players, true, isTeamPlay);
+    }
+    else {
+        startButton.disabled = true;
+    }
 }
 
+// Seleccionar puntos torneo
 function selectTournamentPoints(points) {
     let teamPlayersButtons = document.querySelectorAll('.tour-points-btn-group')
     teamPlayersButtons.forEach(button => button.classList.remove('button-selected'));
@@ -95,6 +88,50 @@ function selectTournamentPoints(points) {
     selectedButton.classList.add('button-selected');
 }
 
+// Recargar juego
+function reloadingGameTournament() {
+    // Remove registration process
+    const popupContainer = document.getElementById("gameRegister");
+    popupContainer.innerHTML = "";
+
+    // Remove error msg
+    const error_msg = document.getElementById("game-tournament-error");
+    if (error_msg)
+        hideElement(error_msg);
+
+    // Remove selected Players
+    let playersButtons = document.querySelectorAll('.team-players-btn-group');
+    playersButtons.forEach(button => button.classList.remove('button-selected'));
+    let totalPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
+    totalPlayersButtons.forEach(button => button.classList.remove('button-selected'));
+
+    // Disable start button
+    const startButton = document.getElementById('tournamentButton');
+    startButton.disabled = true;
+    
+    // Hide graph
+    const tournamentGraph = document.getElementById("tournamentGraph")
+    tournamentGraph.style.display = "none";
+
+    // Hide player info
+    const gameBoosts = document.getElementById("gameBoosts");
+    gameBoosts.style.display = "none";
+
+    // Update score position
+    const score = document.getElementById("score");
+    score.style.top = "10px";
+
+    // Enable selection buttons
+    let playerButtons = document.querySelectorAll('.players-btn-group');
+    let pointsButtons = document.querySelectorAll('.points-btn-group');
+    playerButtons.forEach(button => button.disabled = false);
+    pointsButtons.forEach(button => button.disabled = false);
+    
+    // Reset num playeers
+    numplayers = null
+}
+
+// Empezar torneos
 function startTournament() {
 
     //1. Obtener y validar información del torneo
@@ -114,16 +151,15 @@ function startTournament() {
 
     // 5. Tournament loop
     let winner = startFights(fights['fights']);
-    
-    //gameLoop();
 }
 
+// Deshabilitar botones de selección
 function disableTournamentSelectionButtons()
 {
     let teamplayerButtons = document.querySelectorAll('.team-players-btn-group');
     let tournamentPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
     let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
-    const startButton = document.getElementById('tournamenButton');
+    const startButton = document.getElementById('tournamentButton');
     
     teamplayerButtons.forEach(button => button.disabled = true);
     tournamentPlayersButtons.forEach(button => button.disabled = true);
@@ -131,6 +167,7 @@ function disableTournamentSelectionButtons()
     startButton.disabled = true;
 }
 
+// Matchmaking
 function generateFights(players) {
     let fights = [];
     
@@ -310,8 +347,7 @@ function getPosition(players, index) {
     return index;
 }
 
-
-function startFights(matches) {
+async function startFights(matches) {
     let winners = [];
 
     while (matches.length >= 1) {
@@ -319,6 +355,11 @@ function startFights(matches) {
 
         matches.forEach((match) => {
             highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
+            
+            console.log(match)
+            
+            // Mostrar info jugador
+            displayPlayerInfoTour(match);
 
             // Jugar
             started = true;
@@ -326,9 +367,9 @@ function startFights(matches) {
             debugMessage.textContent = "PRESS SPACEBAR";
             
             // 6. Bucle
-            winner = gameLoop();
-            
             let winner = gameLoop() == 1 ? match.player1 : match.player2;
+            console.log("The winner")
+            console.log(winner)
             // let winner = determineWinner(match.player1, match.player2);
             winners.push(winner);
             match.winner = winner;
@@ -358,7 +399,6 @@ function startFights(matches) {
     element1.style.background = 'red';
 }
 
-
 function highlightMatch(player1, player2) {
     const element1 = document.getElementById(getPlayerId(player1));
     const element2 = document.getElementById(getPlayerId(player2));
@@ -372,6 +412,50 @@ function resetHighlight(player1, player2) {
     const element2 = document.getElementById(getPlayerId(player2));
     if (element1) element1.style.backgroundColor = '';
     if (element2) element2.style.backgroundColor = '';
+}
+
+function displayPlayerInfoTour(playersData) {
+    const gameBoosts = document.getElementById("gameBoosts");
+    const boostImages = {
+        speed: "images/speed.png",
+        power: "images/power.png",
+        defense: "images/shield.png"
+    };
+
+    
+    let playerContainer1 = gameBoosts.children[0];
+    let playerContainer2 = gameBoosts.children[1];
+    if (playerContainer1) {
+        let nameElement = playerContainer1.querySelector("p, span");
+        let button = playerContainer1.querySelector("button");
+
+        if (nameElement) {
+            nameElement.textContent = playersData.player1.username;
+        }
+        if (button) {
+            button.innerHTML = `
+                <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
+            `;
+        }
+    }
+    if (playerContainer2) {
+        let nameElement = playerContainer2.querySelector("p, span");
+        let button = playerContainer2.querySelector("button");
+
+        if (nameElement) {
+            nameElement.textContent = playersData.player2.username;
+        }
+        if (button) {
+            button.innerHTML = `
+                <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
+            `;
+        }
+    }
+
+    gameBoosts.style.display = "flex";
+    gameBoosts.style.visibility = "visible";
+    const score = document.getElementById("score");
+    score.style.top = "115px";
 }
 
 function getPlayerId(player) {

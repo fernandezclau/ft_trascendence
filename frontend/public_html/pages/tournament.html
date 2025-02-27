@@ -11,8 +11,8 @@
         </div>
     
         <div class="game-selection-option">
-            <h4>Total Players</h4>
-            <div>
+            <h4 >Total Teams</h4>
+            <div class="game-selection-option-players">
                 <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(2)">2</button>
                 <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(4)">4</button>
                 <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(8)">8</button>
@@ -20,7 +20,7 @@
         </div>
         <div class="game-selection-option">
             <h4>Points</h4>
-            <div>
+            <div class="game-selection-option-players">
                 <button class="option-btn tour-points-btn-group" onclick="selectTournamentPoints(5)">5</button>
                 <button class="option-btn tour-points-btn-group button-selected" onclick="selectTournamentPoints(10)">10</button>
                 <button class="option-btn tour-points-btn-group" onclick="selectTournamentPoints(15)">15</button>
@@ -40,8 +40,8 @@
     
         <!-- Start button -->
         <div class="tournament-start">
-            <button type="submit" id="tournamenButton" onclick="startTournament()">READY</button>
-            <button id="RELOAD" onclick="location.reload();">
+            <button type="submit" id="tournamentButton" onclick="startTournament()">READY</button>
+            <button id="RELOAD2" onclick="reloadGame('tournament')">
                 <i class="fas fa-redo"></i>
             </button>
         </div>

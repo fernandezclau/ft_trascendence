@@ -250,15 +250,17 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-    if (event.key === 'w' || event.key === 'W') wPressed = false;
-    if (event.key === 's' || event.key === 'S') sPressed = false;
-    if (event.key === 'ArrowUp') upPressed = false;
-    if (event.key === 'ArrowDown') downPressed = false;
-    if (playersToPlay == 4) {
-        if (event.key === 'i' || event.key === 'I') iPressed = false;
-        if (event.key === 'k' || event.key === 'K') kPressed = false;
-        if (event.code === 'Numpad8') np8Pressed = false;
-        if (event.code === 'Numpad5') np5Pressed = false;
+    if (started) {
+        if (event.key === 'w' || event.key === 'W') wPressed = false;
+        if (event.key === 's' || event.key === 'S') sPressed = false;
+        if (event.key === 'ArrowUp') upPressed = false;
+        if (event.key === 'ArrowDown') downPressed = false;
+        if (playersToPlay == 4) {
+            if (event.key === 'i' || event.key === 'I') iPressed = false;
+            if (event.key === 'k' || event.key === 'K') kPressed = false;
+            if (event.code === 'Numpad8') np8Pressed = false;
+            if (event.code === 'Numpad5') np5Pressed = false;
+        }
     }
 });
 
@@ -302,7 +304,7 @@ function drawGameBoard() {
 
 function gameLoop() {
     // Controlar pausa
-    if (paused || !started) {
+    if (paused) {
         requestAnimationFrame(gameLoop);
         lastTime = performance.now();
         return;
@@ -342,9 +344,60 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
+function reloadGame(page) {
+    // Pause game
+    started = false;
+    paused = true;
+    winner = 0;
+    pauseTime = 0.0;                                    // Tiempo transcurrido desde la pausa
+    debugMessage.textContent = "";
+    player1Score.textContent = 0;
+    player2Score.textContent = 0;
+
+    ballX = canvas.width / 2 - ballSize / 2;            // Posición de la pelota
+    ballY = canvas.height / 2 - ballSize / 2;
+    drawGameBoard();
+
+    if (page == "game")
+        reloadingGamePage()
+    else if (page == "tournament")
+        reloadingGameTournament()
+}
+
+function reloadingGamePage() {
+    // Remove registration process
+    const popupContainer = document.getElementById("gameRegister");
+    popupContainer.innerHTML = "";
+
+    // Remove error msg
+    const error_msg = document.getElementById("game-registration-error");
+    hideElement(error_msg);
+
+    // Remove selected Players
+    let playersButtons = document.querySelectorAll('.players-btn-group');
+    playersButtons.forEach(button => button.classList.remove('button-selected'));
+
+    // Disable start button
+    const startButton = document.getElementById('startButton');
+    startButton.disabled = true;
+
+    // Hide player info
+    const gameBoosts = document.getElementById("gameBoosts");
+    gameBoosts.style.display = "none";
+
+    // Update score position
+    const score = document.getElementById("score");
+    score.style.top = "10px";
+
+    // Enable selection buttons
+    let playerButtons = document.querySelectorAll('.players-btn-group');
+    let pointsButtons = document.querySelectorAll('.points-btn-group');
+    playerButtons.forEach(button => button.disabled = false);
+    pointsButtons.forEach(button => button.disabled = false);
+}
+
 // Iniciar juego
 drawGameBoard();
-//gameLoop();
 
 // Función para seleccionar el número de jugadores
 function selectPlayers(players) {
@@ -374,7 +427,7 @@ function selectPlayers(players) {
         startButton.disabled = false;
         generatePlayerForms(playersToPlay, false, false);
     }
-    else if (startButton){
+    else {
         startButton.disabled = true;
     }
     console.log(`Selected ${playersToPlay} players`);
@@ -384,6 +437,8 @@ function selectPlayers(players) {
 // Generación de formularios de registro
 function generatePlayerForms(num_players, isTournament, isTeamGame) {
     const popupContainer = document.getElementById("gameRegister");
+    showElement(popupContainer);
+    popupContainer.style.display = "flex";
     popupContainer.innerHTML = ""; // Limpiar contenido previo
 
     let teamNumber = num_players == 2 ? 2 : 2;
@@ -475,7 +530,7 @@ function startGame() {
     }
 
     // 3. Actualizar hechizos
-    displayPlayerBoosts(registerData)
+    displayPlayerInfo(registerData)
 
     // 2. Quitar registro jugadores
     hideElement(document.getElementById("gameRegister"));
@@ -578,7 +633,7 @@ function getFormData(form_id, error_id) {
 }
 
 // Mostrar hechizos de jugador
-function displayPlayerBoosts(playersData) {
+function displayPlayerInfo(playersData) {
     const gameBoosts = document.getElementById("gameBoosts");
     const boostImages = {
         speed: "images/speed.png",
@@ -587,26 +642,28 @@ function displayPlayerBoosts(playersData) {
     };
 
     playersData.forEach((player, index) => {
-        let button = gameBoosts.children[index];
-        if (button) {
-            button.innerHTML = `<img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">`;
+        console.log(player)
+        let playerContainer = gameBoosts.children[index];
+        if (playerContainer) {
+            let nameElement = playerContainer.querySelector("p, span");
+            let button = playerContainer.querySelector("button");
+
+            if (nameElement) {
+                nameElement.textContent = player.username;
+            }
+
+            if (button) {
+                button.innerHTML = `
+                    <img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">
+                `;
+            }
         }
     });
+
     gameBoosts.style.display = "flex";
     gameBoosts.style.visibility = "visible";
-    gameBoosts.style.margin = "20px";
-    const score = document.getElementById("score")
-    score.style.top = "90px";
-}
-
-function showElement(element) {
-    element.style.display = "block";
-    element.style.visibility = "visible";
-}
-
-function hideElement(element) {
-    element.style.display = "none";
-    element.style.visibility = "hidden";
+    const score = document.getElementById("score");
+    score.style.top = "115px";
 }
 
 // ---------------------------------------------------
@@ -661,18 +718,6 @@ function updateColorSelection(value) {
     if (selectedButton) {
         selectedButton.classList.add('selected');
     }
-}
-
-function hexToRgb(hex) {
-    // Elimina el "#" si está presente
-    hex = hex.replace(/^#/, '');
-    
-    // Convierte a RGB
-    let r = parseInt(hex.substring(0, 2), 16);
-    let g = parseInt(hex.substring(2, 4), 16);
-    let b = parseInt(hex.substring(4, 6), 16);
-
-    return `rgb(${r}, ${g}, ${b})`;
 }
 
 // ACTUALIZAR FONDO
