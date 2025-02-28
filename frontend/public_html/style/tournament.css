@@ -88,3 +88,30 @@
     background-color: #F4A6B1;
     border: 2px solid #B2AFB1;
 }
+
+/* DISPOSITIVOS MÓVILES */
+@media (max-width: 768px) {
+
+    .tournament-container h1 {
+        font-size: clamp(14px, 4vw, 36px); /* Reduce ligeramente en pantallas pequeñas */
+    }
+
+    .tournament-container h4 {
+        font-size: clamp(12px, 2.5vw, 24px); /* Más pequeño pero aún adaptable */
+    }
+    
+    .game-selection-options {
+        flex-wrap: wrap;
+    }
+    
+    #tournamentSect .game-selection-option:first-child {
+        display: none;
+    }
+
+    .tournament-start {
+        flex-wrap: wrap;
+    }
+    .tournament-start button {
+        margin: 10px;
+    }
+}

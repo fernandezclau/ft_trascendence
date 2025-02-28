@@ -93,7 +93,6 @@ button.button-selected:disabled {
     background-color: #70B8B1 !important;
 }
 
-
 /* START BUTTON */
 .game-selection-start button {
     font-family: 'retro';
@@ -172,6 +171,15 @@ button.button-selected:disabled {
 
 .form-control::placeholder {
     color: #fff2f2ab;   
+}
+
+.form-control:disabled {
+    outline: none;
+    border-color: #a79395;
+    background-color: #B2AFB1;
+    color: #161618;
+    font-weight: 600;
+    cursor:not-allowed;
 }
 
 .game-register-content-input {
@@ -257,16 +265,48 @@ button.button-selected:disabled {
 
 /* DISPOSITIVOS MÓVILES */
 @media (max-width: 768px) {
+    
+    .game-selection h3 {
+        font-size: clamp(14px, 4vw, 36px); /* Reduce ligeramente en pantallas pequeñas */
+    }
 
+    .game-selection h4 {
+        font-size: clamp(12px, 2.5vw, 24px); /* Más pequeño pero aún adaptable */
+    }
+
+    .game-selection-options{
+        flex-wrap: wrap;
+    }
+    
     #playerSelection .game-selection-option:first-child {
       display: none;
     }
-
-
+    
     .game-selection-start {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
+        margin: 0px;
     }
+
+    .game-selection-start button {
+        margin: 10px;
+    }
+
+    .option-btn {
+        position: relative;
+        font-size: clamp(14px, 2vw, 22px); /* Tamaño de fuente adaptable */
+        font-weight: bolder;
+        color: #161618;
+        width: clamp(60px, 10vw, 120px); /* Botón adaptable entre 60px y 120px */
+        height: clamp(60px, 10vw, 120px); /* Igual que el ancho para mantener proporción */
+        background-color: #b2afb1;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    
 }
   

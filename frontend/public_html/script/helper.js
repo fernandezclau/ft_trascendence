@@ -19,3 +19,9 @@ function hideElement(element) {
     element.style.display = "none";
     element.style.visibility = "hidden";
 }
+
+// Construir nombre de equipo en ingles
+function formatPossessive(username) {
+    if (!username) return "";  
+    return username.endsWith("s") ? `${username}'` : `${username}'s`;
+}

@@ -16,10 +16,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
     background-color: #161618;
     color: #FFF2F2;
     margin: 0;
+    width: 100%;
 }
 
 /* LIGHT MODE */

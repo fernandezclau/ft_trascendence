@@ -77,14 +77,10 @@ function toggleGameVisibility(show) {
 /* LOADING GAME */
 function loadGame() {
 
-    // Title reload button
+    // Title reload button 
     document.getElementById("RELOAD").title = translations[document.documentElement.lang]?.["reload"] || "Reload";
-
-    // Disable startButton
-    const startButton = document.getElementById('startButton'); 
-    startButton.disabled = true;
         
-    // Disable default start button option
+    // Disable default start button option 
     document.getElementById("playerForm").addEventListener("submit", function(event) {
         event.preventDefault();
     });
@@ -92,7 +88,7 @@ function loadGame() {
         event.preventDefault();
     });
 
-    //Reload game
+    //Reload game 
     if (reload)
         reloadGame("game");
 }
@@ -107,7 +103,7 @@ function loadTournament() {
     startButton.disabled = true;
 
     const totalTeams = document.getElementById('tournamentButton'); 
-    startButton.disabled = true;
+    totalTeams.disabled = true;
 
     // Disable default start button option
     document.getElementById("tournamentButton").addEventListener("submit", function(event) {

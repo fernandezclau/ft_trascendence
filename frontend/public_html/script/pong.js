@@ -364,35 +364,50 @@ function reloadGame(page) {
 }
 
 function reloadingGamePage() {
-    // Remove registration process
-    const popupContainer = document.getElementById("gameRegister");
-    popupContainer.innerHTML = "";
+
+    /* Mobile mode */
+    if (window.innerWidth <= 768) {
+
+        // Enable button (no selection)
+        const startButton = document.getElementById("startButton");
+        startButton.disabled = false;
+        
+        // Remove registration process (selection mode enabled)
+        generatePlayerForms(2, false, false, "Claudia"); // TODO: Modificar con el username 
+    }
+
+    /* PC mode */
+    else {
+        // Remove registration process (selection mode enabled)
+        const popupContainer = document.getElementById("gameRegister");
+        popupContainer.innerHTML = "";
+
+        // Remove selected Players (select players available)
+        let playersButtons = document.querySelectorAll('.players-btn-group');
+        playersButtons.forEach(button => button.classList.remove('button-selected'));
+
+        // Enable selection buttons (no)
+        let playerButtons = document.querySelectorAll('.players-btn-group'); 
+        playerButtons.forEach(button => button.disabled = false);
+
+        // Disable start button
+        const startButton = document.getElementById("startButton");
+        startButton.disabled = true;
+    }
+
+    /*  Common */
 
     // Remove error msg
     const error_msg = document.getElementById("game-registration-error");
     hideElement(error_msg);
 
-    // Remove selected Players
-    let playersButtons = document.querySelectorAll('.players-btn-group');
-    playersButtons.forEach(button => button.classList.remove('button-selected'));
-
-    // Disable start button
-    const startButton = document.getElementById('startButton');
-    startButton.disabled = true;
-
-    // Hide player info
+    // Hide player info (si)
     const gameBoosts = document.getElementById("gameBoosts");
     gameBoosts.style.display = "none";
 
-    // Update score position
+    // Update score position (si)
     const score = document.getElementById("score");
     score.style.top = "10px";
-
-    // Enable selection buttons
-    let playerButtons = document.querySelectorAll('.players-btn-group');
-    let pointsButtons = document.querySelectorAll('.points-btn-group');
-    playerButtons.forEach(button => button.disabled = false);
-    pointsButtons.forEach(button => button.disabled = false);
 }
 
 // Iniciar juego
@@ -424,7 +439,7 @@ function selectPlayers(players) {
     
     if (playersToPlay && startButton) {
         startButton.disabled = false;
-        generatePlayerForms(playersToPlay, false, false);
+        generatePlayerForms(playersToPlay, false, false, "Carlos");  // TODO: Modificar con el username 
     }
     else {
         startButton.disabled = true;
@@ -433,8 +448,7 @@ function selectPlayers(players) {
     drawGameBoard();
 }
 
-// Generación de formularios de registro
-function generatePlayerForms(num_players, isTournament, isTeamGame) {
+function generatePlayerForms(num_players, isTournament, isTeamGame, loggedInPlayerName) {
     const popupContainer = document.getElementById("gameRegister");
     showElement(popupContainer);
     popupContainer.style.display = "flex";
@@ -444,23 +458,38 @@ function generatePlayerForms(num_players, isTournament, isTeamGame) {
     let titleKey = num_players == 2 ? "player" : "team";
 
     // Si es torneo
-    if (isTournament)
-    {
+    if (isTournament) {
         teamNumber = num_players;
         console.log("Is team game" + isTeamGame);
         titleKey = isTeamGame ? "team" : "player";    
     }
+
+    if (titleKey == "team")
+        loggedInPlayerName = formatTranslation("usersTeam", {username : loggedInPlayerName})
 
     let { titleText, username_label, username_placeholder, boost_label, speed_label, power_label, defense_label } = loadPlayerFormTranslations(titleKey);
 
     for (let i = 1; i <= teamNumber; i++) {
         const playerForm = document.createElement("div");
         playerForm.classList.add("game-register-content");
-        playerForm.innerHTML =`
+        
+        // Si es el primer jugador (el que hizo login), deshabilitar el input y mostrar su nombre
+        let usernameInputHtml = '';
+        if (i === 1 && loggedInPlayerName) {
+            usernameInputHtml = `
+                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" value="${loggedInPlayerName}" placeholder="${username_placeholder}" disabled required>
+            `;
+        } else {
+            usernameInputHtml = `
+                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="${username_placeholder}" required>
+            `;
+        }
+
+        playerForm.innerHTML = `
             <h3 id="modalTitle">${titleText} ${i}</h3>
             <div class="game-register-content-input">
                 <label for="usernameInput${i}" class="game-register-content-label">${username_label}</label>
-                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="${username_placeholder}" required>
+                ${usernameInputHtml}
             </div>
             <div class="game-register-content-input">
                 <label class="game-register-content-label">${boost_label}</label>
@@ -548,7 +577,11 @@ function startGame() {
     // 2. Quitar registro jugadores
     hideElement(document.getElementById("gameRegister"));
 
-    // 3. Comienza el juego
+    // 3. Modo movil 2 jugadores por defecto siempre
+    if (window.innerWidth <= 768)
+        playersToPlay = 2;
+    
+    // 4. Comienza el juego
     if (playersToPlay != null && pointsToWin)
     {
         console.log("Starting game");

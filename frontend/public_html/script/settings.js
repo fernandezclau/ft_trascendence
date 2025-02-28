@@ -119,7 +119,10 @@ function formatTranslation(key, placeholders) {
     if (!translation) return key;
 
     for (const [placeholder, value] of Object.entries(placeholders)) {
-        translation = translation.replace(`{${placeholder}}`, value);
+        if (document.documentElement.lang == "en" && key == "usersTeam")
+            translation = translation.replace(`{${placeholder}}`, formatPossessive(value));
+        else
+            translation = translation.replace(`{${placeholder}}`, value);
     }
 
     return translation;

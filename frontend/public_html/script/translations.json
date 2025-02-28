@@ -105,7 +105,8 @@
         "usernameTooLong": "Error: Username is too long. (Max 8 characters)",
         "invalidBoost": "Error: Boost '{boost}' is invalid.",
         "pressSpaceBar": "PRESS SPACE",
-        "paused": "PAUSED"
+        "paused": "PAUSED",
+        "usersTeam": "{username} Team"
     },
     "es": {
         "navbarBrand": "PONG",
@@ -214,7 +215,8 @@
         "usernameTooLong": "Error: El nombre de usuario es demasiado largo. (Máximo 8 caracteres)",
         "invalidBoost": "Error: Boost '{boost}' no es válido.",
         "pressSpaceBar": "PULSA ESPACIO",
-        "paused": "PAUSA"
+        "paused": "PAUSA",
+        "usersTeam": "Equipo de {username}"
     },
     "fr": {
         "navbarBrand": "PONG",
@@ -323,6 +325,7 @@
         "usernameTooLong": "Erreur : Le nom d'utilisateur est trop long. (Max 8 caractères)",
         "invalidBoost": "Erreur: Boost '{boost}' n'est pas valide.",
         "pressSpaceBar": "ESPACE PRESSE",
-        "paused": "PAUSÉ"
+        "paused": "PAUSÉ",
+        "usersTeam": "l'équipe de {username}"
     }
 }

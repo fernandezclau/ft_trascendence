@@ -32,7 +32,7 @@ function selectTeamPlayers(teamPlayers) {
     // Dibujamos el mapa actualizado
     drawGameBoard();
     if (numplayers)
-        generatePlayerForms(numplayers, true, isTeamPlay);
+        generatePlayerForms(numplayers, true, isTeamPlay, "Claudia");  // TODO: Modificar con el username 
 }
 
 // Seleccionar número de equipos/personas
@@ -59,7 +59,7 @@ function selectTournamentPlayers(players) {
     if (numplayers && startButton) {
         startButton.disabled = false;
         // Generate form
-        generatePlayerForms(players, true, isTeamPlay);
+        generatePlayerForms(players, true, isTeamPlay, "Claudia"); // TODO: Modificar con el username 
     }
     else {
         startButton.disabled = true;
@@ -90,6 +90,35 @@ function selectTournamentPoints(points) {
 
 // Recargar juego
 function reloadingGameTournament() {
+    // Disable button (selection needed)
+    const button = document.getElementById("tournamentButton");
+    button.disabled = true;
+
+    /* Mobile mode */
+    if (window.innerWidth <= 768) {
+        
+        // Enable player selection
+        let teamPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
+        teamPlayersButtons.forEach(button => button.disabled = false);
+    }
+
+    /* PC mode */
+    else {
+        // Remove selected plauers (mode 1, 2 per team)
+        let playersButtons = document.querySelectorAll('.team-players-btn-group');
+        playersButtons.forEach(button => button.classList.remove('button-selected'));
+
+        // Enable selection buttons
+        let playerButtons = document.querySelectorAll('.team-players-btn-group');
+        let teamPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
+        let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
+        playerButtons.forEach(button => button.disabled = false);
+        teamPlayersButtons.forEach(button => button.disabled = true);
+        pointsButtons.forEach(button => button.disabled = false);
+    }
+    
+    /*  Common */
+
     // Remove registration process
     const popupContainer = document.getElementById("gameRegister");
     popupContainer.innerHTML = "";
@@ -98,17 +127,11 @@ function reloadingGameTournament() {
     const error_msg = document.getElementById("game-tournament-error");
     if (error_msg)
         hideElement(error_msg);
-
-    // Remove selected Players
-    let playersButtons = document.querySelectorAll('.team-players-btn-group');
-    playersButtons.forEach(button => button.classList.remove('button-selected'));
+    
+    // Remove selected players
     let totalPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
     totalPlayersButtons.forEach(button => button.classList.remove('button-selected'));
 
-    // Disable start button
-    const startButton = document.getElementById('tournamentButton');
-    startButton.disabled = true;
-    
     // Hide graph
     const tournamentGraph = document.getElementById("tournamentGraph")
     tournamentGraph.style.display = "none";
@@ -120,14 +143,6 @@ function reloadingGameTournament() {
     // Update score position
     const score = document.getElementById("score");
     score.style.top = "10px";
-
-    // Enable selection buttons
-    let playerButtons = document.querySelectorAll('.team-players-btn-group');
-    let teamPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
-    let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
-    playerButtons.forEach(button => button.disabled = false);
-    teamPlayersButtons.forEach(button => button.disabled = true);
-    pointsButtons.forEach(button => button.disabled = false);
     
     // Reset num playeers
     numplayers = null
