@@ -53,7 +53,7 @@
                 <button class="color-option" style="background-color: #516A99;" onclick="updateBallColor('#516A99')"></button>
                 <button class="color-option" style="background-color: #ECE570;" onclick="updateBallColor('#ECE570')"></button>
                 <button class="color-option" style="background-color: #9C77C1;" onclick="updateBallColor('#9C77C1')"></button>
-                <button class="color-option selected" style="background-color: #fff2f2;" onclick="updateBallColor('#fff2f2')"></button>
+                <button class="color-option" style="background-color: #fff2f2;" onclick="updateBallColor('#fff2f2')"></button>
             </div>
         </div>
         
@@ -108,9 +108,9 @@
             <form>
                 <label for="password" data-key="new_password_label">Change Password</label>
                 <div class="settings-group">
-                    <input type="password" id="password" placeholder="Old password" data-key="old_password_placeholder">
-                    <input type="password" id="password" placeholder="New password" data-key="new_password_placeholder">
-                    <input type="password" id="password" placeholder="Confirm password" data-key="confirm_password_placeholder">
+                    <input type="password" id="old_password" placeholder="Old password" data-key="old_password_placeholder" autocomplete="current-password">
+                    <input type="password" id="new_password" placeholder="New password" data-key="new_password_placeholder" autocomplete="new-password">
+                    <input type="password" id="confirm_password" placeholder="Confirm password" data-key="confirm_password_placeholder" autocomplete="current-password">
                     <button class="save-btn">
                         <i class="fas fa-save"></i>
                     </button>

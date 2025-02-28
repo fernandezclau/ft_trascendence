@@ -3,8 +3,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     margin: 20px;
     font-weight: bold;
+    width: fit-content;
 }
 
 .register-box {
@@ -12,7 +14,6 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    min-width: 490px;
 }
 
 .register-box h2 {

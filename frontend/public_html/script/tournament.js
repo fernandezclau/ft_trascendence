@@ -135,9 +135,6 @@ function reloadingGameTournament() {
 
 // Empezar torneos
 function startTournament() {
-    document.getElementById("tournamentButton").addEventListener("submit", function(event) {
-        event.preventDefault();
-    });
     //1. Obtener y validar información del torneo
     let tournamentData = getFormData("tournamentForm", "game-tournament-error")
     if (!tournamentData) {
@@ -146,6 +143,9 @@ function startTournament() {
     
     // 2. Desahbilitar botones
     disableTournamentSelectionButtons();
+
+    // 4. Ocultar registro
+    hideElement(document.getElementById("gameRegister"));
 
     // 3. Generar peleas
     fights = generateFights(tournamentData);
@@ -368,7 +368,7 @@ async function startFights(matches) {
             // Jugar
             started = true;
             playSound('resume');
-            debugMessage.textContent = "PRESS SPACEBAR";
+            debugMessage.textContent = match.player1.username + " vs " + match.player2.username;
             
             // 6. Bucle
             let winner = gameLoop() == 1 ? match.player1 : match.player2;
@@ -437,6 +437,7 @@ function displayPlayerInfoTour(playersData) {
             nameElement.textContent = playersData.player1.username;
         }
         if (button) {
+            button.title = translations[document.documentElement.lang]?.[player.boost]
             button.innerHTML = `
                 <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
             `;

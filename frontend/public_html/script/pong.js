@@ -237,7 +237,7 @@ document.addEventListener('keydown', (event) => {
 
                 // Pausar
                 playSound('pause');
-                debugMessage.textContent = "PAUSED";
+                debugMessage.textContent = translations[document.documentElement.lang]?.["paused"];;
                 debugMessage.classList.add('paused');
             } else {
                 // Continuar
@@ -441,35 +441,37 @@ function generatePlayerForms(num_players, isTournament, isTeamGame) {
     popupContainer.innerHTML = ""; // Limpiar contenido previo
 
     let teamNumber = num_players == 2 ? 2 : 2;
-    let title = num_players == 2 ? "Player" : "Team";
+    let titleKey = num_players == 2 ? "player" : "team";
 
     // Si es torneo
     if (isTournament)
     {
         teamNumber = num_players;
         console.log("Is team game" + isTeamGame);
-        title = isTeamGame ? "Team" : "Player";    
+        titleKey = isTeamGame ? "team" : "player";    
     }
+
+    let { titleText, username_label, username_placeholder, boost_label, speed_label, power_label, defense_label } = loadPlayerFormTranslations(titleKey);
 
     for (let i = 1; i <= teamNumber; i++) {
         const playerForm = document.createElement("div");
         playerForm.classList.add("game-register-content");
         playerForm.innerHTML =`
-            <h3 id="modalTitle">${title} ${i}</h3>
+            <h3 id="modalTitle">${titleText} ${i}</h3>
             <div class="game-register-content-input">
-                <label for="usernameInput${i}" class="game-register-content-label">Username</label>
-                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="Username" required>
+                <label for="usernameInput${i}" class="game-register-content-label">${username_label}</label>
+                <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="${username_placeholder}" required>
             </div>
             <div class="game-register-content-input">
-                <label class="game-register-content-label" data-key="chooseBoost">Choose a Boost</label>
+                <label class="game-register-content-label">${boost_label}</label>
                 <div class="boost-options">
-                    <div class="boost-option game-option-selected" data-boost="speed" onclick="selectBoost('speed', ${i})">
+                    <div class="boost-option game-option-selected" data-boost="speed" title="${speed_label}" onclick="selectBoost('speed', ${i})">
                         <img src="images/speed.png" alt="Speed Boost">
                     </div>
-                    <div class="boost-option" data-boost="power" onclick="selectBoost('power', ${i})">
+                    <div class="boost-option" data-boost="power" title="${power_label}" onclick="selectBoost('power', ${i})">
                         <img src="images/power.png" alt="Power Boost">
                     </div>
-                    <div class="boost-option" data-boost="defense" onclick="selectBoost('defense', ${i})">
+                    <div class="boost-option" data-boost="defense" title="${defense_label}" onclick="selectBoost('defense', ${i})">
                         <img src="images/shield.png" alt="Defense Boost">
                     </div>
                 </div>
@@ -477,6 +479,18 @@ function generatePlayerForms(num_players, isTournament, isTeamGame) {
         `;
         popupContainer.appendChild(playerForm);
     }
+}
+
+function loadPlayerFormTranslations(titleKey) {
+    return {
+        titleText: translations[document.documentElement.lang]?.[titleKey] || titleKey,
+        username_label: translations[document.documentElement.lang]?.["username_label"],
+        username_placeholder: translations[document.documentElement.lang]?.["username_placeholder"],
+        boost_label: translations[document.documentElement.lang]?.["chooseBoost"],
+        speed_label:  translations[document.documentElement.lang]?.["speed"],
+        power_label:  translations[document.documentElement.lang]?.["power"],
+        defense_label:  translations[document.documentElement.lang]?.["defense"]
+    };
 }
 
 // Selección del bost
@@ -545,7 +559,7 @@ function startGame() {
         // 5. Inicio de juego
         started = true;
         playSound('resume');
-        debugMessage.textContent = "PRESS SPACEBAR";
+        debugMessage.textContent = translations[document.documentElement.lang]?.["pressSpaceBar"];;
         
         // 6. Bucle
         gameLoop();
@@ -582,7 +596,7 @@ function getFormData(form_id, error_id) {
     // 2. Comprobamos que los campos cumplen las restricciones
     if (!form.checkValidity()) {
         form.reportValidity();
-        error_element.innerHTML = "Error: Missing fields";
+        error_element.innerHTML = translations[document.documentElement.lang]?.["missingFields"];
         showElement(error_element);
         return null;
     }
@@ -604,7 +618,10 @@ function getFormData(form_id, error_id) {
 
         // Nombre de usuario único
         if (usernamesSet.has(username)) {
-            errorMsg = "Error: El username " + username + " está duplicado."
+            errorMsg = formatTranslation("usernameDuplicated", {username: username})
+            isValid = false;
+        } else if (username.length > 8)  {
+            errorMsg = translations[document.documentElement.lang]?.["usernameTooLong"];
             isValid = false;
         } else {
             usernamesSet.add(username);
@@ -612,7 +629,8 @@ function getFormData(form_id, error_id) {
 
         // Boost válido
         if (!validBoosts.has(boost)) {
-            errorMsg = "Error: Boost "  + boost + " no es válido."
+            error_element.innerHTML = translations[document.documentElement.lang]?.["missingFields"];
+            errorMsg =  formatTranslation("invalidBoost", { boost: boost });
             isValid = false;
         }
 
@@ -650,8 +668,9 @@ function displayPlayerInfo(playersData) {
             if (nameElement) {
                 nameElement.textContent = player.username;
             }
-
+            
             if (button) {
+                button.title = translations[document.documentElement.lang]?.[player.boost]
                 button.innerHTML = `
                     <img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">
                 `;
@@ -775,6 +794,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Save size " + savedSize)
     if (savedSize == 20 || savedSize == 10 || savedSize == 30) {
         updateBallSize(savedSize)
+    } else {
+        localStorage.setItem("ballSize", 10)
     }
 
     // speed
@@ -783,6 +804,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Save speed " + savedSpeed)
     if (savedSpeed >= 400 && savedSpeed <= 600) {
         updateBallSpeed(savedSpeed)
+    } else {
+        localStorage.setItem("ballSpeed", 500)
     }
 
     // color
@@ -791,14 +814,18 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Save color " + savedColor)
     if (savedColor) {
         updateBallColor(savedColor)
+    } else {
+        localStorage.setItem("ballColor", "#fff2f2")
     }
 
-    // backgroundColor
+    // backgroundColorbackgroundColor
     const savedBackground = localStorage.getItem("backgroundColor")
     const canvas = document.querySelector("canvas");
     console.log("Saved background " + savedBackground)
     if (savedBackground && canvas){
         canvas.style.backgroundColor = savedBackground;
+    } else {
+        localStorage.setItem("backgroundColor", "#161618")
     }
 
     // dark mode

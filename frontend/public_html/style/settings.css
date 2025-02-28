@@ -282,3 +282,122 @@
     color: #6d6b6c;
 }
 
+/* DISPOSITIVOS MÓVILES */
+@media (max-width: 768px) {
+    .settings-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .settings-header h2 {
+        margin: 15px;
+    }
+
+    .settings-header-icons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .settings-header-icons-elem {
+        font-size: 1.5rem;
+    }
+
+    .settings-options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    .form-range {
+        width: 90%;
+        margin: 5px;
+    }
+    .language-select {
+        margin-top: 10px;
+    }
+
+    .ball-speed, .size-picker, .color-picker, .background-picker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .ball-speed .speed-labels,
+    .size-labels {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .ball-speed {
+        width: 100% !important;
+    }
+
+    .size-labels, .speed-labels, .ball-speed  {
+        width: 90%;
+    }
+
+    .account-settings-forms {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0px;
+    }
+
+    .account-settings input {
+        width: 100%;
+    }
+    .account-settings form {
+        margin: 15px;
+    }
+    .settings-group {
+        flex-wrap: wrap;
+    }
+
+    .account-settings form button {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .danger-zone {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .delete-btn, .logout-btn {
+        width: 90%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .settings h2 {
+        text-align: center;
+        width: 93%;
+    }
+
+    .settings hr {
+        margin: 5px;
+    }
+    .color-options {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .settings .color-option {
+        width: 20px;
+        height: 20px;
+    }
+
+    .background-option {
+        width: 30px;
+        height: 30px;
+    }
+
+}

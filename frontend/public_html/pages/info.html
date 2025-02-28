@@ -1,14 +1,23 @@
 <div class="info">
     <h1 class="text-center" data-key="howToPlayTitle">How to Play Pong</h1>
-
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#howToPlay">How to Play</a></li>
+            <li><a href="#controls">Controls</a></li>
+            <li><a href="#boosts">Boosts</a></li>
+            <li><a href="#tournamentMode">Tournament Mode</a></li>
+            <li><a href="#tipsToWin">Tips to Win</a></li>
+        </ul>
+    </nav>
     <!-- Introduction -->
-    <div class="card red">
+    <div id="introduction" class="card red">
         <h3 data-key="introductionTitle">Introduction</h3>
         <p data-key="introductionText">Pong is one of the earliest video games in history, created in 1972. It is a digital table tennis game where players control paddles to hit a ball and score points. The game can be played with up to 4 players simultaneously, making it a fun and competitive experience for everyone.</p>
     </div>
 
     <!-- How to Play -->
-    <div class="card blue">
+    <div id="howToPlay" class="card blue">
         <h3 data-key="howToPlayTitle">How to Play</h3>
         <ul>
             <li data-key="ballMoves">The ball moves automatically across the screen.</li>
@@ -21,19 +30,21 @@
     </div>
 
     <!-- Controls -->
-    <div class="card dark-blue">
+    <div id="controls" class="card dark-blue">
         <h3 data-key="controlsTitle">Controls</h3>
         <ul>
+            <li>Cada jugador controla una pala, moviéndola hacia arriba y hacia abajo para</li>
             <li><strong data-key="player1">Player 1:</strong> <span data-key="player1Controls">Use the <strong>W</strong> and <strong>S</strong> keys to move the paddle.</span></li>
             <li><strong data-key="player2">Player 2:</strong> <span data-key="player2Controls">Use the <strong>⬆️</strong> and <strong>⬇️</strong> arrow keys to move the paddle.</span></li>
             <li><strong data-key="player3">Player 3:</strong> <span data-key="player3Controls">Use the <strong>I</strong> and <strong>K</strong> keys to move the paddle.</span></li>
             <li><strong data-key="player4">Player 4:</strong> <span data-key="player4Controls">Use the <strong>Numpad 8</strong> and <strong>Numpad 5</strong> keys to move the paddle.</span></li>
             <li><strong data-key="spaceBar">Spacebar:</strong> <span data-key="spacePause">Pause the game.</span></li>
+            <li>Los boost corresponde a las teclas 2 (Player 1 y 3) y Izquierda < (Player 2 y 4)</li>
         </ul>
     </div>
 
     <!-- Boosts -->
-    <div class="card orange">
+    <div id="boosts" class="card orange">
         <h3 data-key="boostsTitle">Boosts</h3>
         <p data-key="boostsIntro">Boosts are special power-ups that enhance your gameplay. Choose wisely to gain an advantage over your opponent!</p>
         <ul>
@@ -44,7 +55,7 @@
     </div>
 
     <!-- Tournament Mode -->
-    <div class="card green">
+    <div id="tournamentMode" class="card green">
         <h3 data-key="tournamentModeTitle">Tournament Mode</h3>
         <p data-key="tournamentModeText">Tournament mode allows you to play with multiple players in a structured competition. Up to 4 players can participate simultaneously, and the game supports both single-elimination and round-robin formats.</p>
         <ul>
@@ -56,7 +67,7 @@
     </div>
 
     <!-- Tips to Win -->
-    <div class="card yellow">
+    <div id="tipsToWin" class="card yellow">
         <h3 data-key="tipsTitle">Tips to Win</h3>
         <ul>
             <li data-key="hitAngles">Try to hit the ball at angles to make it harder for your opponent to return.</li>

@@ -1,9 +1,9 @@
 <div class="tournament-container">
-    <h1>Tournament</h1>
+    <h1 data-key="tournament">Tournament</h1>
 
     <div id="tournamentSect" class="game-selection-options">
         <div class="game-selection-option">
-            <h4>Player per Team</h4>
+            <h4 data-key="playerTeams">Player per Team</h4>
             <div class="game-selection-option-players">
                 <button class="option-btn team-players-btn-group" onclick="selectTeamPlayers(1)">1</button>
                 <button class="option-btn team-players-btn-group" onclick="selectTeamPlayers(2)">2</button>
@@ -11,15 +11,15 @@
         </div>
     
         <div class="game-selection-option">
-            <h4 >Total Teams</h4>
+            <h4 data-key="totalTeams">Total Teams</h4>
             <div class="game-selection-option-players">
                 <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(2)">2</button>
                 <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(4)">4</button>
-                <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(8)">8</button>
+                <!-- <button class="option-btn tour-players-btn-group" onclick="selectTournamentPlayers(8)">8</button> -->
             </div>
         </div>
         <div class="game-selection-option">
-            <h4>Points</h4>
+            <h4 data-key="numPoints">Points</h4>
             <div class="game-selection-option-players">
                 <button class="option-btn tour-points-btn-group" onclick="selectTournamentPoints(5)">5</button>
                 <button class="option-btn tour-points-btn-group button-selected" onclick="selectTournamentPoints(10)">10</button>
@@ -40,7 +40,7 @@
     
         <!-- Start button -->
         <div class="tournament-start">
-            <button type="submit" id="tournamentButton" onclick="startTournament()">READY</button>
+            <button type="submit" id="tournamentButton" onclick="startTournament()" data-key="playButton">READY</button>
             <button id="RELOAD2" onclick="reloadGame('tournament')">
                 <i class="fas fa-redo"></i>
             </button>

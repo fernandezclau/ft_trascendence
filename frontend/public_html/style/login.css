@@ -6,6 +6,7 @@
     margin: 20px;
     color: #161618;
     font-weight: bolder;
+    width: fit-content;
 }
 
 .login-box {
@@ -105,4 +106,8 @@
 
 .login-box span {
     color: #161618;
+}
+
+.not-account {
+    font-weight: lighter !important;
 }

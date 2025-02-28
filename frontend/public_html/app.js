@@ -76,6 +76,10 @@ function toggleGameVisibility(show) {
 
 /* LOADING GAME */
 function loadGame() {
+
+    // Title reload button
+    document.getElementById("RELOAD").title = translations[document.documentElement.lang]?.["reload"] || "Reload";
+
     // Disable startButton
     const startButton = document.getElementById('startButton'); 
     startButton.disabled = true;
@@ -95,6 +99,9 @@ function loadGame() {
 
 /* LOADING TOURNAMENT */
 function loadTournament() {
+    // Title reload button
+    document.getElementById("RELOAD2").title = translations[document.documentElement.lang]?.["reload"] || "Reload";
+
     // Disable startButton
     const startButton = document.getElementById('tournamentButton'); 
     startButton.disabled = true;

@@ -18,7 +18,7 @@
     
         <div class="game-selection-option">
             <h4 data-key="numPoints">Points</h4>
-            <div>
+            <div class="game-selection-option-players">
                 <button class="option-btn points-btn-group" onclick="selectPoints(5)">5</button>
                 <button class="option-btn points-btn-group button-selected" onclick="selectPoints(10)">10</button>
                 <button class="option-btn points-btn-group" onclick="selectPoints(15)">15</button>
@@ -39,7 +39,7 @@
         <!-- Start button -->
         <div class="game-selection-start">
             <button type="submit" data-key="playButton" id="startButton" onclick="startGame()">READY</button>
-            <button id="RELOAD" onclick="reloadGame('game')">
+            <button id="RELOAD" onclick="reloadGame('game')" title="">
                 <i class="fas fa-redo"></i>
             </button>
         </div>

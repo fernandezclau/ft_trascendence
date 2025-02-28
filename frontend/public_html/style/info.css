@@ -7,6 +7,39 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+
+/* NAV */
+/* Navigation Styles */
+.info nav {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.info nav ul {
+    list-style: none;
+}
+
+.info nav ul li a {
+    text-decoration: none;
+    font-family: 'retro', sans-serif; /* Usar la misma fuente */
+    font-size: 1.2em;
+    color: #f5f598;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.info nav ul li a:hover {
+    background-color: #f4a6b1; /* Color de hover (coherente con el estilo de las cards rojas) */
+    color: #292831; /* Cambiar color del texto */
+    transform: scale(1.1); /* Efecto de agrandamiento */
+}
+
+.info nav ul li a:active {
+    transform: scale(1); /* Efecto cuando el enlace es presionado */
 }
 
 /* Header */
@@ -99,4 +132,22 @@
     h3 {
         font-size: 1.4em;
     }
+
+    /* Media Queries para el diseño responsivo */
+@media (max-width: 768px) {
+    .info nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+
+    nav ul li a {
+        font-size: 1.1em;
+        padding: 8px;
+    }
+}
 }

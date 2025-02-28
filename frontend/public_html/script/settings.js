@@ -113,3 +113,15 @@ function setLanguage(language) {
     localStorage.setItem('preferredLanguage', language);
     changeLanguage(language);
 }
+
+function formatTranslation(key, placeholders) {
+    let translation = translations[document.documentElement.lang]?.[key];
+    if (!translation) return key;
+
+    for (const [placeholder, value] of Object.entries(placeholders)) {
+        translation = translation.replace(`{${placeholder}}`, value);
+    }
+
+    return translation;
+}
+
