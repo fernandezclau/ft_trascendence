@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
       - ./db-init/init.sql:/docker-entrypoint-initdb.d/init.sql
       # añado esto ^ para que inicialice con un archivo las bases de datos de backend y backend2
       # si al final no necesitamos dos bases de datos, quitamos una y borramos la parte de
