@@ -59,7 +59,7 @@ function selectTournamentPlayers(players) {
     if (numplayers && startButton) {
         startButton.disabled = false;
         // Generate form
-        generatePlayerForms(players, true, isTeamPlay, "Claudia"); // TODO: Modificar con el username 
+        generatePlayerForms(players, true, isTeamPlay, "Claudia Fernandez"); // TODO: Modificar con el username 
     }
     else {
         startButton.disabled = true;
@@ -345,13 +345,11 @@ function fillPlayers(fights) {
         const playerElement2 = document.getElementById(`round-${round}-${position2}`);
 
         if (playerElement1) {
-            playerElement1.innerHTML = fight.player1.username;
-            playerElement1.setAttribute("id", `player-${round}-${position1}`);
+            playerElement1.innerHTML = truncateName(fight.player1.username);
         }
 
         if (playerElement2) {
-            playerElement2.innerHTML = fight.player2.username;
-            playerElement2.setAttribute("id", `player-${round}-${position2}`);
+            playerElement2.innerHTML = truncateName(fight.player2.username);
         }
     });
 }
@@ -383,13 +381,12 @@ async function startFights(matches) {
             // Jugar
             started = true;
             playSound('resume');
-            debugMessage.textContent = match.player1.username + " vs " + match.player2.username;
+            debugMessage.textContent = truncateName(match.player1.username) + " vs " + truncateName(match.player2.username);
             
             // 6. Bucle
             let winner = gameLoop() == 1 ? match.player1 : match.player2;
             console.log("The winner")
             console.log(winner)
-            // let winner = determineWinner(match.player1, match.player2);
             winners.push(winner);
             match.winner = winner;
 
@@ -414,23 +411,23 @@ async function startFights(matches) {
         fillPlayers(matches);
     }
 
-    const element1 = document.getElementById(`player-3-${winners[0].position}`);
-    element1.style.background = 'red';
+    const element1 = document.getElementById(`round-3-${winners[0].position}`);
+    element1.classList.add('ready')
 }
 
 function highlightMatch(player1, player2) {
     const element1 = document.getElementById(getPlayerId(player1));
     const element2 = document.getElementById(getPlayerId(player2));
-    if (element1) element1.style.backgroundColor = 'red';
+    if (element1) element1.classList.add('ready');
         
-    if (element2) element2.style.backgroundColor = 'red';
+    if (element2) element2.classList.add('ready');
 }
 
 function resetHighlight(player1, player2) {
     const element1 = document.getElementById(getPlayerId(player1));
     const element2 = document.getElementById(getPlayerId(player2));
-    if (element1) element1.style.backgroundColor = '';
-    if (element2) element2.style.backgroundColor = '';
+    if (element1) element1.classList.remove('ready');
+    if (element2) element2.classList.remove('ready');
 }
 
 function displayPlayerInfoTour(playersData) {
@@ -449,19 +446,30 @@ function displayPlayerInfoTour(playersData) {
         let button = playerContainer1.querySelector("button");
 
         if (nameElement) {
-            nameElement.textContent = playersData.player1.username;
+            nameElement.textContent = truncateName(playersData.player1.username);
         }
         if (button) {
-            button.title = translations[document.documentElement.lang]?.[player.boost]
+            button.title = translations[document.documentElement.lang]?.[playersData.player1.boost]
             button.innerHTML = `
-                <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
+                    <span style="
+                        font-family: 'retro';
+                        color: #161618; 
+                        text-transform: uppercase;">
+                        E
+                    </span>
+                </div>
             `;
             // Asegurar que no haya eventos previos duplicados
             button.replaceWith(button.cloneNode(true));
             button = playerContainer1.querySelector("button");
 
             // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username));
+            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username, button));
+
+            // Deshabilitar boton
+            button.disabled = true;
         }
     }
     if (playerContainer2) {
@@ -469,31 +477,39 @@ function displayPlayerInfoTour(playersData) {
         let button = playerContainer2.querySelector("button");
 
         if (nameElement) {
-            nameElement.textContent = playersData.player2.username;
+            nameElement.textContent = truncateName(playersData.player2.username);
         }
         if (button) {
+            button.title = translations[document.documentElement.lang]?.[playersData.player2.boost]
             button.innerHTML = `
-                <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
+                    <span style="
+                        font-family: 'retro';
+                        color: #161618; 
+                        text-transform: uppercase;">
+                        >
+                    </span>
+                </div>
             `;
             // Asegurar que no haya eventos previos duplicados
             button.replaceWith(button.cloneNode(true));
             button = playerContainer2.querySelector("button");
 
             // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username));
+            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username, button));
+            
+            // Deshabilitar boton
+            button.disabled = true;
         }
     }
 
     gameBoosts.style.display = "flex";
     gameBoosts.style.visibility = "visible";
     const score = document.getElementById("score");
-    score.style.top = "115px";
+    score.style.top = "105px";
 }
 
 function getPlayerId(player) {
-    return `player-${player.round}-${player.position}`;
-}
-
-function determineWinner(player1, player2) {
-    return Math.random() > 0.5 ? player1 : player2; // Simulación de ganador aleatorio
+    return `round-${player.round}-${player.position}`;
 }

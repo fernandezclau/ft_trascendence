@@ -25,3 +25,8 @@ function formatPossessive(username) {
     if (!username) return "";  
     return username.endsWith("s") ? `${username}'` : `${username}'s`;
 }
+
+// Truncar nombre
+function truncateName(name, maxLength = 10) {
+    return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+}

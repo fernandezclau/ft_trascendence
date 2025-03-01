@@ -29,7 +29,7 @@ let playerDistance = 100;
 let wPressed = false, sPressed = false;                 // Controla si se están pulsando las teclas W/S
 let upPressed = false, downPressed = false;             // Controla si se están pulsando las teclas Arriba/Abajo
 let iPressed = false, kPressed = false;                 // Controla si se están pulsando las teclas I/K
-let np8Pressed = false, np5Pressed = false;
+let np8Pressed = false, np5Pressed = false;             // Controla si se están pulsando las teclas np8/np5
 
 // # SECCIÓN DE PELOTA
 let ballSize = 10;                                    // Dimensiones de la pelota
@@ -229,6 +229,13 @@ document.addEventListener('keydown', (event) => {
             if (event.code === 'Numpad8') np8Pressed = true;
             if (event.code === 'Numpad5') np5Pressed = true;
         }
+        
+        // Boosts ()
+        if (!paused) {
+            if (event.key === "e" || event.key === "E") pressedBoostButton("e");
+            if (event.key === "ArrowRight") pressedBoostButton("right");
+        }
+
         if (event.key === ' ' && winner == 0) {
             paused = !paused;
             if (paused) {
@@ -239,11 +246,17 @@ document.addEventListener('keydown', (event) => {
                 playSound('pause');
                 debugMessage.textContent = translations[document.documentElement.lang]?.["paused"];;
                 debugMessage.classList.add('paused');
+
+                // Deshabilitar boton boosts
+                toggleBoostButtons(true);
             } else {
                 // Continuar
                 playSound('resume');
                 debugMessage.textContent = "";
                 debugMessage.classList.remove('paused');
+                
+                // Habilitar boton boosts
+                toggleBoostButtons(false);
             }
         }
     }
@@ -653,7 +666,7 @@ function getFormData(form_id, error_id) {
         if (usernamesSet.has(username)) {
             errorMsg = formatTranslation("usernameDuplicated", {username: username})
             isValid = false;
-        } else if (username.length > 8)  {
+        } else if (username.length > 8 && index != 0)  {
             errorMsg = translations[document.documentElement.lang]?.["usernameTooLong"];
             isValid = false;
         } else {
@@ -699,13 +712,21 @@ function displayPlayerInfo(playersData) {
             let button = playerContainer.querySelector("button");
 
             if (nameElement) {
-                nameElement.textContent = player.username;
+                nameElement.textContent = truncateName(player.username);
             }
-            
+            const boostKey = index === 0 ? "E" : ">";           
             if (button) {
                 button.title = translations[document.documentElement.lang]?.[player.boost]
                 button.innerHTML = `
-                    <img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <img src="${boostImages[player.boost]}" alt="${player.boost}" width="30">
+                        <span style="
+                            font-family: 'retro';
+                            color: #161618; 
+                            text-transform: uppercase;">
+                            ${boostKey}
+                        </span>
+                    </div>
                 `;
                 
                 // Asegurar que no haya eventos previos duplicados
@@ -714,6 +735,9 @@ function displayPlayerInfo(playersData) {
 
                 // Asignar la función del boost correspondiente
                 button.addEventListener("click", () => activateBoost(player.boost, player.username, button));
+
+                // Deshabilitar
+                button.disabled = true;
             }
         }
     });
@@ -751,6 +775,40 @@ function activateBoost(boostType, playerName, button) {
         }
     }
 }
+
+function toggleBoostButtons(enable) {
+    const gameBoosts = document.getElementById("gameBoosts");
+
+    if (!gameBoosts) return;
+
+    const playerContainers = gameBoosts.children;
+
+    Array.from(playerContainers).forEach(playerContainer => {
+        let buttons = playerContainer.querySelectorAll("button");
+
+        buttons.forEach(button => {
+            button.disabled = enable;
+        });
+    });
+}
+
+function pressedBoostButton(letter) {
+    const gameBoosts = document.getElementById("gameBoosts");
+    
+    if (!gameBoosts) return;
+
+    const button1 = gameBoosts.children[0].querySelector("button");
+    const button2 = gameBoosts.children[1].querySelector("button");
+    
+    if (letter == "e" && button1.disabled == false) {
+        button1.click();
+        console.log("Presiona");
+    } else if (letter = "right" && button2.disabled == false) {
+        button2.click()
+        console.log("Presiona 2");
+    }
+}
+
 // ---------------------------------------------------
 
 // ACTUALIZAR TAMAÑO BOLA
