@@ -1,2 +1,2 @@
 CREATE DATABASE postgres_42;
-CREATE DATABASE postgres_db;
+CREATE DATABASE postgres_auth;

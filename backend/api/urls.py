@@ -22,9 +22,6 @@ from .views import login_42, callback_42
 
 
 urlpatterns = [
-    path('', views.getData),
-    path('add/', views.addItem),
-    path('admin/', admin.site.urls),
     path("api/auth/42/login", views.login_42, name="login_42"),
     path("api/auth/callback", views.callback_42, name="callback_42"),
 ]
