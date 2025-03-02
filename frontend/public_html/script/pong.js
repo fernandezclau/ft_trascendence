@@ -224,6 +224,10 @@ function movePlayers(time) {
 // EVENTO PARA TECLAS
 document.addEventListener('keydown', (event) => {
     if (started) {
+        // Prevenir el comportamiento predeterminado del teclado para evitar el desplazamiento
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault();
+        }
         // Controles de movimiento...
         if (event.key === 'w' || event.key === 'W') wPressed = true;
         if (event.key === 's' || event.key === 'S') sPressed = true;
