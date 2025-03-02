@@ -466,7 +466,7 @@ function displayPlayerInfoTour(playersData) {
             button = playerContainer1.querySelector("button");
 
             // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username, button));
+            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username, 0, button));
 
             // Deshabilitar boton
             button.disabled = true;
@@ -497,7 +497,7 @@ function displayPlayerInfoTour(playersData) {
             button = playerContainer2.querySelector("button");
 
             // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username, button));
+            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username, 1, button));
             
             // Deshabilitar boton
             button.disabled = true;

@@ -120,3 +120,22 @@ canvas {
 #debugMessage.winner {
     animation: glitch 1s infinite;
 }
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #F4A6B1, 0 0 10px #F4A6B1; transform: translate(0, 0) rotate(0deg); }
+    25% { box-shadow: 0 0 10px #F4A6B1, 0 0 20px #F4A6B1; transform: translate(2px, -2px) rotate(5deg); }
+    50% { box-shadow: 0 0 15px #F4A6B1, 0 0 30px #F4A6B1; transform: translate(-2px, 2px) rotate(-5deg); }
+    75% { box-shadow: 0 0 10px #F4A6B1, 0 0 20px #F4A6B1; transform: translate(2px, -2px) rotate(5deg); }
+    100% { box-shadow: 0 0 5px #F4A6B1, 0 0 10px #F4A6B1; transform: translate(0, 0) rotate(0deg); }
+}
+
+.active-boost {
+    animation: glow 0.5s infinite alternate ease-in-out;
+    border: 2px solid #F4A6B1;
+    animation-play-state: running; /* Se ejecuta por defecto */
+}
+
+.paused-boost {
+    animation-play-state: paused; /* Se detiene la animación */
+}
+

@@ -16,20 +16,24 @@ let animation = false;                                  // Guarda si se está ac
 let animationColor;                                     // Color del jugador que provocó la animación
 let UIColor = '#fff';                                   // Color actual de la interfaz
 let pointsToWin = 10;                                   // Puntos para ganar
-let playersToPlay = null;                                  // Numero de jugadores
+let playersToPlay = null;                               // Numero de jugadores
 
 // # SECCIÓN DE JUGADOR
-const paddleWidth = 10, paddleHeight = 100;             // Dimensiones de los rectángulos
-const paddleSpeed = 600;                                // Velocidad de los jugadores
-let player1Y = canvas.height / 2 - paddleHeight / 2;    // Posiciones de ambos jugadores
-let player2Y = player1Y;
+let paddleWidth = 10, paddleHeight = 100;               // Dimensiones de los rectángulos
+let paddleWidth2 = 10, paddleHeight2 = 100;             // Dimensiones de los rectángulos
+let paddleSpeed = 600;                                  // Velocidad de los jugadores (1 y 3)
+let paddleSpeed2 = 600;                                 // Velocidad de los jugadores (2 y 4)
+let player1Y = canvas.height / 2 - paddleHeight / 2;    // Posiciones de ambos jugadores (1 y 3)
+let player2Y = canvas.height / 2 - paddleHeight2 / 2;   // Posiciones de ambos jugadores (2 y 4)
 let player3Y = player1Y;
-let player4Y = player1Y;
+let player4Y = player2Y;
 let playerDistance = 100;
 let wPressed = false, sPressed = false;                 // Controla si se están pulsando las teclas W/S
 let upPressed = false, downPressed = false;             // Controla si se están pulsando las teclas Arriba/Abajo
 let iPressed = false, kPressed = false;                 // Controla si se están pulsando las teclas I/K
 let np8Pressed = false, np5Pressed = false;             // Controla si se están pulsando las teclas np8/np5
+let boostPressedPlayer1 = false;
+let boostPressedPlayer2 = false;
 
 // # SECCIÓN DE PELOTA
 let ballSize = 10;                                    // Dimensiones de la pelota
@@ -39,7 +43,7 @@ let ballY = canvas.height / 2 - ballSize / 2;
 let ballSpeedX = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed;       // Velocidad de la pelota
 let ballSpeedY = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed; 
 let ballColor = '#fff';
-
+let activeBoosts = {};
 // # SECCIÓN DE SONIDO
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const soundBuffer = {};
@@ -122,7 +126,7 @@ function moveBall(time) {
                 playerScore(1);
 
             // Colisi贸n con el jugador 4
-            else if (ballX + ballSize <= canvas.width - playerDistance && ballY + ballSize >= player4Y && ballY <= player4Y + paddleHeight) {
+            else if (ballX + ballSize <= canvas.width - playerDistance && ballY + ballSize >= player4Y && ballY <= player4Y + paddleHeight2) {
                 ballX = canvas.width - playerDistance - paddleWidth - ballSize;
                 ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
                 ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
@@ -130,7 +134,7 @@ function moveBall(time) {
             }
 
             // Colisi贸n con el jugador 2
-            else if (ballX + ballSize >= canvas.width - paddleWidth && ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight) {
+            else if (ballX + ballSize >= canvas.width - paddleWidth && ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight2) {
                 ballX = canvas.width - paddleWidth - ballSize;
                 ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
                 ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
@@ -160,7 +164,7 @@ function moveBall(time) {
                 playerScore(1);
 
             // Rebote
-            else if (ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight) {
+            else if (ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight2) {
                 ballX = canvas.width - paddleWidth - ballSize;
                 ballSpeedX = -ballSpeedX * (Math.random() * 0.15 + 0.95);
                 ballSpeedY = ballSpeedY * (Math.random() * 0.15 + 0.95);
@@ -210,15 +214,17 @@ function playerScore(player) {
 
 function movePlayers(time) {
     player1Y = Math.min(canvas.height - paddleHeight, Math.max(0, player1Y + paddleSpeed * time * (sPressed - wPressed)));
-    player2Y = Math.min(canvas.height - paddleHeight, Math.max(0, player2Y + paddleSpeed * time * (downPressed - upPressed)));
+    player2Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player2Y + paddleSpeed2 * time * (downPressed - upPressed)));
     if (playersToPlay == 4) {
         player3Y = Math.min(canvas.height - paddleHeight, Math.max(0, player3Y + paddleSpeed * time * (kPressed - iPressed)));
-        player4Y = Math.min(canvas.height - paddleHeight, Math.max(0, player4Y + paddleSpeed * time * (np5Pressed - np8Pressed)));
+        player4Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player4Y + paddleSpeed2 * time * (np5Pressed - np8Pressed)));
     }
 }
 
+// EVENTO PARA TECLAS
 document.addEventListener('keydown', (event) => {
     if (started) {
+        // Controles de movimiento...
         if (event.key === 'w' || event.key === 'W') wPressed = true;
         if (event.key === 's' || event.key === 'S') sPressed = true;
         if (event.key === 'ArrowUp') upPressed = true;
@@ -230,33 +236,49 @@ document.addEventListener('keydown', (event) => {
             if (event.code === 'Numpad5') np5Pressed = true;
         }
         
-        // Boosts ()
+        // Lanzar boosts (solo si no está en pausa)
         if (!paused) {
             if (event.key === "e" || event.key === "E") pressedBoostButton("e");
             if (event.key === "ArrowRight") pressedBoostButton("right");
         }
 
+        // PAUSA / REANUDAR con la barra espaciadora
         if (event.key === ' ' && winner == 0) {
             paused = !paused;
             if (paused) {
-                // Guardar el momento de pausa
+                // Al pausar, guardamos el momento y detenemos los boosts
                 pauseTime = performance.now();
+                pauseBoosts(); // Detiene los temporizadores de los boosts activos
 
-                // Pausar
                 playSound('pause');
-                debugMessage.textContent = translations[document.documentElement.lang]?.["paused"];;
+                debugMessage.textContent = translations[document.documentElement.lang]?.["paused"];
                 debugMessage.classList.add('paused');
 
-                // Deshabilitar boton boosts
+                // Deshabilitamos los botones de boost
                 toggleBoostButtons(true);
             } else {
-                // Continuar
+                // Al reanudar, volvemos a activar los temporizadores de los boosts activos
+                resumeBoosts();
+
                 playSound('resume');
                 debugMessage.textContent = "";
                 debugMessage.classList.remove('paused');
                 
-                // Habilitar boton boosts
-                toggleBoostButtons(false);
+                // Habilitamos los botones de boost si aún no se han usado
+                if (boostPressedPlayer1 == false) {
+                    const gameBoosts = document.getElementById("gameBoosts");
+                    if (!gameBoosts) return;
+                    let playerContainer = gameBoosts.children[0];
+                    let button = playerContainer.querySelector("button");
+                    button.disabled = false;
+                } 
+                if (boostPressedPlayer2 == false) {
+                    const gameBoosts = document.getElementById("gameBoosts");
+                    if (!gameBoosts) return;
+                    let playerContainer = gameBoosts.children[1];
+                    let button = playerContainer.querySelector("button");
+                    button.disabled = false;
+                } 
             }
         }
     }
@@ -286,7 +308,7 @@ function drawGameBoard() {
     context.fillRect(0, player1Y, paddleWidth, paddleHeight);
     // Dibujar Jugador 2
     context.fillStyle = "#DA5C5C";
-    context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
+    context.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight2);
     
     if (playersToPlay == 4) {
         // Dibujar Jugador 3
@@ -294,7 +316,7 @@ function drawGameBoard() {
         context.fillRect(playerDistance, player3Y, paddleWidth, paddleHeight);
         // Dibujar Jugador 4
         context.fillStyle = "#BE4F8A";
-        context.fillRect(canvas.width - playerDistance - paddleWidth, player4Y, paddleWidth, paddleHeight);
+        context.fillRect(canvas.width - playerDistance - paddleWidth, player4Y, paddleWidth, paddleHeight2);
     }
 
     // Dibujar línea discontinua en el centro
@@ -368,12 +390,31 @@ function reloadGame(page) {
 
     ballX = canvas.width / 2 - ballSize / 2;            // Posición de la pelota
     ballY = canvas.height / 2 - ballSize / 2;
+
+    player1Y = (canvas.height / 2) - (paddleHeight / 2);    // Posicion palas
+    player2Y = (canvas.height / 2) - (paddleHeight2 / 2);
+    
+    if (playersToPlay == 4) {
+        player3Y = (canvas.height / 2) - (paddleHeight / 2);
+        player4Y = (canvas.height / 2) - (paddleHeight2 / 2);
+    }
+    
+    UIColor = "#fff";                   // Resetear color animación
+    animation = false;
+    player1Score.style.color = UIColor;
+    player2Score.style.color = UIColor;
+    canvas.style.border = '2px solid ' + UIColor;
+
     drawGameBoard();
 
     if (page == "game")
         reloadingGamePage();
     else if (page == "tournament")
         reloadingGameTournament();
+
+    // Botones de boost todavía no pulsados
+    boostPressedPlayer1 = false;
+    boostPressedPlayer2 = false;
 }
 
 function reloadingGamePage() {
@@ -734,7 +775,7 @@ function displayPlayerInfo(playersData) {
                 button = playerContainer.querySelector("button");
 
                 // Asignar la función del boost correspondiente
-                button.addEventListener("click", () => activateBoost(player.boost, player.username, button));
+                button.addEventListener("click", () => activateBoost(player.boost, player.username, index, button));
 
                 // Deshabilitar
                 button.disabled = true;
@@ -748,33 +789,151 @@ function displayPlayerInfo(playersData) {
     score.style.top = "105px";
 }
 
-// Función para activar el boost
-function activateBoost(boostType, playerName, button) {
-    if (!paused)
-    {
-        switch (boostType) {
-            case "speed":
-                console.log(`${playerName} activó el Boost de Velocidad!`);
-                ballSpeedX *= 5, ballSpeedY *= 5;
-                setTimeout(() => {
-                        ballSpeedX /= 5;
-                        ballSpeedY /= 5;
-                }, 150);
-                button.disabled = true;
-                break;
-            case "power":
-                console.log(`${playerName} activó el Boost de Poder!`);
-                // Lógica específica del boost de poder
-                break;
-            case "defense":
-                console.log(`${playerName} activó el Boost de Defensa!`);
-                // Lógica específica del boost de defensa
-                break;
-            default:
-                console.log("Boost desconocido.");
+// FUNCIÓN PARA ACTIVAR EL BOOST CON SOPORTE DE PAUSA / REANUDAR
+function activateBoost(boostType, playerName, index, button) {
+    // No activar si el juego está en pausa
+    if (paused) return;
+    
+    button.classList.add("active-boost");
+    let boostDuration = boostType === "speed" ? 150 : 2000;
+    let startTime = performance.now();
+
+    // Aplicamos el efecto inmediatamente
+    applyBoost(boostType, playerName, index);
+
+    // Función que se ejecutará al finalizar el boost (para remover su efecto)
+    let removalFn = function() {
+        removeBoost(boostType, index);
+        button.classList.remove("active-boost");
+        // Eliminamos el boost de la lista de activos
+        delete activeBoosts[index];
+    };
+
+    // Iniciamos el temporizador
+    let timeoutId = setTimeout(removalFn, boostDuration);
+
+    // Guardamos la información del boost activo
+    activeBoosts[index] = {
+        boostType: boostType,
+        playerName: playerName,
+        button: button,
+        duration: boostDuration,
+        remaining: boostDuration, // Tiempo restante (inicialmente la duración completa)
+        startTime: startTime,
+        timeoutId: timeoutId,
+        removalFn: removalFn
+    };
+
+    if (index % 2 === 0) {
+        boostPressedPlayer1 = true;
+    } else {
+        boostPressedPlayer2 = true;
+    }
+    button.disabled = true;
+}
+
+// FUNCIÓN QUE APLICA EL EFECTO DEL BOOST
+function applyBoost(boostType, playerName, index) {
+    switch (boostType) {
+        case "speed":
+            console.log(`${playerName} activó el Boost de Velocidad!`);
+            ballSpeedX *= 5;
+            ballSpeedY *= 5;
+            break;
+        case "power":
+            console.log(`${playerName} activó el Boost de Poder!`);
+            if (index % 2 === 0) {
+                paddleSpeed *= 2;
+            } else {
+                paddleSpeed2 *= 2;
+            }
+            drawGameBoard();   
+            break;
+        case "defense":
+            console.log(`${playerName} activó el Boost de Defensa!`);
+            if (index % 2 === 0) {
+                paddleHeight = 150;
+            } else {
+                paddleHeight2 = 150;
+            }
+            drawGameBoard();   
+            break;
+        default:
+            console.log("Boost desconocido.");
+    }
+}
+
+// FUNCIÓN QUE REMUEVE EL EFECTO DEL BOOST AL TERMINAR SU DURACIÓN
+function removeBoost(boostType, index) {
+    switch (boostType) {
+        case "speed":
+            ballSpeedX /= 5;
+            ballSpeedY /= 5;
+            break;
+        case "power":
+            if (index % 2 === 0) {
+                paddleSpeed /= 2;
+            } else {
+                paddleSpeed2 /= 2;
+            }
+            drawGameBoard();
+            break;
+        case "defense":
+            if (index % 2 === 0) {
+                paddleHeight = 100;
+            } else {
+                paddleHeight2 = 100;
+            }
+            drawGameBoard();
+            break;
+        default:
+            break;
+    }
+}
+
+// FUNCIONES PARA PAUSAR Y REANUDAR LOS BOOSTS ACTIVOS
+function pauseBoosts() {
+    for (let key in activeBoosts) {
+        let boost = activeBoosts[key];
+
+        // Detenemos el temporizador
+        clearTimeout(boost.timeoutId);
+
+        // Calculamos el tiempo transcurrido
+        let elapsed = performance.now() - boost.startTime;
+
+        // Guardamos el tiempo restante
+        boost.remaining -= elapsed;
+
+        // Pausar animación del botón si existe
+        if (boost.button) {
+            boost.button.classList.remove("active-boost");
+            boost.button.classList.add("paused-boost"); 
         }
     }
 }
+
+
+function resumeBoosts() {
+    for (let key in activeBoosts) {
+        let boost = activeBoosts[key];
+
+        // Reiniciamos el temporizador con el tiempo restante
+        boost.startTime = performance.now();
+        boost.timeoutId = setTimeout(() => {
+            boost.button.classList.remove("active-boost", "paused-boost"); // Quita animaciones cuando termine
+            boost.removalFn(); // Aplica la eliminación del boost
+            delete activeBoosts[key];
+        }, boost.remaining);
+
+        // Reanudar la animación del botón si sigue activo
+        if (boost.button) {
+            boost.button.classList.remove("paused-boost");
+            boost.button.classList.add("active-boost");
+        }
+    }
+}
+
 
 function toggleBoostButtons(enable) {
     const gameBoosts = document.getElementById("gameBoosts");
@@ -802,10 +961,8 @@ function pressedBoostButton(letter) {
     
     if (letter == "e" && button1.disabled == false) {
         button1.click();
-        console.log("Presiona");
     } else if (letter = "right" && button2.disabled == false) {
-        button2.click()
-        console.log("Presiona 2");
+        button2.click();
     }
 }
 
