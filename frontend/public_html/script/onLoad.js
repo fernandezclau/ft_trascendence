@@ -1,15 +1,23 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-    loadPage("game");
+    loadPage("login");
 });
 
 
-window.onload = function() {
+window.onload = function () {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
+    const page = params.get("page");
 
     if (token) {
         localStorage.setItem("jwt", token);
-        window.location.href = "/pages/index.html";
+        window.history.replaceState({}, document.title, "/");
+
+        if (page) {
+            loadPage(page);
+        } else {
+            loadPage("game");
+        }
     }
 };
+

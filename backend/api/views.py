@@ -93,5 +93,5 @@ def callback_42(request):
     jwt_token = generate_jwt(user)
 
     # Redirigir al frontend con el token JWT
-    redirect_url = f"http://localhost:8080/pages/dashboard.html?token={jwt_token}"
+    redirect_url = f"http://localhost:8080/?token={jwt_token}&index.html"
     return redirect(redirect_url)
