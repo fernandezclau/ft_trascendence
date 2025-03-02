@@ -8,14 +8,11 @@ from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 import environ
 
-# Cargar variables de entorno
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
 
-# Obtener el modelo de usuario personalizado
 User = get_user_model()
 
-# Variables de entorno
 SECRET_KEY = env('SECRET_KEY')
 CLIENT_ID = env('CLIENT_ID')
 CLIENT_SECRET = env('CLIENT_SECRET')
@@ -37,14 +34,11 @@ def login_42(request):
 
 @api_view(['GET'])
 def callback_42(request):
-    """Maneja la autenticación con la API de 42 y guarda al usuario en la base de datos."""
     
-    # Obtener el código de autorización
     code = request.GET.get("code")
     if not code:
         return JsonResponse({"error": "No code provided"}, status=400)
 
-    # Intercambiar el código por un token de acceso
     token_url = "https://api.intra.42.fr/oauth/token"
     token_data = {
         "grant_type": "authorization_code",
@@ -60,7 +54,6 @@ def callback_42(request):
 
     access_token = response.json().get("access_token")
 
-    # Obtener la información del usuario desde la API de 42
     user_info_url = "https://api.intra.42.fr/v2/me"
     headers = {"Authorization": f"Bearer {access_token}"}
     user_info_response = requests.get(user_info_url, headers=headers)
@@ -74,24 +67,19 @@ def callback_42(request):
     email = user_data.get("email")
     image_url = user_data.get("image", {}).get("link")
 
-    # Verificar si el usuario ya existe en la base de datos o crearlo
     user, created = User.objects.get_or_create(
-        username=login,  # Asegúrate de que 'username' es clave única en tu modelo
+        username=login,
         defaults={
             "email": email,
             "image_url": image_url,
             "token": access_token,
         }
     )
-
-    # Si el usuario ya existía, actualizar su token
     if not created:
         user.token = access_token
         user.save()
 
     # Generar un token JWT
     jwt_token = generate_jwt(user)
-
-    # Redirigir al frontend con el token JWT
     redirect_url = f"http://localhost:8080/?token={jwt_token}&index.html"
     return redirect(redirect_url)
