@@ -44,36 +44,6 @@ let ballSpeedX = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed;       // Veloci
 let ballSpeedY = Math.random() < 0.5 ? ballBSpeed : -ballBSpeed; 
 let ballColor = '#fff';
 let activeBoosts = {};
-// # SECCIÓN DE SONIDO
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const soundBuffer = {};
-
-// Función para cargar un sonido
-async function loadSound(name, url) {
-    const response = await fetch(url);
-    const arrayBuffer = await response.arrayBuffer();
-    soundBuffer[name] = await audioContext.decodeAudioData(arrayBuffer);
-}
-
-// Función para reproducir un sonido
-function playSound(name) {
-    if (!soundBuffer[name]) return;
-    const source = audioContext.createBufferSource();
-    source.buffer = soundBuffer[name];
-    source.connect(audioContext.destination);
-    source.start();
-}
-
-// PongBlipF4.wav by NoiseCollector -- https://freesound.org/s/4359/ -- License: Attribution 3.0
-loadSound('bounce', 'sound/bound.wav');
-// Score Beep by edwardszakal -- https://freesound.org/s/514160/ -- License: Attribution 4.0
-loadSound('score', 'sound/score.mp3');
-// https://pixabay.com/sound-effects/winsquare-6993/
-loadSound('gameover', 'sound/gameover.mp3');
-// pause.mp3 by crisstanza -- https://freesound.org/s/167127/ -- License: Creative Commons 0
-loadSound('pause', 'sound/pause.mp3');
-// unpause.mp3 by crisstanza -- https://freesound.org/s/167126/ -- License: Creative Commons 0
-loadSound('resume', 'sound/resume.mp3');
 
 function moveBall(time) {
     // Incrementar velocidad
@@ -220,88 +190,6 @@ function movePlayers(time) {
         player4Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player4Y + paddleSpeed2 * time * (np5Pressed - np8Pressed)));
     }
 }
-
-// EVENTO PARA TECLAS
-document.addEventListener('keydown', (event) => {
-    if (started) {
-        // Prevenir el comportamiento predeterminado del teclado para evitar el desplazamiento
-        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-            event.preventDefault();
-        }
-        // Controles de movimiento...
-        if (event.key === 'w' || event.key === 'W') wPressed = true;
-        if (event.key === 's' || event.key === 'S') sPressed = true;
-        if (event.key === 'ArrowUp') upPressed = true;
-        if (event.key === 'ArrowDown') downPressed = true;
-        if (playersToPlay == 4) {
-            if (event.key === 'i' || event.key === 'I') iPressed = true;
-            if (event.key === 'k' || event.key === 'K') kPressed = true;
-            if (event.code === 'Numpad8') np8Pressed = true;
-            if (event.code === 'Numpad5') np5Pressed = true;
-        }
-        
-        // Lanzar boosts (solo si no está en pausa)
-        if (!paused) {
-            if (event.key === "e" || event.key === "E") pressedBoostButton("e");
-            if (event.key === "ArrowRight") pressedBoostButton("right");
-        }
-
-        // PAUSA / REANUDAR con la barra espaciadora
-        if (event.key === ' ' && winner == 0) {
-            paused = !paused;
-            if (paused) {
-                // Al pausar, guardamos el momento y detenemos los boosts
-                pauseTime = performance.now();
-                pauseBoosts(); // Detiene los temporizadores de los boosts activos
-
-                playSound('pause');
-                debugMessage.textContent = translations[document.documentElement.lang]?.["paused"];
-                debugMessage.classList.add('paused');
-
-                // Deshabilitamos los botones de boost
-                toggleBoostButtons(true);
-            } else {
-                // Al reanudar, volvemos a activar los temporizadores de los boosts activos
-                resumeBoosts();
-
-                playSound('resume');
-                debugMessage.textContent = "";
-                debugMessage.classList.remove('paused');
-                
-                // Habilitamos los botones de boost si aún no se han usado
-                if (boostPressedPlayer1 == false) {
-                    const gameBoosts = document.getElementById("gameBoosts");
-                    if (!gameBoosts) return;
-                    let playerContainer = gameBoosts.children[0];
-                    let button = playerContainer.querySelector("button");
-                    button.disabled = false;
-                } 
-                if (boostPressedPlayer2 == false) {
-                    const gameBoosts = document.getElementById("gameBoosts");
-                    if (!gameBoosts) return;
-                    let playerContainer = gameBoosts.children[1];
-                    let button = playerContainer.querySelector("button");
-                    button.disabled = false;
-                } 
-            }
-        }
-    }
-});
-
-document.addEventListener('keyup', (event) => {
-    if (started) {
-        if (event.key === 'w' || event.key === 'W') wPressed = false;
-        if (event.key === 's' || event.key === 'S') sPressed = false;
-        if (event.key === 'ArrowUp') upPressed = false;
-        if (event.key === 'ArrowDown') downPressed = false;
-        if (playersToPlay == 4) {
-            if (event.key === 'i' || event.key === 'I') iPressed = false;
-            if (event.key === 'k' || event.key === 'K') kPressed = false;
-            if (event.code === 'Numpad8') np8Pressed = false;
-            if (event.code === 'Numpad5') np5Pressed = false;
-        }
-    }
-});
 
 function drawGameBoard() {
     // Dibujar tablero limpio
@@ -917,7 +805,6 @@ function pauseBoosts() {
     }
 }
 
-
 function resumeBoosts() {
     for (let key in activeBoosts) {
         let boost = activeBoosts[key];
@@ -937,7 +824,6 @@ function resumeBoosts() {
         }
     }
 }
-
 
 function toggleBoostButtons(enable) {
     const gameBoosts = document.getElementById("gameBoosts");
@@ -971,71 +857,6 @@ function pressedBoostButton(letter) {
 }
 
 // ---------------------------------------------------
-
-// ACTUALIZAR TAMAÑO BOLA
-function updateBallSize(value) {
-
-    console.log("Este es el size input " + value)
-    ballSize = parseInt(value);
-    ballX = canvas.width / 2 - ballSize / 2;
-    ballY = canvas.height / 2 - ballSize / 2;
-    localStorage.setItem("ballSize", ballSize);
-
-    drawGameBoard();
-}
-
-// ACTUALIZAR VELOCIDAD
-function updateBallSpeed(value) {
-    
-    console.log("Este es el speed input " + value)
-
-    ballSpeedX = value, ballSpeedY = value;
-    localStorage.setItem("ballSpeed", value);
-
-    drawGameBoard();
-}
-
-// ACTUALIZAR COLOR
-function updateBallColor(value) {
-    
-    console.log("Este es el color input " + value)
-
-    ballColor = value;
-    localStorage.setItem("ballColor", ballColor);
-
-    drawGameBoard();
-
-    // Update selected color
-    updateColorSelection(value);
-}
-
-function updateColorSelection(value) {
-    const buttons = document.querySelectorAll('.color-option');
-    
-    buttons.forEach(button => {
-        button.classList.remove('selected');
-    });
-    
-    const selectedButton = Array.from(buttons).find(button => 
-        button.style.backgroundColor === value || button.style.backgroundColor === hexToRgb(value)
-    );
-    if (selectedButton) {
-        selectedButton.classList.add('selected');
-    }
-}
-
-// ACTUALIZAR FONDO
-function updateBackground(value) {
-console.log("Este es el color input " + value)
-
-    ballColor = value;
-    localStorage.setItem("ballColor", ballColor);
-
-    drawGameBoard();
-
-    // Update selected color
-    updateColorSelection(value);
-}
 
 // ON LOAD PAGE
 document.addEventListener("DOMContentLoaded", () => {
