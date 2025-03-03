@@ -30,8 +30,11 @@ function mobileGame() {
             button.disabled = true;
         }
         let playersButtons = document.querySelectorAll('.players-btn-group');
-        playersButtons.forEach(button => button.classList.remove('button-selected'));
-        playersButtons[0].classList.add('button-selected');
+        if (playersButtons) {
+            playersButtons.forEach(button => button.classList.remove('button-selected'));
+            if (playersButtons[0])
+                playersButtons[0].classList.add('button-selected');
+        }
     }
 }
 

@@ -176,8 +176,10 @@ function reloadingGameTournament() {
 
     // Remove winner
     let winner = document.getElementById(`round-3-1`);
+    winner.innerHTML = "";
     winner.classList.remove('ready');
     let winner2 = document.getElementById(`round-3-2`);
+    winner2.innerHTML = "";
     winner2.classList.remove('ready');
 }
 
@@ -205,19 +207,14 @@ async function startFights(matches) {
             // Espera a que el juego termine y obtén el ganador
             let gameWinner = await runGame();
             let winnerPlayer = gameWinner === 1 ? match.player1 : match.player2;
-            console.log("El ganador es:", winnerPlayer);
             winners.push(winnerPlayer);
             match.winner = winnerPlayer;
- 
-            // Mostrar el ganador en debugMessage durante 3 segundos
-            //debugMessage.textContent = `${truncateName(winnerPlayer.username)} WINS!`;
 
             await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 3 segundos antes del siguiente partido
 
             debugMessage.textContent = "";
             resetHighlight(match.player1, match.player2);
-            // 4. Mostramos peleas
-            updateGraph(numplayers, matches);
+            
             reloadGame();
         }
 
@@ -504,10 +501,12 @@ function fillPlayers(fights) {
 
         if (playerElement1) {
             playerElement1.innerHTML = truncateName(fight.player1.username);
+            playerElement1.title = fight.player1.username;
         }
 
         if (playerElement2) {
             playerElement2.innerHTML = truncateName(fight.player2.username);
+            playerElement2.title = fight.player2.username;
         }
     });
 }

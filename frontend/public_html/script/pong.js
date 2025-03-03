@@ -153,7 +153,6 @@ function playerScore(player) {
         animationColor = "#8BB9F7";
         if (parseInt(player1Score.textContent) >= pointsToWin) {
             winner = 1;
-            debugMessage.classList.add('winner');
             debugMessage.textContent = player1 + " WINS!";
             debugMessage.style.color = 'blue';
         }
@@ -163,7 +162,6 @@ function playerScore(player) {
         animationColor = "#DA5C5C";
         if (parseInt(player2Score.textContent) >= pointsToWin) {
             winner = 2;
-            debugMessage.classList.add('winner');
             debugMessage.textContent = player2 + " WINS!";
             debugMessage.style.color = 'red';
         }
@@ -288,6 +286,7 @@ function reloadGame(page) {
     winner = 0;
     pauseTime = 0.0;                                    // Tiempo transcurrido desde la pausa
     debugMessage.textContent = "";
+    debugMessage.style.color = 'white';
     player1Score.textContent = 0;
     player2Score.textContent = 0;
 

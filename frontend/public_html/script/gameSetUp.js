@@ -81,6 +81,12 @@ async function startGame() {
         
         // 7. Bucle juego
         await runGame();
+
+        await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos antes del siguiente partido
+        
+        // 8. Recargamos juego
+        reloadGame("game");
+        
     } else {
         const error_element = document.getElementById('game-error');
         showElement(error_element)
@@ -295,6 +301,8 @@ function displayPlayerInfo(playersData) {
 
             if (nameElement) {
                 nameElement.textContent = truncateName(player.username);
+                nameElement.title = player.username;
+                
             }
             const boostKey = index === 0 ? "E" : ">";           
             if (button) {
