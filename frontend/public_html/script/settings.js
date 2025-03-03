@@ -1,5 +1,5 @@
 let translations = {};
-const allowedSizes = [10, 20, 30];
+const allowedSizes = [10, 15, 20];
 const allowedSpeeds = [400, 450, 500, 550, 600];
 const allowedColors = ["#B63A4B", "#5A9F6B", "#516A99", "#ECE570", "#9C77C1", "#fff2f2"];
 const allowedBackgrounds = ["#161618", "#70b8b1", "#b2afb1", "#f4a6b1", "#74748d"];
