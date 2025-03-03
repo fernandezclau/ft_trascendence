@@ -146,6 +146,12 @@ function reloadingGameTournament() {
     
     // Reset num playeers
     numplayers = null
+
+    // Remove winner
+    let winner = document.getElementById(`round-3-1`);
+    winner.classList.remove('ready');
+    let winner2 = document.getElementById(`round-3-2`);
+    winner2.classList.remove('ready');
 }
 
 // Empezar torneos
@@ -370,33 +376,43 @@ async function startFights(matches) {
     while (matches.length >= 1) {
         winners = [];
 
-        matches.forEach((match) => {
+        // Usamos for...of para poder await cada partida
+        for (const match of matches) {
             highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
             
-            console.log(match)
+            console.log(match);
             
-            // Mostrar info jugador
+            // Mostrar info del jugador
             displayPlayerInfoTour(match);
 
-            // Jugar
+            // Iniciar el juego
             started = true;
             playSound('resume');
             debugMessage.textContent = truncateName(match.player1.username) + " vs " + truncateName(match.player2.username);
             
-            // 6. Bucle
-            let winner = gameLoop() == 1 ? match.player1 : match.player2;
-            console.log("The winner")
-            console.log(winner)
-            winners.push(winner);
-            match.winner = winner;
+            // Espera a que el juego termine y obtén el ganador
+            let gameWinner = await runGame();
+            let winnerPlayer = gameWinner === 1 ? match.player1 : match.player2;
+            console.log("El ganador es:", winnerPlayer);
+            winners.push(winnerPlayer);
+            match.winner = winnerPlayer;
+ 
+            // Mostrar el ganador en debugMessage durante 3 segundos
+            //debugMessage.textContent = `${truncateName(winnerPlayer.username)} WINS!`;
 
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 3 segundos antes del siguiente partido
+
+            debugMessage.textContent = "";
             resetHighlight(match.player1, match.player2);
-        });
+            // 4. Mostramos peleas
+            updateGraph(numplayers, matches);
+            reloadGame();
+        }
 
-        nextRoundMatches = []; // Reiniciar la lista de partidos para la nueva ronda
-
+        // Preparar los partidos de la siguiente ronda
+        let nextRoundMatches = [];
         for (let i = 0; i < winners.length; i += 2) {
-             if (winners[i + 1]) {
+            if (winners[i + 1]) {
                 nextRoundMatches.push({
                     player1: winners[i],
                     player2: winners[i + 1],
@@ -407,12 +423,11 @@ async function startFights(matches) {
         }
 
         matches = nextRoundMatches;
-
         fillPlayers(matches);
     }
 
     const element1 = document.getElementById(`round-3-${winners[0].position}`);
-    element1.classList.add('ready')
+    element1.classList.add('ready');
 }
 
 function highlightMatch(player1, player2) {
@@ -431,6 +446,8 @@ function resetHighlight(player1, player2) {
 }
 
 function displayPlayerInfoTour(playersData) {
+    player1 = playersData.player1.username;
+    player2 = playersData.player2.username;
     const gameBoosts = document.getElementById("gameBoosts");
     const boostImages = {
         speed: "images/speed.png",

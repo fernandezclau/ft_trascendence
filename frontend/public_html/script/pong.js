@@ -34,6 +34,8 @@ let iPressed = false, kPressed = false;                 // Controla si se están
 let np8Pressed = false, np5Pressed = false;             // Controla si se están pulsando las teclas np8/np5
 let boostPressedPlayer1 = false;
 let boostPressedPlayer2 = false;
+let player1 = "PLAYER 1";
+let player2 = "PLAYER 2";
 
 // # SECCIÓN DE PELOTA
 let ballSize = 10;                                    // Dimensiones de la pelota
@@ -152,7 +154,7 @@ function playerScore(player) {
         if (parseInt(player1Score.textContent) >= pointsToWin) {
             winner = 1;
             debugMessage.classList.add('winner');
-            debugMessage.textContent = "PLAYER 1 WINS!";
+            debugMessage.textContent = player1 + " WINS!";
             debugMessage.style.color = 'blue';
         }
     }
@@ -162,7 +164,7 @@ function playerScore(player) {
         if (parseInt(player2Score.textContent) >= pointsToWin) {
             winner = 2;
             debugMessage.classList.add('winner');
-            debugMessage.textContent = "PLAYER 2 WINS!";
+            debugMessage.textContent = player2 + " WINS!";
             debugMessage.style.color = 'red';
         }
     }
@@ -228,46 +230,55 @@ function drawGameBoard() {
     context.fill(); 
 }
 
-function gameLoop() {
-    // Controlar pausa
-    if (paused) {
-        requestAnimationFrame(gameLoop);
-        lastTime = performance.now();
-        return;
-    }
+function runGame() {
+    return new Promise((resolve) => {
+        function loop() {
+            // Controlar pausa
+            if (paused) {
+                requestAnimationFrame(loop);
+                lastTime = performance.now();
+                return;
+            }
 
-    // Medir diferencias de tiempo
-    let currentTime = performance.now();
-    let time = (currentTime - lastTime) * 0.001;
-    lastTime = currentTime;
+            // Medir diferencias de tiempo
+            let currentTime = performance.now();
+            let time = (currentTime - lastTime) * 0.001;
+            lastTime = currentTime;
 
-    // Controlar animación
-    if (animation) {
-        let animationTimeDiff = currentTime - animationTime - pauseTime;
-        UIColor = (Math.floor((animationTimeDiff) * 0.0075) % 2 == 1) ? animationColor : '#fff';
-        if (winner == 0 && animationTimeDiff * 0.001 >= 1.25) {
-            UIColor = '#fff';
-            animation = false;
+            // Controlar animación
+            if (animation) {
+                let animationTimeDiff = currentTime - animationTime - pauseTime;
+                UIColor = (Math.floor((animationTimeDiff) * 0.0075) % 2 == 1) ? animationColor : '#fff';
+                if (winner == 0 && animationTimeDiff * 0.001 >= 1.25) {
+                    UIColor = '#fff';
+                    animation = false;
+                }
+                player1Score.style.color = UIColor;
+                player2Score.style.color = UIColor;
+                canvas.style.border = '2px solid ' + UIColor;
+            }
+
+            // Dibujar tablero limpio
+            drawGameBoard();
+
+            if (winner === 0) {
+                // Mover pelota y jugadores según el tiempo transcurrido
+                moveBall(time);
+                movePlayers(time);
+            } else {
+                // Si hay ganador, resolvemos la promesa devolviendo el ganador (1 o 2)
+                resolve(winner);
+                return;
+            }
+
+            // Reajustar el momento de pausa
+            pauseTime = 0.0;
+
+            // Continuar el ciclo de juego
+            requestAnimationFrame(loop);
         }
-        player1Score.style.color = UIColor;
-        player2Score.style.color = UIColor;
-        canvas.style.border = '2px solid ' + UIColor;
-    }
-
-    // Dibujar tablero limpio
-    drawGameBoard();
-
-    if (winner == 0) {
-        // Mover pelota y jugadores según el tiempo transcurrido
-        moveBall(time);
-        movePlayers(time);
-    }
-
-    // Reajustar el momento de pausa
-    pauseTime = 0.0;
-
-    // Ciclo de juego
-    requestAnimationFrame(gameLoop);
+        loop();
+    });
 }
 
 function reloadGame(page) {
@@ -510,7 +521,7 @@ function selectPoints(points) {
 }
 
 // FUNCION INICIO
-function startGame() {
+async function startGame() {
     // 1. Obtenemos datos de registro
     registerData = getFormData("playerForm", "game-registration-error")
     if (!registerData) {
@@ -541,7 +552,9 @@ function startGame() {
         debugMessage.textContent = translations[document.documentElement.lang]?.["pressSpaceBar"];;
         
         // 6. Bucle
-        gameLoop();
+        let gameWinner = await runGame();
+        let winnerPlayer = gameWinner === 1 ? re : match.player2;
+        console.log("El ganador es:", winnerPlayer);
     } else {
         const error_element = document.getElementById('game-error');
         showElement(error_element)
@@ -630,6 +643,10 @@ function getFormData(form_id, error_id) {
 
 // Mostrar hechizos de jugador
 function displayPlayerInfo(playersData) {
+    // Set players names
+    player1 = playersData[0].username;
+    player2 = playersData[1].username;
+
     const gameBoosts = document.getElementById("gameBoosts");
     const boostImages = {
         speed: "images/speed.png",
