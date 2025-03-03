@@ -153,7 +153,7 @@ function playerScore(player) {
         animationColor = "#8BB9F7";
         if (parseInt(player1Score.textContent) >= pointsToWin) {
             winner = 1;
-            debugMessage.textContent = player1 + " WINS!";
+            debugMessage.textContent = truncateName(player1) + " WINS!";
             debugMessage.style.color = 'blue';
         }
     }
@@ -162,7 +162,7 @@ function playerScore(player) {
         animationColor = "#DA5C5C";
         if (parseInt(player2Score.textContent) >= pointsToWin) {
             winner = 2;
-            debugMessage.textContent = player2 + " WINS!";
+            debugMessage.textContent = truncateName(player2) + " WINS!";
             debugMessage.style.color = 'red';
         }
     }
