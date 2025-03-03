@@ -1,38 +1,40 @@
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import Item
-from .serializers import ItemSerializer
-import requests
-from django.shortcuts import redirect
 from django.http import JsonResponse
-from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+import requests
+import jwt
+import datetime
+import os
+from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+import environ
 
-@api_view(['GET'])
-def getData(request):
-    items = Item.objects.all()
-    serializer = ItemSerializer(items, many=True)
-    return Response(serializer.data)
+env = environ.Env()
+environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
 
-@api_view(['POST'])
-def addItem(request):
-    serializer = ItemSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+User = get_user_model()
 
+SECRET_KEY = env('SECRET_KEY')
+CLIENT_ID = env('CLIENT_ID')
+CLIENT_SECRET = env('CLIENT_SECRET')
+REDIRECT_URI = env('REDIRECT_URI')
 
-
-CLIENT_ID = "u-s4t2ud-13c0bdb3fc88012225da7e3db230a8b5fa8f5861b8723570c02d496846e8dc7a"
-CLIENT_SECRET = "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"
-REDIRECT_URI = "http://localhost:8000/api/auth/callback"
+def generate_jwt(user):
+    """Genera un token JWT para el usuario autenticado."""
+    payload = {
+        'id': user.id,
+        'username': user.username,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 def login_42(request):
-
+    """Redirige al usuario a la API de 42 para autenticación."""
     auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code"
     return redirect(auth_url)
 
+@api_view(['GET'])
 def callback_42(request):
-
+    
     code = request.GET.get("code")
     if not code:
         return JsonResponse({"error": "No code provided"}, status=400)
@@ -46,6 +48,7 @@ def callback_42(request):
         "redirect_uri": REDIRECT_URI,
     }
     response = requests.post(token_url, data=token_data)
+
     if response.status_code != 200:
         return JsonResponse({"error": "Failed to obtain access token"}, status=400)
 
@@ -59,25 +62,24 @@ def callback_42(request):
         return JsonResponse({"error": "Failed to fetch user info"}, status=400)
 
     user_data = user_info_response.json()
+    intra_id = user_data.get("id")
     login = user_data.get("login")
     email = user_data.get("email")
+    image_url = user_data.get("image", {}).get("link")
 
     user, created = User.objects.get_or_create(
         username=login,
-        defaults={"email": email}
-    )
-
-
-    if created:
-
-        return JsonResponse({
-            "login": login,
+        defaults={
             "email": email,
-            "new_user": created
-        })
+            "image_url": image_url,
+            "token": access_token,
+        }
+    )
+    if not created:
+        user.token = access_token
+        user.save()
 
-    return JsonResponse({
-        "login": login,
-        "email": email,
-        "new_user": created
-    })
+    # Generar un token JWT
+    jwt_token = generate_jwt(user)
+    redirect_url = f"http://localhost:8080/?token={jwt_token}&index.html"
+    return redirect(redirect_url)

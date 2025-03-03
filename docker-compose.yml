@@ -25,7 +25,9 @@ services:
     container_name: django-auth-42-api
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./backend/api:/code
+      - ./backend:/code
+    env_file:
+      - backend/.env
     ports:
       - "8000:8000" # Para pruebas, acceso a backend
     environment:
