@@ -13,17 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
 window.onload = function () {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-    const page = params.get("page");
+    const authMethod = params.get("auth");
 
     if (token) {
         localStorage.setItem("jwt", token);
-        window.history.replaceState({}, document.title, "/");
-        updateNavbar();  
-        if (page) {
-            loadPage(page);
-        } else {
-            loadPage("game");
+        if (authMethod) {
+            localStorage.setItem("auth_method", authMethod);
         }
+        window.history.replaceState({}, document.title, "/");
+        updateNavbar();
+        loadPage("game");
     } else {
         updateNavbar();
     }
@@ -35,7 +34,12 @@ function updateNavbar() {
     const jwtToken = localStorage.getItem("jwt");
 
     if (jwtToken) {
-        fetch("http://localhost:8000/api/auth/user", {
+        // Determinar qué backend consultar (8000 para la API de 42, 8001 para login normal)
+        const apiUrl = localStorage.getItem("auth_method") === "42" 
+            ? "http://localhost:8000/api/auth/user" 
+            : "http://localhost:8001/api/auth/user";
+
+        fetch(apiUrl, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwtToken}`,
@@ -50,9 +54,12 @@ function updateNavbar() {
         })
         .then(data => {
             if (data.username) {
+                // Si el usuario no tiene imagen, asignar una imagen por defecto
+                const imageUrl = data.image_url ? data.image_url : "/images/default-avatar.png";
+
                 authContainer.innerHTML = `
                     <div class="user-info">
-                        <img src="${data.image_url}" alt="Profile" class="profile-pic">
+                        <img src="${imageUrl}" alt="Profile" class="profile-pic">
                         <span class="username">${data.username}</span>
                         <button class="btn logout-button" onclick="logout()">Logout</button>
                     </div>
@@ -87,5 +94,6 @@ function resetNavbar() {
 
 function logout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("auth_method"); // Eliminar el método de autenticación
     window.location.reload();
 }

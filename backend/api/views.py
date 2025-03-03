@@ -84,8 +84,9 @@ def callback_42(request):
 
     # Generar un token JWT
     jwt_token = generate_jwt(user)
-    redirect_url = f"http://localhost:8080/?token={jwt_token}"
+    redirect_url = f"http://localhost:8080/?token={jwt_token}&auth=42"
     return redirect(redirect_url)
+
 
 @api_view(["GET"])
 def get_user_info(request):

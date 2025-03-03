@@ -30,5 +30,34 @@
             <a href="#" class="sign-up" onclick="loadPage('register')" data-key="sign_up">Sign up</a>
         </p>
     </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+        
+            const data = { email, password };
+        
+            fetch("http://localhost:8001/api/auth/login", {  // Backend 2 para login normal
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    localStorage.setItem("jwt", data.token);
+                    localStorage.setItem("auth_method", "normal");
+                    localStorage.setItem("image_url", data.image_url || "https://i.imgur.com/DP2aShH.png");
+                    window.location.href = "/";
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+        </script>
+        
     <script src="script/onLoad.js"></script>
 </div>
