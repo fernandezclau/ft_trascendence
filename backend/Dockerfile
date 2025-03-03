@@ -5,6 +5,8 @@ ENV PYTHONUNBUFFERED=1
 RUN mkdir /code
 WORKDIR /code
 
+RUN apt update && apt install -y postgresql-client
+
 COPY requirements.txt /code/
 RUN pip install --no-cache-dir -r requirements.txt
 

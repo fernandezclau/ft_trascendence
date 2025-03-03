@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-dark w-100" data-key="signup_button">Sign Up</button> // ruta para loguear en la base de datos
+            <button type="submit" class="btn btn-dark w-100" data-key="signup_button">Sign Up</button>
         </form>
 
         <div class="mt-1">
@@ -45,4 +45,36 @@
                 <a href="#" class="sign-up" onclick="loadPage('login')" data-key="login_link">Log in</a></p>
         </div> 
     </div>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+        
+            const username = document.getElementById("newUsername").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+        
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden.");
+                return;
+            }
+            const data = { username, email, password };
+        
+            fetch("http://localhost:8001/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert("Registro exitoso. Ahora puedes iniciar sesión.");
+                    loadPage("login");
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+        </script>
 </div>

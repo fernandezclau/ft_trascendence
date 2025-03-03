@@ -1,13 +1,13 @@
 FROM python:3.11
 
-WORKDIR /app
+ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt .
+RUN mkdir /code
+WORKDIR /code
+
+RUN apt update && apt install -y postgresql-client
+
+COPY requirements.txt /code/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-CMD ["/entrypoint.sh"]
+COPY . /code/

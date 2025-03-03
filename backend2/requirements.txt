@@ -1,8 +1,7 @@
 Django~=5.1.6
 psycopg2~=2.9.10
-djangorestframework~=3.15.1
-django-cors-headers~=4.3.1
-requests~=2.31.0
-python-dotenv~=1.0.1
-PyJWT~=2.8.0
-gunicorn~=21.2.0
+djangorestframework
+django-cors-headers==3.11.0
+requests
+PyJWT==2.8.0
+django-environ==0.4.5

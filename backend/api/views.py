@@ -7,6 +7,8 @@ import os
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 import environ
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
@@ -23,6 +25,7 @@ def generate_jwt(user):
     payload = {
         'id': user.id,
         'username': user.username,
+        'intra_id': user.intra_id,  # Asegurar que intra_id esté en el token
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -81,5 +84,29 @@ def callback_42(request):
 
     # Generar un token JWT
     jwt_token = generate_jwt(user)
-    redirect_url = f"http://localhost:8080/?token={jwt_token}&index.html"
+    redirect_url = f"http://localhost:8080/?token={jwt_token}&auth=42"
     return redirect(redirect_url)
+
+
+@api_view(["GET"])
+def get_user_info(request):
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = User.objects.get(id=payload["id"])  # Asegurar que usamos el ID correcto
+        return JsonResponse({
+            "username": user.username,
+            "image_url": user.image_url
+        })
+    except jwt.ExpiredSignatureError:
+        return JsonResponse({"error": "Token expired"}, status=401)
+    except jwt.DecodeError:
+        return JsonResponse({"error": "Invalid token"}, status=401)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
