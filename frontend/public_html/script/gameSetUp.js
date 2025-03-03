@@ -82,6 +82,7 @@ async function startGame() {
         // 7. Bucle juego
         await runGame();
 
+        toggleBoostButtons(true);
         await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos antes del siguiente partido
         
         // 8. Recargamos juego
@@ -302,8 +303,8 @@ function displayPlayerInfo(playersData) {
             if (nameElement) {
                 nameElement.textContent = truncateName(player.username);
                 nameElement.title = player.username;
-                
             }
+            
             const boostKey = index === 0 ? "E" : ">";           
             if (button) {
                 button.title = translations[document.documentElement.lang]?.[player.boost]

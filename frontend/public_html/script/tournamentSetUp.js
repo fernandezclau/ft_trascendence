@@ -208,11 +208,13 @@ async function startFights(matches) {
             let gameWinner = await runGame();
             let winnerPlayer = gameWinner === 1 ? match.player1 : match.player2;
             winners.push(winnerPlayer);
-            match.winner = winnerPlayer;
+            match.winner = winnerPlayer;  
+
+            // Deshabilitamos botones boosts
+            toggleBoostButtons(true);
 
             await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 3 segundos antes del siguiente partido
 
-            debugMessage.textContent = "";
             resetHighlight(match.player1, match.player2);
             
             reloadGame();
@@ -262,6 +264,7 @@ function displayPlayerInfoTour(playersData) {
 
         if (nameElement) {
             nameElement.textContent = truncateName(playersData.player1.username);
+            nameElement.title = playersData.player1.username;
         }
         if (button) {
             button.title = translations[document.documentElement.lang]?.[playersData.player1.boost]
@@ -293,6 +296,7 @@ function displayPlayerInfoTour(playersData) {
 
         if (nameElement) {
             nameElement.textContent = truncateName(playersData.player2.username);
+            nameElement.title = playersData.player2.username;
         }
         if (button) {
             button.title = translations[document.documentElement.lang]?.[playersData.player2.boost]
