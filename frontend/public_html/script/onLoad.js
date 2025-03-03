@@ -2,14 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const jwtToken = localStorage.getItem("jwt");
 
     if (!jwtToken) {
-        // Si no hay token, cargar la página de login
         loadPage("login");
     } else {
-        // Si hay token, cargar la página del juego
         loadPage("game");
     }
 
-    updateNavbar(); // Actualizar el navbar según el estado de autenticación
+    updateNavbar();
 });
 
 window.onload = function () {
@@ -21,8 +19,6 @@ window.onload = function () {
         localStorage.setItem("jwt", token);
         window.history.replaceState({}, document.title, "/");
         updateNavbar();  
-
-        // Si se especificó una página en la URL, cargarla, de lo contrario, ir al juego
         if (page) {
             loadPage(page);
         } else {
@@ -61,8 +57,6 @@ function updateNavbar() {
                         <button class="btn logout-button" onclick="logout()">Logout</button>
                     </div>
                 `;
-
-                // Mostrar las opciones del navbar para usuarios logueados
                 navbarLinks.forEach(link => {
                     link.style.display = "block";
                 });
@@ -70,7 +64,7 @@ function updateNavbar() {
         })
         .catch(error => {
             console.error("Error fetching user data:", error);
-            localStorage.removeItem("jwt"); // Eliminar token si hay un error
+            localStorage.removeItem("jwt");
             resetNavbar();
         });
     } else {
@@ -86,8 +80,6 @@ function resetNavbar() {
         <button class="btn login-button" onclick="loadPage('login')" data-key="login">Log in</button>
         <button class="btn signup-button" onclick="loadPage('register')" data-key="signup">Sign up</button>
     `;
-
-    // Ocultar las opciones del navbar para usuarios no autenticados
     navbarLinks.forEach(link => {
         link.style.display = "none";
     });
