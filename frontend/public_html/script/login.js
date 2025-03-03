@@ -1,32 +1,32 @@
 
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) { // Verificar si existe antes de agregar el event listener
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-    const data = {
-        email: email,
-        password: password
-    };
+            const data = { email, password };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8000/api/auth/login", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-
-            console.log("Login successful");
-            window.location.href = "/dashboard";
-        } else {
-
-            const response = JSON.parse(xhr.responseText);
-            console.error("Error: " + response.error);
-        }
-    };
-
-    xhr.send(JSON.stringify(data));
+            fetch("http://localhost:8000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.jwt) {
+                    localStorage.setItem("jwt", data.jwt);
+                    window.location.href = "/"; // Redirigir a la página principal
+                } else {
+                    console.error("Error:", data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    }
 });
 
 function togglePassword(passwordFieldId, toggleIconId) {
