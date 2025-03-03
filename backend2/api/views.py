@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-import request
+import requests
 import jwt
 import datetime
 import os
@@ -14,7 +14,6 @@ CustomUser = get_user_model()
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 def generate_jwt(user):
-    """Genera un JWT para el usuario autenticado."""
     payload = {
         'id': user.id,
         'username': user.username,
