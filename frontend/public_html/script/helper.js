@@ -30,3 +30,7 @@ function formatPossessive(username) {
 function truncateName(name, maxLength = 10) {
     return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
 }
+
+function isMobile() {
+    return window.innerWidth <= 768;
+}

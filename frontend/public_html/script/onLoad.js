@@ -1,7 +1,8 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     loadPage("game");
-    
+    applySettings();
+
     window.addEventListener("resize", mobileGame);
     window.addEventListener("resize", mobileTournament);
 });
@@ -17,11 +18,20 @@ function mobileGame() {
             // Mostramos formularios
             generatePlayerForms(2, false, false, "Claudia"); // TODO: Modificar con el username 
         }
+
+        // 2 jugadores
+        if (playersToPlay != 2) {
+            playersToPlay = 2;
+            drawGameBoard();
+        }
     }
     else {
         if (button) {
             button.disabled = true;
         }
+        let playersButtons = document.querySelectorAll('.players-btn-group');
+        playersButtons.forEach(button => button.classList.remove('button-selected'));
+        playersButtons[0].classList.add('button-selected');
     }
 }
 
@@ -32,6 +42,7 @@ function mobileTournament() {
         // Activamos botones de seleccion equipo (no opcion +2 jugadores en un mismo equipo)
         if (teamsButton)
             teamsButton.forEach(button => button.disabled = false)
+
     } else {
         if (teamsButton)
             teamsButton.forEach(button => button.disabled = true)

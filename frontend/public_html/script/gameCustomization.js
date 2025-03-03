@@ -62,3 +62,33 @@ console.log("Este es el color input " + value)
     // Update selected color
     updateColorSelection(value);
 }
+
+// ACTUALIZAR MODO
+function updateMode(value) {
+    if (value == "disabled")
+    {
+        document.body.classList.remove("light-mode");
+        
+        let canvasBorders = document.querySelectorAll('.canvas-border');
+        canvasBorders.forEach(function(element) {
+            element.classList.remove("light-mode");
+        });
+        let navbar = document.querySelectorAll('.navbar');
+        navbar.forEach(function(element) {
+            element.classList.remove("light-mode");
+        });
+    }
+    else
+    {
+        document.body.classList.add("light-mode");
+
+        let canvasBorders = document.querySelectorAll('.canvas-border');
+        canvasBorders.forEach(function(element) {
+            element.classList.add("light-mode");
+        });
+        let navbar = document.querySelectorAll('.navbar');
+        navbar.forEach(function(element) {
+            element.classList.add("light-mode");
+        });
+    }
+}

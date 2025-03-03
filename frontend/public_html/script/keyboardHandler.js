@@ -1,4 +1,4 @@
-// EVENTO PARA TECLAS
+// Eventos para teclas
 document.addEventListener('keydown', (event) => {
     if (started) {
         // Prevenir el comportamiento predeterminado del teclado para evitar el desplazamiento
@@ -79,3 +79,19 @@ document.addEventListener('keyup', (event) => {
         }
     }
 });
+
+// Evento teclas boosts e/>
+function pressedBoostButton(letter) {
+    const gameBoosts = document.getElementById("gameBoosts");
+    
+    if (!gameBoosts) return;
+
+    const button1 = gameBoosts.children[0].querySelector("button");
+    const button2 = gameBoosts.children[1].querySelector("button");
+    
+    if (letter == "e" && button1.disabled == false) {
+        button1.click();
+    } else if (letter = "right" && button2.disabled == false) {
+        button2.click();
+    }
+}

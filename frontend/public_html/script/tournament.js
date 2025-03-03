@@ -88,7 +88,31 @@ function selectTournamentPoints(points) {
     selectedButton.classList.add('button-selected');
 }
 
-// Recargar juego
+// Empezar torneos
+function startTournament() {
+    //1. Obtener y validar información del torneo
+    let tournamentData = getFormData("tournamentForm", "game-tournament-error")
+    if (!tournamentData) {
+        return; // Datos inválidos
+    }
+    
+    // 2. Desahbilitar botones
+    disableTournamentSelectionButtons();
+
+    // 4. Ocultar registro
+    hideElement(document.getElementById("gameRegister"));
+
+    // 3. Generar peleas
+    fights = generateFights(tournamentData);
+    
+    // 4. Mostramos peleas
+    updateGraph(numplayers, fights.fights);
+
+    // 5. Tournament loop
+    startFights(fights['fights']);
+}
+
+// Recargar torneo
 function reloadingGameTournament() {
     // Disable button (selection needed)
     const button = document.getElementById("tournamentButton");
@@ -111,10 +135,9 @@ function reloadingGameTournament() {
         // Enable selection buttons
         let playerButtons = document.querySelectorAll('.team-players-btn-group');
         let teamPlayersButtons = document.querySelectorAll('.tour-players-btn-group');
-        let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
+        
         playerButtons.forEach(button => button.disabled = false);
         teamPlayersButtons.forEach(button => button.disabled = true);
-        pointsButtons.forEach(button => button.disabled = false);
     }
     
     /*  Common */
@@ -144,6 +167,10 @@ function reloadingGameTournament() {
     const score = document.getElementById("score");
     score.style.top = "10px";
     
+    // Seleccion de puntos habilitar
+    let pointsButtons = document.querySelectorAll('.tour-points-btn-group');
+    pointsButtons.forEach(button => button.disabled = false);
+
     // Reset num playeers
     numplayers = null
 
@@ -154,28 +181,152 @@ function reloadingGameTournament() {
     winner2.classList.remove('ready');
 }
 
-// Empezar torneos
-function startTournament() {
-    //1. Obtener y validar información del torneo
-    let tournamentData = getFormData("tournamentForm", "game-tournament-error")
-    if (!tournamentData) {
-        return; // Datos inválidos
+// Lógica de enfrentamientos
+async function startFights(matches) {
+    let winners = [];
+
+    while (matches.length >= 1) {
+        winners = [];
+
+        // Usamos for...of para poder await cada partida
+        for (const match of matches) {
+            highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
+            
+            console.log(match);
+            
+            // Mostrar info del jugador
+            displayPlayerInfoTour(match);
+
+            // Iniciar el juego
+            started = true;
+            playSound('resume');
+            debugMessage.textContent = truncateName(match.player1.username) + " vs " + truncateName(match.player2.username);
+            
+            // Espera a que el juego termine y obtén el ganador
+            let gameWinner = await runGame();
+            let winnerPlayer = gameWinner === 1 ? match.player1 : match.player2;
+            console.log("El ganador es:", winnerPlayer);
+            winners.push(winnerPlayer);
+            match.winner = winnerPlayer;
+ 
+            // Mostrar el ganador en debugMessage durante 3 segundos
+            //debugMessage.textContent = `${truncateName(winnerPlayer.username)} WINS!`;
+
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 3 segundos antes del siguiente partido
+
+            debugMessage.textContent = "";
+            resetHighlight(match.player1, match.player2);
+            // 4. Mostramos peleas
+            updateGraph(numplayers, matches);
+            reloadGame();
+        }
+
+        // Preparar los partidos de la siguiente ronda
+        let nextRoundMatches = [];
+        for (let i = 0; i < winners.length; i += 2) {
+            if (winners[i + 1]) {
+                nextRoundMatches.push({
+                    player1: winners[i],
+                    player2: winners[i + 1],
+                    result: "pending",
+                    winner: null
+                });
+            }
+        }
+
+        matches = nextRoundMatches;
+        fillPlayers(matches);
     }
+
+    const element1 = document.getElementById(`round-3-${winners[0].position}`);
+    element1.classList.add('ready');
+}
+
+// Mostrar información jugadores
+function displayPlayerInfoTour(playersData) {
     
-    // 2. Desahbilitar botones
-    disableTournamentSelectionButtons();
+    // 1. Establecemos nombres globales de jugadores
+    player1 = playersData.player1.username;
+    player2 = playersData.player2.username;
 
-    // 4. Ocultar registro
-    hideElement(document.getElementById("gameRegister"));
+    const gameBoosts = document.getElementById("gameBoosts");
+    const boostImages = {
+        speed: "images/speed.png",
+        power: "images/power.png",
+        defense: "images/shield.png"
+    };
 
-    // 3. Generar peleas
-    fights = generateFights(tournamentData);
-    
-    // 4. Mostramos peleas
-    updateGraph(numplayers, fights.fights);
+    // 2. Mostramos los boost que corresponden por jugador
+    let playerContainer1 = gameBoosts.children[0];
+    let playerContainer2 = gameBoosts.children[1];
+    if (playerContainer1) {
+        let nameElement = playerContainer1.querySelector("p, span");
+        let button = playerContainer1.querySelector("button");
 
-    // 5. Tournament loop
-    let winner = startFights(fights['fights']);
+        if (nameElement) {
+            nameElement.textContent = truncateName(playersData.player1.username);
+        }
+        if (button) {
+            button.title = translations[document.documentElement.lang]?.[playersData.player1.boost]
+            button.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
+                    <span style="
+                        font-family: 'retro';
+                        color: #161618; 
+                        text-transform: uppercase;">
+                        E
+                    </span>
+                </div>
+            `;
+            // Asegurar que no haya eventos previos duplicados
+            button.replaceWith(button.cloneNode(true));
+            button = playerContainer1.querySelector("button");
+
+            // Asignar la función del boost correspondiente
+            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username, 0, button));
+
+            // Deshabilitar boton
+            button.disabled = true;
+        }
+    }
+    if (playerContainer2) {
+        let nameElement = playerContainer2.querySelector("p, span");
+        let button = playerContainer2.querySelector("button");
+
+        if (nameElement) {
+            nameElement.textContent = truncateName(playersData.player2.username);
+        }
+        if (button) {
+            button.title = translations[document.documentElement.lang]?.[playersData.player2.boost]
+            button.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
+                    <span style="
+                        font-family: 'retro';
+                        color: #161618; 
+                        text-transform: uppercase;">
+                        >
+                    </span>
+                </div>
+            `;
+            // Asegurar que no haya eventos previos duplicados
+            button.replaceWith(button.cloneNode(true));
+            button = playerContainer2.querySelector("button");
+
+            // Asignar la función del boost correspondiente
+            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username, 1, button));
+            
+            // Deshabilitar boton
+            button.disabled = true;
+        }
+    }
+
+    // 3. Actualizamos css de componentes
+    gameBoosts.style.display = "flex";
+    gameBoosts.style.visibility = "visible";
+    const score = document.getElementById("score");
+    score.style.top = "105px";
 }
 
 // Deshabilitar botones de selección
@@ -209,6 +360,7 @@ function generateFights(players) {
     return { fights };
 }
 
+// Actualización de gráficos
 function updateGraph(players, fights)
 {
     const tournamentGraph = document.getElementById("tournamentGraph")
@@ -370,66 +522,6 @@ function getPosition(players, index) {
     return index;
 }
 
-async function startFights(matches) {
-    let winners = [];
-
-    while (matches.length >= 1) {
-        winners = [];
-
-        // Usamos for...of para poder await cada partida
-        for (const match of matches) {
-            highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
-            
-            console.log(match);
-            
-            // Mostrar info del jugador
-            displayPlayerInfoTour(match);
-
-            // Iniciar el juego
-            started = true;
-            playSound('resume');
-            debugMessage.textContent = truncateName(match.player1.username) + " vs " + truncateName(match.player2.username);
-            
-            // Espera a que el juego termine y obtén el ganador
-            let gameWinner = await runGame();
-            let winnerPlayer = gameWinner === 1 ? match.player1 : match.player2;
-            console.log("El ganador es:", winnerPlayer);
-            winners.push(winnerPlayer);
-            match.winner = winnerPlayer;
- 
-            // Mostrar el ganador en debugMessage durante 3 segundos
-            //debugMessage.textContent = `${truncateName(winnerPlayer.username)} WINS!`;
-
-            await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 3 segundos antes del siguiente partido
-
-            debugMessage.textContent = "";
-            resetHighlight(match.player1, match.player2);
-            // 4. Mostramos peleas
-            updateGraph(numplayers, matches);
-            reloadGame();
-        }
-
-        // Preparar los partidos de la siguiente ronda
-        let nextRoundMatches = [];
-        for (let i = 0; i < winners.length; i += 2) {
-            if (winners[i + 1]) {
-                nextRoundMatches.push({
-                    player1: winners[i],
-                    player2: winners[i + 1],
-                    result: "pending",
-                    winner: null
-                });
-            }
-        }
-
-        matches = nextRoundMatches;
-        fillPlayers(matches);
-    }
-
-    const element1 = document.getElementById(`round-3-${winners[0].position}`);
-    element1.classList.add('ready');
-}
-
 function highlightMatch(player1, player2) {
     const element1 = document.getElementById(getPlayerId(player1));
     const element2 = document.getElementById(getPlayerId(player2));
@@ -443,88 +535,6 @@ function resetHighlight(player1, player2) {
     const element2 = document.getElementById(getPlayerId(player2));
     if (element1) element1.classList.remove('ready');
     if (element2) element2.classList.remove('ready');
-}
-
-function displayPlayerInfoTour(playersData) {
-    player1 = playersData.player1.username;
-    player2 = playersData.player2.username;
-    const gameBoosts = document.getElementById("gameBoosts");
-    const boostImages = {
-        speed: "images/speed.png",
-        power: "images/power.png",
-        defense: "images/shield.png"
-    };
-
-    
-    let playerContainer1 = gameBoosts.children[0];
-    let playerContainer2 = gameBoosts.children[1];
-    if (playerContainer1) {
-        let nameElement = playerContainer1.querySelector("p, span");
-        let button = playerContainer1.querySelector("button");
-
-        if (nameElement) {
-            nameElement.textContent = truncateName(playersData.player1.username);
-        }
-        if (button) {
-            button.title = translations[document.documentElement.lang]?.[playersData.player1.boost]
-            button.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <img src="${boostImages[playersData.player1.boost]}" alt="${playersData.player1.boost}" width="30">
-                    <span style="
-                        font-family: 'retro';
-                        color: #161618; 
-                        text-transform: uppercase;">
-                        E
-                    </span>
-                </div>
-            `;
-            // Asegurar que no haya eventos previos duplicados
-            button.replaceWith(button.cloneNode(true));
-            button = playerContainer1.querySelector("button");
-
-            // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player1.boost, playersData.player1.username, 0, button));
-
-            // Deshabilitar boton
-            button.disabled = true;
-        }
-    }
-    if (playerContainer2) {
-        let nameElement = playerContainer2.querySelector("p, span");
-        let button = playerContainer2.querySelector("button");
-
-        if (nameElement) {
-            nameElement.textContent = truncateName(playersData.player2.username);
-        }
-        if (button) {
-            button.title = translations[document.documentElement.lang]?.[playersData.player2.boost]
-            button.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <img src="${boostImages[playersData.player2.boost]}" alt="${playersData.player2.boost}" width="30">
-                    <span style="
-                        font-family: 'retro';
-                        color: #161618; 
-                        text-transform: uppercase;">
-                        >
-                    </span>
-                </div>
-            `;
-            // Asegurar que no haya eventos previos duplicados
-            button.replaceWith(button.cloneNode(true));
-            button = playerContainer2.querySelector("button");
-
-            // Asignar la función del boost correspondiente
-            button.addEventListener("click", () => activateBoost(playersData.player2.boost, playersData.player2.username, 1, button));
-            
-            // Deshabilitar boton
-            button.disabled = true;
-        }
-    }
-
-    gameBoosts.style.display = "flex";
-    gameBoosts.style.visibility = "visible";
-    const score = document.getElementById("score");
-    score.style.top = "105px";
 }
 
 function getPlayerId(player) {

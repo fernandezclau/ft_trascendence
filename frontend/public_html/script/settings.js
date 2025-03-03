@@ -1,3 +1,11 @@
+let translations = {};
+const allowedSizes = [10, 20, 30];
+const allowedSpeeds = [400, 450, 500, 550, 600];
+const allowedColors = ["#B63A4B", "#5A9F6B", "#516A99", "#ECE570", "#9C77C1", "#fff2f2"];
+const allowedBackgrounds = ["#161618", "#70b8b1", "#b2afb1", "#f4a6b1", "#74748d"];
+const allowedModes = ["enabled", "disabled"];
+
+// Gestion de sonidos
 function toggleSound() {
     let soundIcon = document.getElementById("soundIcon");
 
@@ -13,6 +21,7 @@ function toggleSound() {
     }
 }
 
+// Gestion de modos (claro/oscuro)
 function toggleMode() {
     let modeIcon = document.getElementById("modeIcon");
 
@@ -46,9 +55,8 @@ function toggleMode() {
     }
 }
 
+// Gestion de modos (claro/oscuro)
 function changeBackground(value, button) {
-    const canvas = document.querySelector("canvas");
-
     const buttons = document.querySelectorAll('.background-option');
     
     buttons.forEach(button => {
@@ -65,9 +73,9 @@ function changeBackground(value, button) {
     }
 }
 
-// LANGUAGE
-let translations = {};
+/* Traducciones (en/es/fr) */
 
+// Cargas traducciones
 function loadTranslations() {
     fetch('script/translations.json')
         .then(response => response.json())
@@ -82,6 +90,7 @@ function loadTranslations() {
         });
 }
 
+// Traducir cada clave de la página
 function changeLanguage(language) {
     document.documentElement.lang = language; 
     const translation = translations[language];
@@ -114,6 +123,7 @@ function setLanguage(language) {
     changeLanguage(language);
 }
 
+// Formatear campos con variables
 function formatTranslation(key, placeholders) {
     let translation = translations[document.documentElement.lang]?.[key];
     if (!translation) return key;
@@ -128,3 +138,61 @@ function formatTranslation(key, placeholders) {
     return translation;
 }
 
+/* CARGAR SETTINGS (tamaño, velocidad, color, fondo ...) */
+
+// Actualizar páginas con los ajustes seleccionados
+function applySettings() {
+
+    // 1. Tamaño bola
+    const savedSize = Number(localStorage.getItem("ballSize"));
+    if (allowedSizes.includes(savedSize)) {
+        updateBallSize(savedSize);
+    } else {
+        localStorage.setItem("ballSize", 10);
+    }
+
+    // 2. Velocidad bola
+    const savedSpeed = localStorage.getItem("ballSpeed");
+    if (allowedSpeeds.includes(savedSpeed)) {
+        updateBallSpeed(savedSpeed)
+    } else {
+        localStorage.setItem("ballSpeed", 500)
+    }
+
+    // 3. Color bola
+    const savedColor = localStorage.getItem("ballColor");
+    if (allowedColors.includes(savedColor)) {
+        updateBallColor(savedColor)
+    } else {
+        localStorage.setItem("ballColor", "#fff2f2")
+    }
+
+    // 4. Color fondo
+    const savedBackground = localStorage.getItem("backgroundColor")
+    if (allowedBackgrounds.includes(savedBackground)) {
+        canvas.style.backgroundColor = savedBackground;
+    } else {
+        localStorage.setItem("backgroundColor", "#161618")
+    }
+
+    // 5. Modo (oscuro/claro)
+    const savedMode = localStorage.getItem("darkMode");
+    if (allowedModes.includes(savedMode)) {
+        updateMode(savedMode)
+    } else {
+        localStorage.setItem("darkMode", "enable")
+    }
+
+    // 6. Sonido
+    if (localStorage.getItem("sound") === "muted") {
+        audioContext.suspend();  // Silencia el sonido
+    } else {
+        audioContext.resume();   // Activa el sonido
+    }
+
+    // 7. Idioma
+    loadTranslations();
+    const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    changeLanguage(savedLanguage);
+
+}
