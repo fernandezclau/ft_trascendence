@@ -36,19 +36,19 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders', # Para permitir leer desde el frontend
     'rest_framework',
     'api',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Para permitir leer desde el frontend
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,32 +58,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    # 'http://localhost',
-    'https://localhost',
-    "http://localhost:3000",  # Si el frontend corre en React o en otro puerto
-    "http://localhost:8000",  # Si se accede al backend desde otro servicio
+CORS_ALLOW_ALL_ORIGINS = [
+    "http://localhost:8080",
+    "http://localhost:8001",
 ]
-
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-    'PUT',
-    'PATCH',
-    'DELETE',
-    'OPTIONS',
-    'HEAD',
-    'TRACE',
-    'CONNECT',
-]
-
-# CORS_ALLOW_HEADERS = [
-#     'content-type',
-#     'authorization',
-#     'x-csrftoken',
-# ]
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+CORS_ALLOW_HEADERS = ['content-type', 'authorization', 'x-csrftoken', 'x-requested-with', 'origin', 'accept']
 
 ROOT_URLCONF = 'api.urls'
 

@@ -48,6 +48,7 @@
     <script>
         document.getElementById("registerForm").addEventListener("submit", function(event) {
             event.preventDefault();
+            event.stopPropagation();
         
             const username = document.getElementById("newUsername").value;
             const email = document.getElementById("email").value;
@@ -55,26 +56,35 @@
             const confirmPassword = document.getElementById("confirmPassword").value;
         
             if (password !== confirmPassword) {
-                alert("Las contraseñas no coinciden.");
+                alert("❌ Las contraseñas no coinciden.");
                 return;
             }
+        
             const data = { username, email, password };
+        
+            console.log("📩 Enviando solicitud a:", "http://localhost:8001/api/auth/register");
+            console.log("📦 Datos enviados:", JSON.stringify(data));
         
             fetch("http://localhost:8001/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("📥 Respuesta recibida:", response);
+                return response.json();
+            })
             .then(data => {
+                console.log("📩 Respuesta del backend:", data);
                 if (data.message) {
-                    alert("Registro exitoso. Ahora puedes iniciar sesión.");
-                    loadPage("login");
+                    alert("✅ Registro exitoso. Ahora puedes iniciar sesión.");
+                    setTimeout(() => loadPage("login"), 1000);
                 } else {
-                    alert("Error: " + data.error);
+                    alert("⚠️ Error: " + data.error);
                 }
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => console.error("🚨 Error en la solicitud:", error));
         });
+        
         </script>
 </div>

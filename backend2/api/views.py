@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+import request
 import jwt
 import datetime
 import os
@@ -51,7 +52,6 @@ def register_user(request):
 
 @api_view(['POST'])
 def login_user(request):
-    """Autentica un usuario y devuelve un token JWT."""
     email = request.data.get("email")
     password = request.data.get("password")
 

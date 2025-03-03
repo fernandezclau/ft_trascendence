@@ -47,7 +47,7 @@ services:
     env_file:
       - backend/.env
     ports:
-      - "8001:8001" # Para pruebas, acceso a backend
+      - "8001:8001"
     environment:
       - PYTHONPATH=/code
     depends_on:
