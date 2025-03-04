@@ -11,3 +11,6 @@ COPY requirements.txt /code/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /code/
+
+RUN rm -rf /code/migrations /code/**/migrations /code/__pycache__
+

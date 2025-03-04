@@ -4,4 +4,6 @@ djangorestframework
 django-cors-headers==3.11.0
 requests
 PyJWT==2.8.0
+psycopg2-binary
+python-dotenv
 django-environ==0.4.5

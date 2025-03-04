@@ -31,7 +31,6 @@ def generate_jwt(user):
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 def login_42(request):
-    """Redirige al usuario a la API de 42 para autenticación."""
     auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code"
     return redirect(auth_url)
 
