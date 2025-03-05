@@ -143,8 +143,39 @@ function resetNavbar() {
     });
 }
 
-function logout() {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("auth_method"); // Eliminar el método de autenticación
-    window.location.reload();
+async function logout() {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+        console.log("❌ No hay usuario autenticado.");
+        return;
+    }
+
+    try {
+        console.log("🔄 Enviando petición para eliminar usuario...");
+
+        const response = await fetch("http://localhost:8000/api/auth/logout", {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (response.ok) {
+            console.log("✅ Usuario eliminado correctamente.");
+        } else {
+            console.error("⚠️ No se pudo eliminar el usuario:", data);
+        }
+
+        // 🔹 Borrar el token del almacenamiento local después de eliminar el usuario
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("auth_method");
+        window.location.reload();
+
+    } catch (error) {
+        console.error("❌ Error al hacer logout:", error);
+    }
 }

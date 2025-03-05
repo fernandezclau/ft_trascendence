@@ -36,7 +36,6 @@ def login_42(request):
 
 @api_view(['GET'])
 def callback_42(request):
-    
     code = request.GET.get("code")
     if not code:
         return JsonResponse({"error": "No code provided"}, status=400)
@@ -69,15 +68,22 @@ def callback_42(request):
     email = user_data.get("email")
     image_url = user_data.get("image", {}).get("link")
 
+    # 🔹 Evitar problemas de duplicación con `get_or_create`
     user, created = User.objects.get_or_create(
-        username=login,
+        login=login,
         defaults={
+            "username": login,
+            "intra_id": intra_id,
             "email": email,
             "image_url": image_url,
             "token": access_token,
         }
     )
+
     if not created:
+        # Si el usuario ya existía, actualizar sus datos
+        user.email = email
+        user.image_url = image_url
         user.token = access_token
         user.save()
 
@@ -85,6 +91,7 @@ def callback_42(request):
     jwt_token = generate_jwt(user)
     redirect_url = f"http://localhost:8080/?token={jwt_token}&auth=42"
     return redirect(redirect_url)
+
 
 
 @api_view(["GET"])
@@ -98,11 +105,36 @@ def get_user_info(request):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        user = User.objects.get(id=payload["id"])  # Asegurar que usamos el ID correcto
+        user = User.objects.get(id=payload["id"])
         return JsonResponse({
             "username": user.username,
             "image_url": user.image_url
         })
+    except jwt.ExpiredSignatureError:
+        return JsonResponse({"error": "Token expired"}, status=401)
+    except jwt.DecodeError:
+        return JsonResponse({"error": "Invalid token"}, status=401)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
+
+@api_view(["DELETE"])
+def logout_and_delete_user(request):
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = User.objects.get(id=payload["id"])
+
+        # 🔹 Borrar el usuario de la base de datos
+        user.delete()
+
+        return JsonResponse({"message": "User deleted successfully"}, status=200)
+    
     except jwt.ExpiredSignatureError:
         return JsonResponse({"error": "Token expired"}, status=401)
     except jwt.DecodeError:

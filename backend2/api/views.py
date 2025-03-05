@@ -18,7 +18,7 @@ def generate_jwt(user):
         'id': user.id,
         'username': user.username,
         'image_url': user.image_url,  # Agregar imagen para el frontend
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
