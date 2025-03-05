@@ -65,4 +65,4 @@ fclean: clean
 	docker system prune -a -f
 	@echo "\033[1;32mSystem cleaned up successfully.\033[0m"
 
-re: clean all
+re: fclean all
