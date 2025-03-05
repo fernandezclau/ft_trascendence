@@ -25,7 +25,7 @@ def generate_jwt(user):
     payload = {
         'id': user.id,
         'username': user.username,
-        'intra_id': user.intra_id,  # Asegurar que intra_id esté en el token
+        'intra_id': user.intra_id, 
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')

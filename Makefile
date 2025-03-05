@@ -60,7 +60,7 @@ clean:
 	@echo "\033[1;32mCleanup completed.\033[0m"
 
 # Limpiar todo (todos los contenedores, imágenes y volúmenes no utilizados)
-fclean:
+fclean: clean
 	@echo "\033[1;35mPruning unused containers, images, and volumes...\033[0m"
 	docker system prune -a -f
 	@echo "\033[1;32mSystem cleaned up successfully.\033[0m"
