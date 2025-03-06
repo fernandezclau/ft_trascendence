@@ -1,14 +1,11 @@
 services:
   db:
-    image: postgres:15
+    build: ./postgres
     container_name: postgres-db
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    env_file:
+      - ./postgres/conf/.env
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
-      - ./db-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
     healthcheck:
@@ -18,7 +15,7 @@ services:
       retries: 5
 
   auth-42-api:
-    build: backend
+    build: ./backend
     container_name: django-auth-42-api
     command: sh -c "
       rm -rf /code/api/migrations &&
@@ -39,7 +36,7 @@ services:
       - app_network
 
   auth-db-api:
-    build: backend2
+    build: ./backend2
     container_name: django-auth-db-api
     command: sh -c "
       rm -rf /code/api/migrations &&
@@ -60,7 +57,7 @@ services:
       - app_network
 
   frontend:
-    build: frontend
+    build: ./frontend
     container_name: apache-web
     ports:
       - "8080:80"
