@@ -1,10 +1,10 @@
-
+# .env
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-**/migrations/*.py
+**/migrations/*
 !**/migrations/__init__.py
 
 node_modules/
