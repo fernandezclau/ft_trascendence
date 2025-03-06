@@ -1,24 +1,26 @@
 
+
 document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
+        const jwtToken = localStorage.getItem("jwt");
 
-    const jwtToken = localStorage.getItem("jwt");
+        if (!jwtToken) {
+            PageManager.load("login");
+        } else {
+            PageManager.load("game");
+        }
 
-    if (!jwtToken) {
-        loadPage("login");
-    } else {
-        loadPage("game");
-    }
+        updateNavbar();
+        applySettings();
 
-    updateNavbar();
-    applySettings();
-
-    window.addEventListener("resize", mobileGame);
-    window.addEventListener("resize", mobileTournament);
+        window.addEventListener("resize", mobileGame);
+        window.addEventListener("resize", mobileTournament);
+    }, 100);
 });
 
 window.onpopstate = function (event) {
     if (event.state && event.state.page) {
-        loadPage(event.state.page, null, false);
+        PageManager.load(event.state.page, null, false);
     }
 };
 
@@ -31,7 +33,7 @@ function mobileGame() {
         if (button){
             button.disabled = false;
             // Mostramos formularios
-            generatePlayerForms(2, false, false, "Claudia"); // TODO: Modificar con el username 
+            generatePlayerForms(2, false, false, "Claudia"); 
         }
 
         // 2 jugadores
@@ -101,11 +103,11 @@ window.onload = function () {
     const jwt_backend2 = localStorage.getItem("jwt_backend2");
 
     if (lastPage && ["game", "tournament", "info", "settings"].includes(lastPage)) {
-        loadPage(lastPage, null, false);
+        PageManager.load(lastPage, null, false);
     } else if (jwt_backend || jwt_backend2) {
-        loadPage("game");
+        PageManager.load("game");
     } else {
-        loadPage("login");
+        PageManager.load("login");
     }
 };
 
@@ -154,8 +156,8 @@ function resetNavbar() {
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
 
     authContainer.innerHTML = `
-        <button class="btn login-button" onclick="loadPage('login')" data-key="login">Log in</button>
-        <button class="btn signup-button" onclick="loadPage('register')" data-key="signup_button">Sign up</button>
+        <button class="btn login-button" onclick="PageManager.load('login')" data-key="login">Log in</button>
+        <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button">Sign up</button>
     `;
     navbarLinks.forEach(link => {
         link.style.display = "none";
@@ -186,8 +188,6 @@ async function logout() {
                 }
             });
         }
-
-        console.log("✅ Sesión cerrada correctamente.");
     } catch (error) {
         console.error("❌ Error al hacer logout:", error);
     }
@@ -200,10 +200,7 @@ async function logout() {
     localStorage.removeItem("image_url_backend2");
 
     pageHistory = [];
-    window.history.pushState({}, "", "#login");
-    loadPage("login");
+    window.history.pushState({}, "", "#");
+    PageManager.load("login");
     window.location.reload();
 }
-
-
-

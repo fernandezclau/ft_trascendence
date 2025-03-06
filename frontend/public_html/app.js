@@ -1,49 +1,70 @@
+const PageManager = (() => {
+    let currentPage = null;
+    let pageHistory = [];
 
-let currentPage = null; 
-let pageHistory = [];
+    const PUBLIC_PAGES = ["login", "register"];
 
-async function loadPage(page, callback, addToHistory = true) {
-    if (page === currentPage) {
-        console.log(`La página ${page} ya está cargada.`);
-        return;
-    }
-
-    try {
-        const response = await fetch(`pages/${page}.html`);
-        const html = await response.text();
-        document.getElementById('content-container').innerHTML = html;
-        currentPage = page;
-
-        if (addToHistory) {
-            pageHistory.push(page);
-            window.history.pushState({ page }, "", `#${page}`);
+    async function loadPage(page, callback, addToHistory = true) {
+        const jwt_backend = localStorage.getItem("jwt_backend");
+        const jwt_backend2 = localStorage.getItem("jwt_backend2");
+    
+        if (!jwt_backend && !jwt_backend2 && !PUBLIC_PAGES.includes(page)) {
+            console.warn("⚠️ Intento de acceso no autorizado. Redirigiendo a login.");
+            PageManager.load("login");
+            return;
         }
-
-        toggleGameVisibility(page === "game" || page === "tournament");
-
-        changeLanguage(localStorage.getItem('preferredLanguage'));
-
-        if (callback) callback();
-
-    } catch (error) {
-        console.error('Error loading page:', error);
+    
+        if (page === currentPage) {
+            console.log(`La página ${page} ya está cargada.`);
+            return;
+        }
+    
+        try {
+            const response = await fetch(`pages/${page}.html`);
+    
+            const html = await response.text();
+            document.getElementById("content-container").innerHTML = html;
+            currentPage = page;
+    
+            if (addToHistory) {
+                window.history.pushState({ page }, "", window.location.pathname);
+                if (!PUBLIC_PAGES.includes(page)) {
+                    pageHistory.push(page);
+                }
+            }
+    
+            toggleGameVisibility(page === "game" || page === "tournament");
+    
+            changeLanguage(localStorage.getItem("preferredLanguage"));
+    
+            if (callback) callback();
+        } catch (error) {
+            console.error("Error loading page:", error);
+        }
     }
-}
 
-function goBack() {
-    if (pageHistory.length > 1) {
-        pageHistory.pop();
-        const lastPage = pageHistory[pageHistory.length - 1];
-        loadPage(lastPage, null, false);
+    function goBack() {
+        if (pageHistory.length > 1) {
+            pageHistory.pop();
+            const lastPage = pageHistory[pageHistory.length - 1];
+            PageManager.load(lastPage, null, false);
+        }
     }
-}
 
-function toggleGameVisibility(show) {
-    const gameElement = document.getElementById("game");
-    if (gameElement) {
-        gameElement.style.display = show ? "block" : "none";
+    function toggleGameVisibility(show) {
+        const gameElement = document.getElementById("game");
+        if (gameElement) {
+            gameElement.style.display = show ? "block" : "none";
+        }
     }
-}
+
+    return {
+        load: loadPage,
+        goBack
+    };
+})();
+
+
 
 
 /* LOADING GAME */
@@ -92,7 +113,7 @@ function loadTournament() {
 
 /* LOADING SETTINGS */
 function loadSettings() {
-    loadPage("settings", () => {
+    PageManager.load("settings", () => {
         // Cargar configuraciones guardadas en el localStorage
         
         // size

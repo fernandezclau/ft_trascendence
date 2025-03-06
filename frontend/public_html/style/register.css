@@ -1,4 +1,9 @@
 /* MAIN CONTAINER */
+.loginButton {
+    font-weight: bold;
+    text-decoration: none;
+    color: #161618;
+}
 .register-container {
     display: flex;
     justify-content: center;
@@ -92,3 +97,4 @@
 .btn-hover:hover {
     background-color: #b2afb1;
 }
+

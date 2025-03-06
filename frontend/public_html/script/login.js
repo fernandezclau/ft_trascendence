@@ -7,13 +7,13 @@ async function registerUser() {
 
     if (!username || !email || !password || !confirmPassword) {
         alert("❌ Todos los campos son obligatorios.");
-        loadPage("register", updateNavbar);
+        PageManager.load("register", updateNavbar);
         return;
     }
 
     if (password !== confirmPassword) {
         alert("❌ Las contraseñas no coinciden.");
-        loadPage("register", updateNavbar);
+        PageManager.load("register", updateNavbar);
         return;
     }
     try {
@@ -39,7 +39,7 @@ async function registerUser() {
                 localStorage.setItem("image_url", data.image_url);
             }
 
-            loadPage("game", updateNavbar);
+            PageManager.load("game", updateNavbar);
         } else {
             alert("⚠️ Error: " + (data.error || "Error desconocido."));
         }
@@ -79,7 +79,7 @@ async function loginUser() {
             localStorage.setItem("username_backend2", data.username);
             localStorage.setItem("image_url_backend2", data.image_url || "https://i.imgur.com/DP2aShH.png");
 
-            loadPage("game", updateNavbar);
+            PageManager.load("game", updateNavbar);
         } else {
             alert("⚠️ Error: " + (data.error || "Error desconocido." ));
         }
@@ -88,6 +88,21 @@ async function loginUser() {
         alert("⚠️ Ocurrió un error inesperado.");
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const signUpLink = document.getElementById("signUpLink");
+
+    if (signUpLink) {
+        signUpLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Evita la recarga de la página
+            if (typeof PageManager !== "undefined" && PageManager.load) {
+                PageManager.load("register");
+            } else {
+                console.error("❌ Error: PageManager no está definido o no tiene la función 'load'.");
+            }
+        });
+    }
+});
 
 
 // claudia lo puedes usar para proteger las funciones como LoadPage
@@ -120,3 +135,26 @@ function togglePassword(passwordFieldId, toggleIconId) {
         toggleIcon.classList.remove("fa-eye-slash");
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const signUpLink = document.querySelector(".sign-up");
+    const loginButton = document.getElementById("loginButton");
+
+    if (signUpLink) {
+        signUpLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            if (typeof PageManager !== "undefined" && PageManager.load) {
+                PageManager.load("register");
+            }
+        });
+    }
+
+    if (loginButton) {
+        loginButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            if (typeof PageManager !== "undefined" && PageManager.load) {
+                PageManager.load("login");
+            }
+        });
+    }
+});
