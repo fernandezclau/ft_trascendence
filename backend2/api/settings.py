@@ -108,7 +108,7 @@ DATABASES = {
         'HOST': env('DB_HOST'),
         'PORT': env.int('DB_PORT'),
         'OPTIONS': {
-            'options': '-c search_path=backend2,public'
+            'options': '-c search_path=auth_local,public'
         }
     }
 }
