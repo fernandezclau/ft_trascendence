@@ -88,10 +88,17 @@ window.onload = function () {
             }
         }
         window.history.replaceState({}, document.title, "/");
-        updateNavbar();
+    }
+
+    updateNavbar();
+
+    const jwt_backend = localStorage.getItem("jwt_backend");
+    const jwt_backend2 = localStorage.getItem("jwt_backend2");
+
+    if (jwt_backend || jwt_backend2) {
         loadPage("game");
     } else {
-        updateNavbar();
+        loadPage("login");
     }
 };
 
