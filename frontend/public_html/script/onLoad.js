@@ -16,6 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", mobileTournament);
 });
 
+window.onpopstate = function (event) {
+    if (event.state && event.state.page) {
+        loadPage(event.state.page, null, false);
+    }
+};
+
 // Hacer resize sobre pantalla Juego
 function mobileGame() {
     const button = document.getElementById("startButton")
@@ -89,13 +95,14 @@ window.onload = function () {
         }
         window.history.replaceState({}, document.title, "/");
     }
-
     updateNavbar();
-
+    const lastPage = window.location.hash.substring(1);
     const jwt_backend = localStorage.getItem("jwt_backend");
     const jwt_backend2 = localStorage.getItem("jwt_backend2");
 
-    if (jwt_backend || jwt_backend2) {
+    if (lastPage && ["game", "tournament", "info", "settings"].includes(lastPage)) {
+        loadPage(lastPage, null, false);
+    } else if (jwt_backend || jwt_backend2) {
         loadPage("game");
     } else {
         loadPage("login");
@@ -184,20 +191,19 @@ async function logout() {
     } catch (error) {
         console.error("❌ Error al hacer logout:", error);
     }
+    localStorage.removeItem("jwt_backend");
+    localStorage.removeItem("username_backend");
+    localStorage.removeItem("image_url_backend");
 
-    if (token_backend) {
-        localStorage.removeItem("jwt_backend");
-        localStorage.removeItem("username_backend");
-        localStorage.removeItem("image_url_backend");
-    }
+    localStorage.removeItem("jwt_backend2");
+    localStorage.removeItem("username_backend2");
+    localStorage.removeItem("image_url_backend2");
 
-    if (token_backend2) {
-        localStorage.removeItem("jwt_backend2");
-        localStorage.removeItem("username_backend2");
-        localStorage.removeItem("image_url_backend2");
-    }
-
+    pageHistory = [];
+    window.history.pushState({}, "", "#login");
+    loadPage("login");
     window.location.reload();
 }
+
 
 

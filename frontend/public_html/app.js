@@ -1,10 +1,8 @@
 
+let currentPage = null; 
+let pageHistory = [];
 
-let currentPage = null; // Variable para rastrear la página actual
-let reload = true;
-
-async function loadPage(page, callback) {
-
+async function loadPage(page, callback, addToHistory = true) {
     if (page === currentPage) {
         console.log(`La página ${page} ya está cargada.`);
         return;
@@ -14,50 +12,39 @@ async function loadPage(page, callback) {
         const response = await fetch(`pages/${page}.html`);
         const html = await response.text();
         document.getElementById('content-container').innerHTML = html;
-        currentPage = page; // Actualizar la página actual
+        currentPage = page;
 
-        // Manejo de visibilidad y carga de contenido según la página
-        switch (page) {
-            case "game":
-                loadGame();
-                toggleGameVisibility(true);
-                break;
-
-            case "tournament":
-                loadTournament();
-                toggleGameVisibility(true);
-                break;
-
-            case "animate":
-                loadThreeJS();
-                toggleGameVisibility(false);
-                break;
-
-            default:
-                toggleGameVisibility(false);
-                break;
+        if (addToHistory) {
+            pageHistory.push(page);
+            window.history.pushState({ page }, "", `#${page}`);
         }
 
-        // Traducir la página según el idioma guardado
+        toggleGameVisibility(page === "game" || page === "tournament");
+
         changeLanguage(localStorage.getItem('preferredLanguage'));
 
-        // Ejecutar callback si se proporciona
         if (callback) callback();
+
     } catch (error) {
         console.error('Error loading page:', error);
     }
-
-    // Implementar lógica recarga juego (solo en pong y tournament)
 }
 
-// Función para mostrar u ocultar el juego
-function toggleGameVisibility(show) {
-    const gameElement = document.getElementById('game');
-    if (gameElement) {
-        gameElement.style.display = show ? 'block' : 'none';
-        gameElement.style.visibility = show ? 'visible' : 'hidden';
+function goBack() {
+    if (pageHistory.length > 1) {
+        pageHistory.pop();
+        const lastPage = pageHistory[pageHistory.length - 1];
+        loadPage(lastPage, null, false);
     }
 }
+
+function toggleGameVisibility(show) {
+    const gameElement = document.getElementById("game");
+    if (gameElement) {
+        gameElement.style.display = show ? "block" : "none";
+    }
+}
+
 
 /* LOADING GAME */
 function loadGame() {
