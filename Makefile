@@ -63,6 +63,7 @@ clean:
 fclean: clean
 	@echo "\033[1;35mPruning unused containers, images, and volumes...\033[0m"
 	docker system prune -a -f
+	docker compose down -v
 	@echo "\033[1;32mSystem cleaned up successfully.\033[0m"
 
 re: fclean all

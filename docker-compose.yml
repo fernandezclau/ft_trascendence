@@ -35,7 +35,7 @@ services:
     networks:
       - app_network
 
-  auth-db-api:
+  auth-db-api: # auth-local 
     build: ./backend2
     container_name: django-auth-db-api
     command: sh -c "
