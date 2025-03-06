@@ -115,7 +115,7 @@ DATABASES = {
         'HOST': env('POSTGRES'),
         'PORT': env.int('POSTGRES_PORT'),
         'OPTIONS': {
-            'options': '-c search_path=backend42,public'
+            'options': '-c search_path=auth_42_api,public'
         }
     }
 }
