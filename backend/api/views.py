@@ -21,11 +21,12 @@ CLIENT_SECRET = env('CLIENT_SECRET')
 REDIRECT_URI = env('REDIRECT_URI')
 
 def generate_jwt(user):
-    """Genera un token JWT para el usuario autenticado."""
+    """Genera un token JWT para el usuario autenticado incluyendo la imagen"""
     payload = {
         'id': user.id,
         'username': user.username,
-        'intra_id': user.intra_id, 
+        'intra_id': user.intra_id,
+        'image_url': user.image_url,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -68,7 +69,6 @@ def callback_42(request):
     email = user_data.get("email")
     image_url = user_data.get("image", {}).get("link")
 
-    # 🔹 Evitar problemas de duplicación con `get_or_create`
     user, created = User.objects.get_or_create(
         login=login,
         defaults={
@@ -81,15 +81,14 @@ def callback_42(request):
     )
 
     if not created:
-        # Si el usuario ya existía, actualizar sus datos
         user.email = email
         user.image_url = image_url
         user.token = access_token
         user.save()
 
-    # Generar un token JWT
     jwt_token = generate_jwt(user)
-    redirect_url = f"http://localhost:8080/?token={jwt_token}&auth=42"
+
+    redirect_url = f"http://localhost:8080/?token={jwt_token}&auth=42&username={login}&image_url={image_url}"
     return redirect(redirect_url)
 
 
@@ -108,7 +107,7 @@ def get_user_info(request):
         user = User.objects.get(id=payload["id"])
         return JsonResponse({
             "username": user.username,
-            "image_url": user.image_url
+            "image_url": user.image_url  
         })
     except jwt.ExpiredSignatureError:
         return JsonResponse({"error": "Token expired"}, status=401)
@@ -116,6 +115,7 @@ def get_user_info(request):
         return JsonResponse({"error": "Invalid token"}, status=401)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found"}, status=404)
+
 
 @api_view(["DELETE"])
 def logout_and_delete_user(request):
@@ -129,8 +129,6 @@ def logout_and_delete_user(request):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user = User.objects.get(id=payload["id"])
-
-        # 🔹 Borrar el usuario de la base de datos
         user.delete()
 
         return JsonResponse({"message": "User deleted successfully"}, status=200)

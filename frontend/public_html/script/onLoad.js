@@ -51,7 +51,6 @@ function mobileGame() {
 function mobileTournament() {
     const teamsButton = document.querySelectorAll(".tour-players-btn-group")
     if (window.innerWidth <= 768){
-        // Activamos botones de seleccion equipo (no opcion +2 jugadores en un mismo equipo)
         if (teamsButton)
             teamsButton.forEach(button => button.disabled = false)
 
@@ -65,11 +64,28 @@ window.onload = function () {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
     const authMethod = params.get("auth");
+    const username = params.get("username");
+    const imageUrl = params.get("image_url");
 
     if (token) {
-        localStorage.setItem("jwt", token);
-        if (authMethod) {
-            localStorage.setItem("auth_method", authMethod);
+        if (authMethod === "42") {
+            localStorage.setItem("jwt_backend", token);
+            localStorage.setItem("auth_method_backend", authMethod);
+            if (username) {
+                localStorage.setItem("username_backend", username);
+            }
+            if (imageUrl) {
+                localStorage.setItem("image_url_backend", imageUrl);
+            }
+        } else {
+            localStorage.setItem("jwt_backend2", token);
+            localStorage.setItem("auth_method_backend2", authMethod);
+            if (username) {
+                localStorage.setItem("username_backend2", username);
+            }
+            if (!localStorage.getItem("image_url_backend2")) {
+                localStorage.setItem("image_url_backend2", "https://i.imgur.com/DP2aShH.png");
+            }
         }
         window.history.replaceState({}, document.title, "/");
         updateNavbar();
@@ -79,56 +95,45 @@ window.onload = function () {
     }
 };
 
+
+
 function updateNavbar() {
     const authContainer = document.getElementById("auth-container");
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
-    const jwtToken = localStorage.getItem("jwt");
 
-    if (jwtToken) {
-        // Determinar qué backend consultar (8000 para la API de 42, 8001 para login normal)
-        const apiUrl = localStorage.getItem("auth_method") === "42" 
-            ? "http://localhost:8000/api/auth/user" 
-            : "http://localhost:8001/api/auth/user";
+    const jwt_backend = localStorage.getItem("jwt_backend");
+    const jwt_backend2 = localStorage.getItem("jwt_backend2");
 
-        fetch(apiUrl, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${jwtToken}`,
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to fetch user data");
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.username) {
-                // Si el usuario no tiene imagen, asignar una imagen por defecto
-                const imageUrl = data.image_url ? data.image_url : "/images/default-avatar.png";
+    if (jwt_backend || jwt_backend2) {
+        const username = jwt_backend 
+            ? localStorage.getItem("username_backend") 
+            : localStorage.getItem("username_backend2");
 
-                authContainer.innerHTML = `
-                    <div class="user-info">
-                        <img src="${imageUrl}" alt="Profile" class="profile-pic">
-                        <span class="username">${data.username}</span>
-                        <button class="btn logout-button" onclick="logout()">Logout</button>
-                    </div>
-                `;
-                navbarLinks.forEach(link => {
-                    link.style.display = "block";
-                });
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching user data:", error);
-            localStorage.removeItem("jwt");
-            resetNavbar();
+        let imageUrl;
+        if (jwt_backend) {
+            imageUrl = localStorage.getItem("image_url_backend");
+        } else if (jwt_backend2) {
+            imageUrl = localStorage.getItem("image_url_backend2") || "https://i.imgur.com/DP2aShH.png";
+        }
+
+        authContainer.innerHTML = `
+            <div class="user-info">
+                <img src="${imageUrl}" alt="Profile" class="profile-pic">
+                <span class="username">${username}</span>
+                <button class="btn logout-button" onclick="logout()">Logout</button>
+            </div>
+        `;
+
+        navbarLinks.forEach(link => {
+            link.style.display = "block";
         });
     } else {
         resetNavbar();
     }
 }
+
+
+
 
 function resetNavbar() {
     const authContainer = document.getElementById("auth-container");
@@ -144,38 +149,48 @@ function resetNavbar() {
 }
 
 async function logout() {
-    const token = localStorage.getItem("jwt");
-    if (!token) {
-        console.log("❌ No hay usuario autenticado.");
-        return;
-    }
+    const token_backend = localStorage.getItem("jwt_backend");
+    const token_backend2 = localStorage.getItem("jwt_backend2");
 
     try {
-        console.log("🔄 Enviando petición para eliminar usuario...");
-
-        const response = await fetch("http://localhost:8000/api/auth/logout", {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        if (response.ok) {
-            console.log("✅ Usuario eliminado correctamente.");
-        } else {
-            console.error("⚠️ No se pudo eliminar el usuario:", data);
+        if (token_backend) {
+            await fetch("http://localhost:8000/api/auth/logout", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token_backend}`,
+                    "Content-Type": "application/json"
+                }
+            });
         }
 
-        // 🔹 Borrar el token del almacenamiento local después de eliminar el usuario
-        localStorage.removeItem("jwt");
-        localStorage.removeItem("auth_method");
-        window.location.reload();
+        if (token_backend2) {
+            await fetch("http://localhost:8001/api/auth/logout", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token_backend2}`,
+                    "Content-Type": "application/json"
+                }
+            });
+        }
 
+        console.log("✅ Sesión cerrada correctamente.");
     } catch (error) {
         console.error("❌ Error al hacer logout:", error);
     }
+
+    if (token_backend) {
+        localStorage.removeItem("jwt_backend");
+        localStorage.removeItem("username_backend");
+        localStorage.removeItem("image_url_backend");
+    }
+
+    if (token_backend2) {
+        localStorage.removeItem("jwt_backend2");
+        localStorage.removeItem("username_backend2");
+        localStorage.removeItem("image_url_backend2");
+    }
+
+    window.location.reload();
 }
+
+

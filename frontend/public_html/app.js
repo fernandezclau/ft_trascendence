@@ -50,21 +50,6 @@ async function loadPage(page, callback) {
     // Implementar lógica recarga juego (solo en pong y tournament)
 }
 
-// Función para cargar Three.js si no está cargado
-function loadThreeJS() {
-    if (typeof THREE === "undefined") {
-        const script = document.createElement("script");
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-        script.onload = () => {
-            console.log("Three.js cargado correctamente.");
-            startAnimation();
-        };
-        document.head.appendChild(script);
-    } else {
-        startAnimation();
-    }
-}
-
 // Función para mostrar u ocultar el juego
 function toggleGameVisibility(show) {
     const gameElement = document.getElementById('game');

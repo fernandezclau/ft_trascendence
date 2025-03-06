@@ -225,8 +225,8 @@ body.light-mode {
 }
 
 .logout-button {
-    background: red;
-    color: white;
+    background: rgb(0, 0, 0);
+    color: #f5f598;
     border: none;
     padding: 5px 10px;
     cursor: pointer;

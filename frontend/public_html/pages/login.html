@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-dark w-100" data-key="login_button">Login</button>
+            <button type="button" class="btn btn-dark w-100" onclick="loginUser()">Log In</button>
 
             <button type="button" onclick="window.location.href='http://localhost:8000/api/auth/42/login'" 
                 class="btn w-100 mt-3 btn-hover login-button">
@@ -31,33 +31,9 @@
         </p>
     </div>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
         
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-        
-            const data = { email, password };
-        
-            fetch("http://localhost:8001/api/auth/login", {  // Backend 2 para login normal
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    localStorage.setItem("jwt", data.token);
-                    localStorage.setItem("auth_method", "normal");
-                    localStorage.setItem("image_url", data.image_url || "https://i.imgur.com/DP2aShH.png");
-                    window.location.href = "/";
-                } else {
-                    alert("Error: " + data.error);
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        });
         </script>
         
     <script src="script/onLoad.js"></script>
+    <script src="script/login.js"></script>
 </div>
