@@ -2,15 +2,15 @@ FROM python:3.11
 
 ENV PYTHONUNBUFFERED=1
 
-RUN mkdir /code
-WORKDIR /code
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt install -y postgresql-client
+WORKDIR /app
 
-COPY requirements.txt /code/
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /code/
+COPY . ./
 
-RUN rm -rf /code/migrations /code/**/migrations /code/__pycache__
-
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

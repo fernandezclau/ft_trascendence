@@ -18,13 +18,9 @@ services:
     build: ./backend
     container_name: django-auth-42-api
     command: sh -c "
-      rm -rf /code/api/migrations &&
-      rm -rf /code/__pycache__ &&
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ./backend:/code
     env_file:
       - backend/.env
     ports:
@@ -39,13 +35,9 @@ services:
     build: ./backend2
     container_name: django-auth-db-api
     command: sh -c "
-      rm -rf /code/api/migrations &&
-      rm -rf /code/__pycache__ &&
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8001"
-    volumes:
-      - ./backend2:/code
     env_file:
       - backend2/.env
     ports:
