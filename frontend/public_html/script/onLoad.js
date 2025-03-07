@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
-        const jwtToken = localStorage.getItem("jwt");
+        const jwtToken = localStorage.getItem("jwt_backend") ? localStorage.getItem("jwt_backend") : localStorage.getItem("auth_method_backend");
 
         if (!jwtToken) {
             PageManager.load("login");
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.addEventListener("resize", mobileGame);
         window.addEventListener("resize", mobileTournament);
-    }, 100);
+    }, 150);
 });
 
 window.onpopstate = function (event) {
