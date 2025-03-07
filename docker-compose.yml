@@ -57,10 +57,6 @@ services:
     depends_on:
       - auth-42-api
       - auth-db-api
-    volumes:
-      - ./frontend/public_html:/var/www/html/
-      - ./frontend/certs:/etc/ssl/certs/
-      - ./frontend/pong-ssl.conf:/etc/apache2/sites-available/pong-ssl.conf
     networks:
       - app_network
 
