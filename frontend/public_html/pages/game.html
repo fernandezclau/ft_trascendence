@@ -3,7 +3,16 @@
 <div class="game-selection">
 
     <!-- Game Title -->
-    <h3 data-key="gameTitle">Game options</h3>
+    <div class="game-header">
+        <h3 data-key="gameTitle">Game options</h3>
+        <div class="boost-enable">
+            <span data-key="enableSpells">Enable Spells</span>
+            <label class="switch">
+                <input type="checkbox" id="spellToggle" onclick="enableBoost('game')">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
     <hr>
 
     <!-- Game options -->

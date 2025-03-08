@@ -9,12 +9,95 @@
     width: 80%;
 }
 
+.game-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    padding: 10px 10px 0px 10px;
+}
+
 .game-selection h3 {
     font-family: 'retro';
     color: #FFF2F2;
     text-align: center;
     padding: 25px 10px 10px 10px;
-    width: 100%;
+}
+
+.boost-enable {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 18px;
+    font-family: 'retro', sans-serif;
+    color: white;
+}
+
+.boost-enable span {
+    font-family: 'retro';
+    font-size: small;
+}
+
+/* Switch boost */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Estilo del fondo del switch */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #b2afb1;
+    transition: 0.4s;
+    border-radius: 26px;
+}
+
+/* Círculo dentro del switch */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Estado ON */
+input:checked + .slider {
+    background-color: #70B8B1;
+}
+
+/* Activado */
+input:checked + .slider:before {
+    transform: translateX(23px);
+    background-color: #f5f598;
+}
+
+/* Deshabilitado */
+.switch input:disabled + .slider {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.switch input:disabled + .slider:before {
+    background-color: #aaa; 
 }
 
 hr {

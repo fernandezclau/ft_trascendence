@@ -1,5 +1,17 @@
 <div class="tournament-container">
-    <h1 data-key="tournament">Tournament</h1>
+
+    <div class="game-header">
+        <h3 data-key="tournament">Tournament</h1>
+        <div class="boost-enable">
+            <span data-key="enableSpells">Enable Spells</span>
+            <label class="switch">
+                <input type="checkbox" id="spellToggle" onclick="enableBoost('tournament')">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <hr>
+    
 
     <div id="tournamentSect" class="game-selection-options">
         <div class="game-selection-option">
@@ -78,10 +90,8 @@
         <!-- Round 3 -->
         <div class="tournament-round-3" id="round-3">
             <div class="tournament-player" id="round-3-1">
-                Winner ()
             </div>
             <div class="tournament-player" id="round-3-2">
-                Winner ()
             </div>
         </div>
 

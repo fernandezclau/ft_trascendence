@@ -8,8 +8,14 @@
     width: 80%;
 }
 
-.tournament-container h1 {
+.tournament-container h3 {
     font-family: 'retro';
+}
+
+.tournament-container hr {
+    width: 90%;
+    margin: 0;
+    border: 1px solid #FFF2F2;
 }
 
 .tournament-start {
@@ -95,6 +101,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     overflow: hidden;
     border: 3px solid #70B8B1;
+    cursor: pointer;
 }
 
 .tournament-player:hover {

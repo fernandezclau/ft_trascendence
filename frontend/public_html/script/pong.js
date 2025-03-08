@@ -5,7 +5,7 @@ const player1Score = document.getElementById('player1Score');
 const player2Score = document.getElementById('player2Score');
 const debugMessage = document.getElementById('debugMessage');
 
-// # SECCIÓN DE 
+// # SECCIÓN DE Juego
 let started = false;
 let paused = true;                                      // Guarda si el juego está pausado
 let winner = 0;                                         // Guarda si hay un ganador (0:No, 1:Jugador1, 2:Jugador2)
@@ -17,6 +17,7 @@ let animationColor;                                     // Color del jugador que
 let UIColor = '#fff';                                   // Color actual de la interfaz
 let pointsToWin = 10;                                   // Puntos para ganar
 let playersToPlay = null;                               // Numero de jugadores
+let boostEnable = false;                                 // Activación boosts
 
 // # SECCIÓN DE JUGADOR
 let paddleWidth = 10, paddleHeight = 100;               // Dimensiones de los rectángulos

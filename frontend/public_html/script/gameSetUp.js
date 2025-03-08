@@ -1,3 +1,17 @@
+// Activar o descativar boosts
+function enableBoost(mode) {
+
+    document.getElementById("spellToggle").addEventListener("change", function() {
+        if (this.checked) {
+            boostEnable = true;
+        } else {
+            boostEnable = false;
+        }
+    });
+    reloadGame(mode);
+}
+
+
 // Selección número de jugadores
 function selectPlayers(players) {
     let playersButtons = document.querySelectorAll('.players-btn-group');
@@ -143,6 +157,10 @@ function reloadingGamePage() {
     // Enable score selection
     let pointsButtons = document.querySelectorAll('.points-btn-group');
     pointsButtons.forEach(button => button.disabled = false);
+
+    // Enable boost button
+    let spellToggle = document.getElementById("spellToggle");
+    spellToggle.disabled = false;
 }
 
 // Generación formularios de jugadores
@@ -186,27 +204,37 @@ function generatePlayerForms(num_players, isTournament, isTeamGame, loggedInPlay
             `;
         }
 
-        playerForm.innerHTML = `
-            <h3 id="modalTitle">${titleText} ${i}</h3>
-            <div class="game-register-content-input">
-                <label for="usernameInput${i}" class="game-register-content-label">${username_label}</label>
-                ${usernameInputHtml}
-            </div>
-            <div class="game-register-content-input">
-                <label class="game-register-content-label">${boost_label}</label>
-                <div class="boost-options">
-                    <div class="boost-option game-option-selected" data-boost="speed" title="${speed_label}" onclick="selectBoost('speed', ${i})">
-                        <img src="images/speed.png" alt="Speed Boost">
-                    </div>
-                    <div class="boost-option" data-boost="power" title="${power_label}" onclick="selectBoost('power', ${i})">
-                        <img src="images/power.png" alt="Power Boost">
-                    </div>
-                    <div class="boost-option" data-boost="defense" title="${defense_label}" onclick="selectBoost('defense', ${i})">
-                        <img src="images/shield.png" alt="Defense Boost">
+        if (boostEnable) {
+            playerForm.innerHTML = `
+                <h3 id="modalTitle">${titleText} ${i}</h3>
+                <div class="game-register-content-input">
+                    <label for="usernameInput${i}" class="game-register-content-label">${username_label}</label>
+                    ${usernameInputHtml}
+                </div>
+                <div class="game-register-content-input">
+                    <label class="game-register-content-label">${boost_label}</label>
+                    <div class="boost-options">
+                        <div class="boost-option game-option-selected" data-boost="speed" title="${speed_label}" onclick="selectBoost('speed', ${i})">
+                            <img src="images/speed.png" alt="Speed Boost">
+                        </div>
+                        <div class="boost-option" data-boost="power" title="${power_label}" onclick="selectBoost('power', ${i})">
+                            <img src="images/power.png" alt="Power Boost">
+                        </div>
+                        <div class="boost-option" data-boost="defense" title="${defense_label}" onclick="selectBoost('defense', ${i})">
+                            <img src="images/shield.png" alt="Defense Boost">
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+        } else {
+            playerForm.innerHTML = `
+                <h3 id="modalTitle">${titleText} ${i}</h3>
+                <div class="game-register-content-input">
+                    <label for="usernameInput${i}" class="game-register-content-label">${username_label}</label>
+                    ${usernameInputHtml}
+                </div>  
+            `;
+        }
         popupContainer.appendChild(playerForm);
     }
 }
@@ -285,6 +313,12 @@ function displayPlayerInfo(playersData) {
     player1 = playersData[0].username;
     player2 = playersData[1].username;
 
+    // 2. Boost no estan activados
+    if (!boostEnable) {
+        debugMessage.style.top = "56%";
+        return;
+    }
+
     const gameBoosts = document.getElementById("gameBoosts");
     const boostImages = {
         speed: "images/speed.png",
@@ -292,7 +326,7 @@ function displayPlayerInfo(playersData) {
         defense: "images/shield.png"
     };
 
-    // 2. Mostramos los boost que corresponden por jugador
+    // 3. Mostramos los boost que corresponden por jugador
     playersData.forEach((player, index) => {
         console.log(player)
         let playerContainer = gameBoosts.children[index];
@@ -359,10 +393,12 @@ function disableSelectionButtons()
     let playerButtons = document.querySelectorAll('.players-btn-group');
     let pointsButtons = document.querySelectorAll('.points-btn-group');
     const startButton = document.getElementById('startButton');
+    let spellToggle = document.getElementById("spellToggle");
     
     playerButtons.forEach(button => button.disabled = true);
     pointsButtons.forEach(button => button.disabled = true);
     startButton.disabled = true;
+    spellToggle.disabled = true;
 }
 
 // Traducción de campos de formulario

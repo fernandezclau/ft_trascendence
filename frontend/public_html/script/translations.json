@@ -108,7 +108,8 @@
         "pressSpaceBar": "PRESS SPACE",
         "paused": "PAUSED",
         "usersTeam": "{username} Team",
-        "noPlayers": "Please select the number of players and points to win."
+        "noPlayers": "Please select the number of players and points to win.",
+        "enableSpells": "Enable Boosts"
     },
     "es": {
         "navbarBrand": "PONG",
@@ -219,7 +220,8 @@
         "pressSpaceBar": "PULSA ESPACIO",
         "paused": "PAUSA",
         "usersTeam": "Equipo de {username}",
-        "noPlayers": "Por favor introduce el número de jugadores y el número de puntos de partida."
+        "noPlayers": "Por favor introduce el número de jugadores y el número de puntos de partida.",
+        "enableSpells": "Activar Boosts"
     },
     "fr": {
         "navbarBrand": "PONG",
@@ -330,6 +332,7 @@
         "pressSpaceBar": "ESPACE PRESSE",
         "paused": "PAUSÉ",
         "usersTeam": "l'équipe de {username}",
-        "noPlayers": "Veuillez indiquer le nombre de joueurs et le nombre de points de départ."
+        "noPlayers": "Veuillez indiquer le nombre de joueurs et le nombre de points de départ.",
+        "enableSpells": "Activer boosts"
     }
 }

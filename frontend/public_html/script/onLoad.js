@@ -156,14 +156,14 @@ function updateNavbar() {
             hideElement(lang)
         }
         homeButton.setAttribute("onclick", "PageManager.load('game')");
+    } else {
+        resetNavbar();
     }
 }
 
-
-
-
 function resetNavbar() {
     const authContainer = document.getElementById("auth-container");
+    const lang = document.getElementById("loginLanguage");
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
     const homeButton = document.getElementById("homeButton");
 
@@ -171,6 +171,7 @@ function resetNavbar() {
     <button class="btn login-button" onclick="PageManager.load('login')" data-key="login"></button>
     <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button"></button>
     `;
+    lang.style = "flex";
     navbarLinks.forEach(link => {
         link.style.display = "none";
     });
