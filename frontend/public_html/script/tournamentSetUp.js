@@ -1,7 +1,18 @@
 let isTeamPlay = false;
-let numplayers = null; 
-const params = new URLSearchParams(window.location.search);
 
+function getUsername() {
+    const jwt_backend = localStorage.getItem("jwt_backend");
+    const jwt_backend2 = localStorage.getItem("jwt_backend2");
+
+    if (jwt_backend || jwt_backend2) {
+        const username = jwt_backend 
+            ? localStorage.getItem("username_backend") 
+            : localStorage.getItem("username_backend2");
+        return username
+    }
+
+    return "User";
+}
 // Seleccionar numero de jugadores por equipo
 function selectTeamPlayers(teamPlayers) {
 
@@ -33,8 +44,7 @@ function selectTeamPlayers(teamPlayers) {
     // Dibujamos el mapa actualizado
     drawGameBoard();
     if (numplayers) {
-        let username = params.get("username") || "User";
-        generatePlayerForms(numplayers, true, isTeamPlay, truncateName(username));
+        generatePlayerForms(numplayers, true, isTeamPlay, truncateName(getUsername()));
     }
 }
 
@@ -62,8 +72,8 @@ function selectTournamentPlayers(players) {
     if (numplayers && startButton) {
         startButton.disabled = false;
         // Generate form
-        let username = params.get("username") || "User";
-        generatePlayerForms(players, true, isTeamPlay, truncateName(username));
+        
+        generatePlayerForms(players, true, isTeamPlay, truncateName(getUsername()));
     }
     else {
         startButton.disabled = true;

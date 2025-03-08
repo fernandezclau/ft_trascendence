@@ -20,8 +20,7 @@ function selectPlayers(players) {
     const startButton = document.getElementById('startButton');
     if (playersToPlay && startButton) {
         startButton.disabled = false;
-        let username = params.get("username") || "User";
-        generatePlayerForms(playersToPlay, false, false, truncateName(username));
+        generatePlayerForms(playersToPlay, false, false, truncateName(getUsername()));
     }
     else {
         startButton.disabled = true;
@@ -107,8 +106,7 @@ function reloadingGamePage() {
         startButton.disabled = false;
         
         // Remove registration process (selection mode enabled)
-        let username = params.get("username") || "User";
-        generatePlayerForms(2, false, false, truncateName(username));
+        generatePlayerForms(2, false, false, truncateName(getUsername()));
     }
 
     /* PC mode */

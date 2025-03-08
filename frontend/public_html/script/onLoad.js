@@ -35,8 +35,7 @@ function mobileGame() {
         if (button){
             button.disabled = false;
             // Mostramos formularios
-            let username = params.get("username") || "User";
-            generatePlayerForms(2, false, false, truncateName(username)); 
+            generatePlayerForms(2, false, false, truncateName(getUsername())); 
         }
 
         // 2 jugadores
