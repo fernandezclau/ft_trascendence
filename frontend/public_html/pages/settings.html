@@ -60,7 +60,7 @@
 
         <!-- BACKGROUND -->
         <div class="background-picker mb-4">
-            <h5 data-key="background">Background</h5>
+            <h5 data-key="background">Game Background</h5>
             <div class="background-options">
                 <button class="background-option" data-color="#161618" style="background-color: #161618;" onclick="changeBackground('#161618', this)">
                 </button>
@@ -76,58 +76,4 @@
         </div>        
         
     </div>
-
-    <!-- Edit Profile Section -->
-    <div class="account-settings">
-        <div class="settings-header">
-            <h2 data-key="account_settings">Account Settings</h2>
-        </div>
-        <hr>
-
-        <div class="account-settings-forms">
-            <form>
-                <label for="username" data-key="username_label">Username</label>
-                <div class="settings-group">
-                    <input type="text" id="username" placeholder="Your username" data-key="username_placeholder">
-                    <button class="save-btn">
-                        <i class="fas fa-save"></i>
-                    </button>                 
-                </div>
-            </form>
-            
-            <form>
-                <label for="email" data-key="email_label">Email</label>
-                <div class="settings-group">
-                    <input type="email" id="email" placeholder="Your email" data-key="email_placeholder">
-                    <button class="save-btn">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </div>
-            </form>
-            
-            <form>
-                <label for="password" data-key="new_password_label">Change Password</label>
-                <div class="settings-group">
-                    <input type="password" id="old_password" placeholder="Old password" data-key="old_password_placeholder" autocomplete="current-password">
-                    <input type="password" id="new_password" placeholder="New password" data-key="new_password_placeholder" autocomplete="new-password">
-                    <input type="password" id="confirm_password" placeholder="Confirm password" data-key="confirm_password_placeholder" autocomplete="current-password">
-                    <button class="save-btn">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    
-        <div class="danger-zone">
-            <button class="delete-btn">
-                <i class="fas fa-trash-alt"></i>
-                <span data-key="delete_account">Delete Account</span>
-            </button>
-            <button class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> 
-                <span data-key="logout">Log Out</span>
-            </button>    
-        </div>
-    </div>
-    
 </div>
