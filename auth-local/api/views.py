@@ -36,12 +36,21 @@ def register_user(request):
 
     if not username or not email or not password:
         return JsonResponse({"error": "Todos los campos son obligatorios."}, status=400)
-
     if CustomUser.objects.filter(email=email).exists():
         return JsonResponse({"error": "Este email ya está registrado."}, status=400)
-
     if CustomUser.objects.filter(username=username).exists():
         return JsonResponse({"error": "Este nombre de usuario ya está en uso."}, status=400)
+    if len(password) < 8:
+        return JsonResponse({"error": "La contraseña debe tener al menos 8 caracteres."}, status=400)
+    if(len(username) < 4):
+        return JsonResponse({"error": "El nombre de usuario debe tener al menos 4 caracteres."}, status=400)
+    if not any(char.isdigit() for char in password):
+        return JsonResponse({"error": "La contraseña debe tener al menos un dígito."}, status=400)
+    if not any(char.isupper() for char in password):
+        return JsonResponse({"error": "La contraseña debe tener al menos una letra mayúscula."}, status=400)
+
+    if not email.count("@") == 1 or not email.count(".") >= 1:
+        return JsonResponse({"error": "Email inválido."}, status=400)
 
     try:
         user = CustomUser.objects.create(
@@ -50,8 +59,6 @@ def register_user(request):
             password=make_password(password),
             image_url="https://i.imgur.com/DP2aShH.png"
         )
-
-        # 🔹 Generar JWT y devolverlo en la respuesta
         token = generate_jwt(user)
 
         return JsonResponse({

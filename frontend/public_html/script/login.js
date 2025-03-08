@@ -16,6 +16,7 @@ async function registerUser() {
         PageManager.load("register", updateNavbar);
         return;
     }
+
     try {
         const csrfToken = await getCsrfToken();  
 
@@ -29,10 +30,8 @@ async function registerUser() {
             body: JSON.stringify({ username, email, password })
         });
         const data = await response.json();
-        console.log("📩 Respuesta del backend:", data);
 
         if (response.ok) {
-            alert("✅ Registro exitoso. Ahora puedes jugar.");
             localStorage.setItem("jwt", data.token);
             localStorage.setItem("username", data.username);
             if (!localStorage.getItem("image_url") || data.image_url !== "https://i.imgur.com/DP2aShH.png") {
