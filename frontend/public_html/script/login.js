@@ -44,7 +44,6 @@ async function registerUser() {
         }
     } catch (error) {
         console.error("🚨 Error en la solicitud:", error);
-        alert("⚠️ Ocurrió un error inesperado.");
     }
 }
 
@@ -71,7 +70,6 @@ async function loginUser() {
         });
 
         const data = await response.json();
-        console.log("📩 Respuesta del backend2:", data);
 
         if (response.ok) {
             localStorage.setItem("jwt_backend2", data.token);
@@ -84,7 +82,6 @@ async function loginUser() {
         }
     } catch (error) {
         console.error("🚨 Error en la solicitud:", error);
-        alert("⚠️ Ocurrió un error inesperado.");
     }
 }
 
