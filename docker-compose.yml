@@ -1,7 +1,7 @@
 services:
   db:
     build: ./postgres
-    container_name: postgres-db
+    container_name: postgres
     env_file:
       - ./postgres/conf/.env
     volumes:
@@ -14,19 +14,15 @@ services:
       timeout: 5s
       retries: 5
 
-  auth-42-api:
-    build: ./backend
-    container_name: django-auth-42-api
+  auth-42:
+    build: ./auth-42
+    container_name: auth-42
     command: sh -c "
-      rm -rf /code/api/migrations &&
-      rm -rf /code/__pycache__ &&
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ./backend:/code
     env_file:
-      - backend/.env
+      - auth-42/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -35,19 +31,15 @@ services:
     networks:
       - app_network
 
-  auth-db-api: # auth-local 
-    build: ./backend2
-    container_name: django-auth-db-api
+  auth-local :
+    build: ./auth-local 
+    container_name: auth-local 
     command: sh -c "
-      rm -rf /code/api/migrations &&
-      rm -rf /code/__pycache__ &&
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8001"
-    volumes:
-      - ./backend2:/code
     env_file:
-      - backend2/.env
+      - auth-local/.env
     ports:
       - "8001:8001"
     depends_on:
@@ -63,12 +55,8 @@ services:
       - "8080:80"
       - "8443:443"
     depends_on:
-      - auth-42-api
-      - auth-db-api
-    volumes:
-      - ./frontend/public_html:/var/www/html/
-      - ./frontend/certs:/etc/ssl/certs/
-      - ./frontend/pong-ssl.conf:/etc/apache2/sites-available/pong-ssl.conf
+      - auth-42
+      - auth-local
     networks:
       - app_network
 

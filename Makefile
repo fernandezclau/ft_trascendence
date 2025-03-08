@@ -1,7 +1,7 @@
 # Variables
-CONTAINERS_NAMES=apache-web postgres-db django-auth-42-api django-auth-db-api
-IMAGES_NAMES=ft_trascendence-frontend ft_trascendence-backend postgres:15 ft_trascendence-auth-42-api ft_trascendence-auth-db-api
-VOLUME_NAME=postgres_data ft_trascendence_postgres_data
+CONTAINERS_NAMES=apache-web postgres auth-42 auth-local
+IMAGES_NAMES=ft_trascendence-frontend ft_trascendence-backend postgres:15 ft_trascendence-auth-42 ft_trascendence-auth-db-api
+VOLUME_NAME=postgres_data
 
 # Levantar contenedores
 all:
@@ -20,9 +20,9 @@ status:
 
 logs:
 	@echo "\033[1;32m logs.\033[0m"
-	@docker logs django-auth-42-api
-	@docker logs django-auth-db-api
-	@docker logs postgres-db
+	@docker logs auth-42
+	@docker logs auth-local
+	@docker logs postgres
 	@docker logs apache-web
 
 # Detener contenedores
