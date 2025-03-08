@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
             PageManager.load("game");
         }
 
+        applySettings();
         updateNavbar();
 
         window.addEventListener("resize", mobileGame);
@@ -34,7 +35,8 @@ function mobileGame() {
         if (button){
             button.disabled = false;
             // Mostramos formularios
-            generatePlayerForms(2, false, false, "Claudia"); 
+            let username = params.get("username") || "User";
+            generatePlayerForms(2, false, false, truncateName(username)); 
         }
 
         // 2 jugadores
@@ -110,6 +112,7 @@ window.onload = function () {
     } else {
         PageManager.load("login");
     }
+    applySettings();
 };
 
 
@@ -157,8 +160,13 @@ function resetNavbar() {
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
 
     authContainer.innerHTML = `
-        <button class="btn login-button" onclick="PageManager.load('login')" data-key="login">Log in</button>
-        <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button">Sign up</button>
+    <select onchange="setLanguage(this.value)" class="login-language-select">
+        <option value="en" class="flag-icon flag-icon-us"> English</option>
+        <option value="es" class="flag-icon flag-icon-es"> Español</option>
+        <option value="fr" class="flag-icon flag-icon-fr"> Français</option>
+    </select>
+    <button class="btn login-button" onclick="PageManager.load('login')" data-key="login"></button>
+    <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button"></button>
     `;
     navbarLinks.forEach(link => {
         link.style.display = "none";

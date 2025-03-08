@@ -20,7 +20,8 @@ function selectPlayers(players) {
     const startButton = document.getElementById('startButton');
     if (playersToPlay && startButton) {
         startButton.disabled = false;
-        generatePlayerForms(playersToPlay, false, false, "Carlos");  // TODO: Modificar con el username 
+        let username = params.get("username") || "User";
+        generatePlayerForms(playersToPlay, false, false, truncateName(username));
     }
     else {
         startButton.disabled = true;
@@ -106,7 +107,8 @@ function reloadingGamePage() {
         startButton.disabled = false;
         
         // Remove registration process (selection mode enabled)
-        generatePlayerForms(2, false, false, "Claudia"); // TODO: Modificar con el username 
+        let username = params.get("username") || "User";
+        generatePlayerForms(2, false, false, truncateName(username));
     }
 
     /* PC mode */

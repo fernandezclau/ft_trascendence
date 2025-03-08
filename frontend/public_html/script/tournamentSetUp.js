@@ -1,5 +1,6 @@
 let isTeamPlay = false;
 let numplayers = null; 
+const params = new URLSearchParams(window.location.search);
 
 // Seleccionar numero de jugadores por equipo
 function selectTeamPlayers(teamPlayers) {
@@ -31,8 +32,10 @@ function selectTeamPlayers(teamPlayers) {
     
     // Dibujamos el mapa actualizado
     drawGameBoard();
-    if (numplayers)
-        generatePlayerForms(numplayers, true, isTeamPlay, "Claudia");  // TODO: Modificar con el username 
+    if (numplayers) {
+        let username = params.get("username") || "User";
+        generatePlayerForms(numplayers, true, isTeamPlay, truncateName(username));
+    }
 }
 
 // Seleccionar número de equipos/personas
@@ -59,7 +62,8 @@ function selectTournamentPlayers(players) {
     if (numplayers && startButton) {
         startButton.disabled = false;
         // Generate form
-        generatePlayerForms(players, true, isTeamPlay, "Claudia Fernandez"); // TODO: Modificar con el username 
+        let username = params.get("username") || "User";
+        generatePlayerForms(players, true, isTeamPlay, truncateName(username));
     }
     else {
         startButton.disabled = true;

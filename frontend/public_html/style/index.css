@@ -225,10 +225,16 @@ body.light-mode {
 }
 
 .logout-button {
-    background: rgb(0, 0, 0);
-    color: #f5f598;
+    background: #B63A4B;
+    border: 2px solid #5e1f27;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: bold;
+}
+
+.logout-button:hover {
+    background: rgb(211, 72, 90);
+    color: #5e1f27;
 }

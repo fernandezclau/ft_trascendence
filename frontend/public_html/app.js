@@ -32,7 +32,12 @@ const PageManager = (() => {
                     pageHistory.push(page);
                 }
             }
-    
+
+            if (page == "game")
+                loadGame();
+            else if (page == "tournament")
+                loadTournament();
+
             toggleGameVisibility(page === "game" || page === "tournament");
     
             changeLanguage(localStorage.getItem("preferredLanguage"));
@@ -82,8 +87,7 @@ function loadGame() {
     });
 
     //Reload game 
-    if (reload)
-        reloadGame("game");
+    reloadGame("game");
 }
 
 /* LOADING TOURNAMENT */
@@ -95,8 +99,8 @@ function loadTournament() {
     const startButton = document.getElementById('tournamentButton'); 
     startButton.disabled = true;
 
-    const totalTeams = document.getElementById('tournamentButton'); 
-    totalTeams.disabled = true;
+    const playersButtons = document.querySelectorAll('.tour-players-btn-group')
+    playersButtons.forEach(button => button.disabled = false);
 
     // Disable default start button option
     document.getElementById("tournamentButton").addEventListener("submit", function(event) {
@@ -107,8 +111,7 @@ function loadTournament() {
     });    
 
     //Reload game
-    if (reload)
-        reloadGame("tournament");
+    reloadGame("tournament");
 }
 
 /* LOADING SETTINGS */
