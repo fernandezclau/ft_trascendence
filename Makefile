@@ -17,6 +17,8 @@ status:
 	@docker images $(foreach image,$(IMAGES_NAMES),--filter=reference=$(image))
 	@echo "\033[1;33mListing Volumes:\033[0m"
 	@docker volume ls $(foreach volume,$(VOLUME_NAMES),--filter name=$(volume))
+
+logs:
 	@echo "\033[1;32m logs.\033[0m"
 	@docker logs django-auth-42-api
 	@docker logs django-auth-db-api
