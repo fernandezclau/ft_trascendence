@@ -22,7 +22,7 @@ logs:
 	@echo "\033[1;32m logs.\033[0m"
 	@docker logs auth-42
 	@docker logs auth-local
-	@docker logs postgres-db
+	@docker logs postgres
 	@docker logs apache-web
 
 # Detener contenedores
