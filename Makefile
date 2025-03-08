@@ -1,7 +1,7 @@
 # Variables
-CONTAINERS_NAMES=apache-web postgres-db django-auth-42-api django-auth-db-api
+CONTAINERS_NAMES=apache-web postgres-db django-auth-42-api auth-local
 IMAGES_NAMES=ft_trascendence-frontend ft_trascendence-backend postgres:15 ft_trascendence-auth-42-api ft_trascendence-auth-db-api
-VOLUME_NAME=postgres_data ft_trascendence_postgres_data
+VOLUME_NAME=postgres_data
 
 # Levantar contenedores
 all:
@@ -19,7 +19,7 @@ status:
 	@docker volume ls $(foreach volume,$(VOLUME_NAMES),--filter name=$(volume))
 	@echo "\033[1;32m logs.\033[0m"
 	@docker logs django-auth-42-api
-	@docker logs django-auth-db-api
+	@docker logs auth-local
 	@docker logs postgres-db
 	@docker logs apache-web
 

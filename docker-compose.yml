@@ -31,15 +31,15 @@ services:
     networks:
       - app_network
 
-  auth-db-api: # auth-local 
-    build: ./backend2
-    container_name: django-auth-db-api
+  auth-local :
+    build: ./auth-local 
+    container_name: auth-local 
     command: sh -c "
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8001"
     env_file:
-      - backend2/.env
+      - auth-local/.env
     ports:
       - "8001:8001"
     depends_on:
@@ -56,7 +56,7 @@ services:
       - "8443:443"
     depends_on:
       - auth-42-api
-      - auth-db-api
+      - auth-local
     networks:
       - app_network
 
