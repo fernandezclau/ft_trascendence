@@ -1,7 +1,9 @@
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    applySettings();
     setTimeout(() => {
+        
         const jwtToken = localStorage.getItem("jwt_backend") ? localStorage.getItem("jwt_backend") : localStorage.getItem("auth_method_backend");
 
         if (!jwtToken) {
@@ -11,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         updateNavbar();
-        applySettings();
 
         window.addEventListener("resize", mobileGame);
         window.addEventListener("resize", mobileTournament);

@@ -76,18 +76,31 @@ function changeBackground(value, button) {
 /* Traducciones (en/es/fr) */
 
 // Cargas traducciones
-function loadTranslations() {
-    fetch('script/translations.json')
-        .then(response => response.json())
-        .then(data => {
-            translations = data;
-            console.log("Traducciones cargadas:", translations);
-            const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+async function loadTranslations() {
+    try {
+        const response = await fetch('script/translations.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        translations = await response.json();
+
+        if (!translations) {
+            throw new Error("Las traducciones no se han cargado correctamente.");
+        }
+
+        const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+
+        if (translations[savedLanguage]) {
             changeLanguage(savedLanguage);
-        })
-        .catch(error => {
-            console.error('Error loading translations:', error);
-        });
+            localStorage.setItem("preferredLanguage", savedLanguage)
+        } else {
+            console.error("Idioma no encontrado en traducciones:", savedLanguage);
+        }
+    } catch (error) {
+        console.error('Error loading translations:', error);
+    }
 }
 
 // Traducir cada clave de la página
@@ -192,7 +205,4 @@ function applySettings() {
 
     // 7. Idioma
     loadTranslations();
-    const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    changeLanguage(savedLanguage);
-
 }
