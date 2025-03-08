@@ -7,8 +7,6 @@ import os
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 import environ
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
