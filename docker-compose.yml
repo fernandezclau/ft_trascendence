@@ -1,7 +1,7 @@
 services:
   db:
     build: ./postgres
-    container_name: postgres-db
+    container_name: postgres
     env_file:
       - ./postgres/conf/.env
     volumes:
@@ -14,15 +14,15 @@ services:
       timeout: 5s
       retries: 5
 
-  auth-42-api:
-    build: ./backend
-    container_name: django-auth-42-api
+  auth-42:
+    build: ./auth-42
+    container_name: auth-42
     command: sh -c "
       python manage.py makemigrations api &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
     env_file:
-      - backend/.env
+      - auth-42/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -55,7 +55,7 @@ services:
       - "8080:80"
       - "8443:443"
     depends_on:
-      - auth-42-api
+      - auth-42
       - auth-local
     networks:
       - app_network
