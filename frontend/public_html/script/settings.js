@@ -4,6 +4,7 @@ const allowedSpeeds = [400, 450, 500, 550, 600];
 const allowedColors = ["#B63A4B", "#5A9F6B", "#516A99", "#ECE570", "#9C77C1", "#fff2f2"];
 const allowedBackgrounds = ["#161618", "#70b8b1", "#b2afb1", "#f4a6b1", "#74748d"];
 const allowedModes = ["enabled", "disabled"];
+const allowedLanguages = ["es", "en", "fr"]
 
 // Gestion de sonidos
 function toggleSound() {
@@ -205,4 +206,9 @@ function applySettings() {
 
     // 7. Idioma
     loadTranslations();
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (allowedLanguages.includes(savedLanguage)) {
+        document.querySelector(`.login-language-select`).value = savedLanguage;
+        changeLanguage(savedLanguage);
+    }
 }

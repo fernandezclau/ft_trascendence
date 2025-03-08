@@ -302,6 +302,20 @@
         width: 90%;
         margin: 5px;
     }
+
+    #navbarNav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .login-language-select {
+        display: flex;
+        justify-content: center;
+    
+    }
+    
+
     .language-select {
         margin-top: 10px;
     }

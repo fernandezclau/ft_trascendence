@@ -48,7 +48,7 @@
             <div class="container-fluid">
 
                 <!-- Navbar brand -->
-                <a class="navbar-brand" data-key="navbarBrand">PONG</a>
+                <a class="navbar-brand" data-key="navbarBrand" id="homeButton" onclick="PageManager.load('login')">PONG</a>
                 
                 <!-- Navbar toggler -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@
                 
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav" style="display: none;">
                         <li class="nav-item">
                             <a class="nav-link" onclick="PageManager.load('tournament')" data-key="tournament">Tournament</a>
                         </li>
@@ -67,10 +67,12 @@
                         <li class="nav-item">
                             <a class="nav-link" onclick="loadSettings('settings')" data-key="settings">Settings</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" onclick="PageManager.load('game')" data-key="game">Game</a>
-                        </li>
-                    </ul>                    
+                    </ul>
+                    <select onchange="setLanguage(this.value)" class="login-language-select" id="loginLanguage">
+                        <option value="en" class="flag-icon flag-icon-us"> English</option>
+                        <option value="es" class="flag-icon flag-icon-es"> Español</option>
+                        <option value="fr" class="flag-icon flag-icon-fr"> Français</option>
+                    </select>                    
                     <div class="button-container" id="auth-container">
                         <button class="btn login-button" onclick="PageManager.load('login')" data-key="login">Log in</button>
                         <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button">Sign up</button>
@@ -85,7 +87,7 @@
         </div>
         
         <!-- Game -->
-        <div id="game">
+        <div id="game" style="display: none;">
             <div class="game-boosts" id="gameBoosts">
                 <div class="game-boosts-container">
                     <p><p>
@@ -121,9 +123,9 @@
     <script src="script/keyboardHandler.js"></script>
     <script src="script/gameCustomization.js"></script>
     <script src="script/settings.js"></script>
-    <script src="script/gameSetUp.js"></script>
     <script src="script/pong.js"></script>
     <script src="script/login.js"></script>
     <script src="script/onLoad.js"></script>
+    <script src="script/gameSetUp.js"></script>
     <script src="script/tournamentSetUp.js"></script>
 </html>

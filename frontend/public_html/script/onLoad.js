@@ -100,7 +100,6 @@ window.onload = function () {
         }
         window.history.replaceState({}, document.title, "/");
     }
-    updateNavbar();
     const lastPage = window.location.hash.substring(1);
     const jwt_backend = localStorage.getItem("jwt_backend");
     const jwt_backend2 = localStorage.getItem("jwt_backend2");
@@ -108,18 +107,19 @@ window.onload = function () {
     if (lastPage && ["game", "tournament", "info", "settings"].includes(lastPage)) {
         PageManager.load(lastPage, null, false);
     } else if (jwt_backend || jwt_backend2) {
+        updateNavbar();
         PageManager.load("game");
     } else {
+        resetNavbar();
         PageManager.load("login");
     }
     applySettings();
 };
 
-
-
 function updateNavbar() {
     const authContainer = document.getElementById("auth-container");
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
+    const homeButton = document.getElementById("homeButton");
 
     const jwt_backend = localStorage.getItem("jwt_backend");
     const jwt_backend2 = localStorage.getItem("jwt_backend2");
@@ -143,12 +143,20 @@ function updateNavbar() {
                 <button class="btn logout-button" onclick="logout()">Logout</button>
             </div>
         `;
-
+        
+        // Show nav
+        document.querySelector(".navbar-nav").style.display = "flex";
         navbarLinks.forEach(link => {
             link.style.display = "block";
+            link.style.visibility = "visible";
         });
-    } else {
-        resetNavbar();
+
+        const lang = document.getElementById("loginLanguage")
+        
+        if (lang) {
+            hideElement(lang)
+        }
+        homeButton.setAttribute("onclick", "PageManager.load('game')");
     }
 }
 
@@ -158,19 +166,16 @@ function updateNavbar() {
 function resetNavbar() {
     const authContainer = document.getElementById("auth-container");
     const navbarLinks = document.querySelectorAll(".navbar-nav .nav-item");
+    const homeButton = document.getElementById("homeButton");
 
     authContainer.innerHTML = `
-    <select onchange="setLanguage(this.value)" class="login-language-select">
-        <option value="en" class="flag-icon flag-icon-us"> English</option>
-        <option value="es" class="flag-icon flag-icon-es"> Español</option>
-        <option value="fr" class="flag-icon flag-icon-fr"> Français</option>
-    </select>
     <button class="btn login-button" onclick="PageManager.load('login')" data-key="login"></button>
     <button class="btn signup-button" onclick="PageManager.load('register')" data-key="signup_button"></button>
     `;
     navbarLinks.forEach(link => {
         link.style.display = "none";
     });
+    homeButton.setAttribute("onclick", "PageManager.load('login')");
 }
 
 async function logout() {
