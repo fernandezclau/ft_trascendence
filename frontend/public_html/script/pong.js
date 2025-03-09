@@ -189,11 +189,11 @@ function movePlayers(time) {
     if (playersToPlay == 1) {
 		
 		// Reducimos la velocidad de la IA
-		let iaSpeedFactor = 0.5; // IA un 50% más lenta
+		let iaSpeedFactor = 0.8; // IA un 20% más lenta
 		let iaTime = time * iaSpeedFactor;
 
 		// Control de precisión de la IA
-		let errorFactor = 0.6; // Entre 0 (precisa) y 1 (muy imprecisa)
+		let errorFactor = 0.2; // Entre 0 (precisa) y 1 (muy imprecisa)
 		let BallError = (Math.random() * errorFactor - errorFactor / 2);
 		let targetY = ballY + BallError; // Posición objetivo con imprecisión  
 
