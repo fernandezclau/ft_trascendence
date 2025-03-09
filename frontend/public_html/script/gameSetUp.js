@@ -19,12 +19,12 @@ function selectPlayers(players) {
 
     let selectedButton;
     if (players === 2) {
-        selectedButton = playersButtons[0]; // Selecciona el botón de 2 jugador
+        selectedButton = playersButtons[1]; // Selecciona el botón de 2 jugador
     } else if (players === 4) {
-        selectedButton = playersButtons[1]; // Selecciona el botón de 4 jugadores
+        selectedButton = playersButtons[2]; // Selecciona el botón de 4 jugadores
     } else {
-        selectedButton = playersButtons[0]; // Selecciona el botón de 2 jugador
-        players = 2;
+        selectedButton = playersButtons[0]; // Selecciona el botón de 1 jugador
+        players = 1;
     }
     
     selectedButton.classList.add('button-selected');
@@ -174,7 +174,7 @@ function generatePlayerForms(num_players, isTournament, isTeamGame, loggedInPlay
 
     // 2. Establecemos número de jugadores (indv/equipo)
     let teamNumber = num_players == 2 ? 2 : 2;
-    let titleKey = num_players == 2 ? "player" : "team";
+    let titleKey = num_players == 4 ? "team" : "player";
 
     // 3. Si es torneo actualizamos jugadores
     if (isTournament) {
