@@ -9,4 +9,4 @@ scrape_configs:
       - targets: ['auth-42:8000', 'auth-local:8001']
   - job_name: "node-exporter"
     static_configs:
-      - targets: ["node-exporter:9100"]
+      - targets: ["node-exporter:9200"]
