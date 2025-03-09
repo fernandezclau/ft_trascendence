@@ -198,7 +198,12 @@ function generatePlayerForms(num_players, isTournament, isTeamGame, loggedInPlay
             usernameInputHtml = `
                 <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" value="${loggedInPlayerName}" placeholder="${username_placeholder}" disabled required>
             `;
-        } else {
+		} else if (num_players === 1 && i === 2) {
+			// Si es modo 1 jugador, el segundo jugador es "Pong Bot" (no modificable)
+			usernameInputHtml = `
+				<input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" value="Pong Bot" disabled required>
+			`;
+		} else {
             usernameInputHtml = `
                 <input type="text" class="form-control" id="usernameInput${i}" name="usernameInput${i}" placeholder="${username_placeholder}" required>
             `;
