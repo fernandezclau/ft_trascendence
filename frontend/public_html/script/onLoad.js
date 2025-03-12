@@ -186,20 +186,10 @@ async function logout() {
 
     try {
         if (token_backend) {
-            await fetch("http://localhost:8000/api/auth/logout", {
+            await fetch("https://localhost:8442/api/auth/logout", {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token_backend}`,
-                    "Content-Type": "application/json"
-                }
-            });
-        }
-
-        if (token_backend2) {
-            await fetch("http://localhost:8001/api/auth/logout", {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token_backend2}`,
                     "Content-Type": "application/json"
                 }
             });
