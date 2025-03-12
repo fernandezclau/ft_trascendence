@@ -109,7 +109,10 @@
         "paused": "PAUSED",
         "usersTeam": "{username} Team",
         "noPlayers": "Please select the number of players and points to win.",
-        "enableSpells": "Enable Boosts"
+        "enableSpells": "Enable Boosts",
+		"otp_code_label": "Verification Code",
+		"otp_code_placeholder": "Introduce 6 digits code",
+		"otp_help": "Help"
     },
     "es": {
         "navbarBrand": "PONG",
@@ -221,7 +224,10 @@
         "paused": "PAUSA",
         "usersTeam": "Equipo de {username}",
         "noPlayers": "Por favor introduce el número de jugadores y el número de puntos de partida.",
-        "enableSpells": "Activar Boosts"
+        "enableSpells": "Activar Boosts",
+		"otp_code_label": "Código de verificación",
+		"otp_code_placeholder": "Ingresa el código de 6 dígitos",
+		"otp_help": "Help"
     },
     "fr": {
         "navbarBrand": "PONG",
@@ -333,6 +339,9 @@
         "paused": "PAUSÉ",
         "usersTeam": "l'équipe de {username}",
         "noPlayers": "Veuillez indiquer le nombre de joueurs et le nombre de points de départ.",
-        "enableSpells": "Activer boosts"
+        "enableSpells": "Activer boosts",
+		"otp_code_label": "Code de vérification",
+		"otp_code_placeholder": "Introduire le code à 6 chiffrese",
+		"otp_help": "Aide "
     }
 }
