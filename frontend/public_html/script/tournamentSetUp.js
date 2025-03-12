@@ -208,8 +208,6 @@ async function startFights(matches) {
         for (const match of matches) {
             highlightMatch(match.player1, match.player2); // Resaltar jugadores en combate
             
-            console.log(match);
-            
             // Mostrar info del jugador
             displayPlayerInfoTour(match);
 

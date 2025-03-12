@@ -15,7 +15,6 @@ const PageManager = (() => {
         }
     
         if (page === currentPage) {
-            console.log(`La página ${page} ya está cargada.`);
             return;
         }
     

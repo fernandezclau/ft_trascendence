@@ -387,12 +387,10 @@ function activateBoost(boostType, playerName, index, button) {
 function applyBoost(boostType, playerName, index) {
     switch (boostType) {
         case "speed":
-            console.log(`${playerName} activó el Boost de Velocidad!`);
             ballSpeedX *= 5;
             ballSpeedY *= 5;
             break;
         case "power":
-            console.log(`${playerName} activó el Boost de Poder!`);
             if (index % 2 === 0) {
                 paddleSpeed *= 2;
             } else {
@@ -401,7 +399,6 @@ function applyBoost(boostType, playerName, index) {
             drawGameBoard();   
             break;
         case "defense":
-            console.log(`${playerName} activó el Boost de Defensa!`);
             if (index % 2 === 0) {
                 paddleHeight = 150;
             } else {
@@ -410,7 +407,7 @@ function applyBoost(boostType, playerName, index) {
             drawGameBoard();   
             break;
         default:
-            console.log("Boost desconocido.");
+            break;
     }
 }
 
