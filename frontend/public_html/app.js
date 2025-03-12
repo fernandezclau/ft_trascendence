@@ -36,6 +36,15 @@ const PageManager = (() => {
                 loadGame();
             else if (page == "tournament")
                 loadTournament();
+            else if (page == "register")
+            {
+                let register = document.getElementById("registerForm");
+                if (register) {
+                    register.addEventListener("submit", function(event) {
+                        event.preventDefault();
+                    });
+                } 
+            }
 
             toggleGameVisibility(page === "game" || page === "tournament");
     
