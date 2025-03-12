@@ -88,11 +88,11 @@ function pressedBoostButton(letter) {
 
     const button1 = gameBoosts.children[0].querySelector("button");
     const button2 = gameBoosts.children[1].querySelector("button");
-	if (playersToPlay == 1 && letter == "e" && button1.disabled == false) 
-	{
-		button1.click();
+    if (playersToPlay == 1 && letter == "e" && button1.disabled == false) 
+    {
+        button1.click();
         button2.click();
-	} else if (letter == "e" && button1.disabled == false) {
+    } else if (letter == "e" && button1.disabled == false) {
         button1.click();
     } else if (letter = "right" && button2.disabled == false) {
         button2.click();

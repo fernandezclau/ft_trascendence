@@ -187,27 +187,27 @@ function playerScore(player) {
 function movePlayers(time) {
     player1Y = Math.min(canvas.height - paddleHeight, Math.max(0, player1Y + paddleSpeed * time * (sPressed - wPressed)));
     if (playersToPlay == 1) {
-		
-		// Reducimos la velocidad de la IA
-		let iaSpeedFactor = 0.8; // IA un 20% más lenta
-		let iaTime = time * iaSpeedFactor;
+        
+        // Reducimos la velocidad de la IA
+        let iaSpeedFactor = 0.8; // IA un 20% más lenta
+        let iaTime = time * iaSpeedFactor;
 
-		// Control de precisión de la IA
-		let errorFactor = 0.2; // Entre 0 (precisa) y 1 (muy imprecisa)
-		let BallError = (Math.random() * errorFactor - errorFactor / 2);
-		let targetY = ballY + BallError; // Posición objetivo con imprecisión  
+        // Control de precisión de la IA
+        let errorFactor = 0.2; // Entre 0 (precisa) y 1 (muy imprecisa)
+        let BallError = (Math.random() * errorFactor - errorFactor / 2);
+        let targetY = ballY + BallError; // Posición objetivo con imprecisión  
 
-		// Movimiento de la IA más lento que el jugador
-		if (player2Y < targetY)
-			player2Y = Math.min(canvas.height - paddleHeight2, player2Y + paddleSpeed2 * iaTime);
-		else if (player2Y > targetY)
-			player2Y = Math.max(0, player2Y - paddleSpeed2 * iaTime);
-	}
-	else {
-		player2Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player2Y + paddleSpeed2 * time * (downPressed - upPressed)));
-	}	
-	if (playersToPlay == 4) {
-	    player3Y = Math.min(canvas.height - paddleHeight, Math.max(0, player3Y + paddleSpeed * time * (kPressed - iPressed)));
+        // Movimiento de la IA más lento que el jugador
+        if (player2Y < targetY)
+            player2Y = Math.min(canvas.height - paddleHeight2, player2Y + paddleSpeed2 * iaTime);
+        else if (player2Y > targetY)
+            player2Y = Math.max(0, player2Y - paddleSpeed2 * iaTime);
+    }
+    else {
+        player2Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player2Y + paddleSpeed2 * time * (downPressed - upPressed)));
+    }    
+    if (playersToPlay == 4) {
+        player3Y = Math.min(canvas.height - paddleHeight, Math.max(0, player3Y + paddleSpeed * time * (kPressed - iPressed)));
         player4Y = Math.min(canvas.height - paddleHeight2, Math.max(0, player4Y + paddleSpeed2 * time * (np5Pressed - np8Pressed)));
     }
 }

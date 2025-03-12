@@ -2,7 +2,7 @@ const PageManager = (() => {
     let currentPage = null;
     let pageHistory = [];
 
-    const PUBLIC_PAGES = ["login", "register"];
+    const PUBLIC_PAGES = ["login", "register", "otp-setup"];
 
     async function loadPage(page, callback, addToHistory = true) {
         const jwt_backend = localStorage.getItem("jwt_backend");
@@ -48,6 +48,28 @@ const PageManager = (() => {
         }
     }
 
+// Añadir esta función al PageManager en app.js
+    function loadOTPSetupPage(qrCodeData) {
+        loadPage("otp-setup", () => {
+            console.log("Página OTP cargada, configurando QR code...");
+            setTimeout(() => {
+                const qrImg = document.getElementById("qrCode");
+                if (qrImg) {
+                    qrImg.src = qrCodeData;
+                    console.log("QR code configurado correctamente");
+                } else {
+                    console.error("No se pudo encontrar el elemento qrCode");
+                }
+            }, 300);
+        });
+    }
+
+    // Luego añade este método al objeto PageManager que se retorna
+    return {
+        load: loadPage,
+        loadOTPSetup: loadOTPSetupPage,
+        goBack
+    };
     function goBack() {
         if (pageHistory.length > 1) {
             pageHistory.pop();

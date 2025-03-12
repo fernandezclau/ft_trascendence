@@ -16,6 +16,15 @@
                 </div>
             </div>
 
+            <!-- Campo OTP (inicialmente oculto) -->
+            <div id="otpField" class="mb-3 login-elem" style="display: none;">
+                <label for="otpCode" class="form-label" data-key="otp_code_label">Código de autenticación</label>
+                <input type="text" class="register-form-control" id="otpCode" placeholder="Código de 6 dígitos" data-key="otp_code_placeholder" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
+                <small class="text-muted" data-key="otp_help">Ingresa el código de Google Authenticator</small>
+            </div>
+
+            <input type="hidden" id="userId" value="">
+
             <button type="button" class="btn btn-dark w-100" onclick="loginUser()">Log In</button>
 
             <button type="button" onclick="window.location.href='http://localhost:8000/api/auth/42/login'" 

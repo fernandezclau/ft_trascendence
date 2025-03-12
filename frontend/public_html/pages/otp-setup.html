@@ -1,0 +1,47 @@
+<div class="otp-setup-container">
+    <div class="otp-setup-box">
+        <h2 class="text-center" data-key="setup_2fa">Configura la Autenticación de Dos Factores</h2>
+        <p class="text-center text-muted" data-key="setup_2fa_message">Escanea el código QR con Google Authenticator para completar tu registro</p>
+
+        <div class="qr-container">
+            <img id="qrCode" src="" alt="Código QR para Google Authenticator">
+        </div>
+
+        <div class="mb-3 otp-input">
+            <label for="otpCode" class="form-label" data-key="otp_code_label">Código de verificación</label>
+            <input type="text" class="register-form-control" id="otpCode" placeholder="Ingresa el código de 6 dígitos" required data-key="otp_code_placeholder" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
+        </div>
+
+        <button type="button" class="btn btn-dark w-100" onclick="verifyOTP()" data-key="verify_button">Verificar</button>
+
+        <div class="mt-3">
+            <p class="text-center text-muted" data-key="otp_instructions">
+                1. Descarga la aplicación Google Authenticator<br>
+                2. Escanea el código QR<br>
+                3. Ingresa el código de 6 dígitos que aparece en la aplicación
+            </p>
+        </div>
+    </div>
+</div>
+
+[11/Mar/2025 19:11:47] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:11:47] "OPTIONS /api/auth/register HTTP/1.1" 200 0
+[11/Mar/2025 19:11:47] "POST /api/auth/register HTTP/1.1" 201 393
+[11/Mar/2025 19:11:51] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:11:51] "OPTIONS /api/auth/login HTTP/1.1" 200 0
+[11/Mar/2025 19:11:52] "POST /api/auth/login HTTP/1.1" 200 373
+[11/Mar/2025 19:12:06] "OPTIONS /api/auth/logout HTTP/1.1" 200 0
+[11/Mar/2025 19:12:06] "DELETE /api/auth/logout HTTP/1.1" 404 179
+[11/Mar/2025 19:12:17] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:12:18] "POST /api/auth/register HTTP/1.1" 201 393
+[11/Mar/2025 19:12:50] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:12:50] "OPTIONS /api/auth/register HTTP/1.1" 200 0
+[11/Mar/2025 19:12:50] "POST /api/auth/register HTTP/1.1" 201 393
+[11/Mar/2025 19:13:03] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:13:03] "OPTIONS /api/auth/login HTTP/1.1" 200 0
+[11/Mar/2025 19:13:03] "POST /api/auth/login HTTP/1.1" 200 373
+[11/Mar/2025 19:13:10] "OPTIONS /api/auth/logout HTTP/1.1" 200 0
+[11/Mar/2025 19:13:10] "DELETE /api/auth/logout HTTP/1.1" 404 179
+[11/Mar/2025 19:13:45] "GET /api/auth/csrf/ HTTP/1.1" 200 81
+[11/Mar/2025 19:13:45] "OPTIONS /api/auth/register HTTP/1.1" 200 0
+[11/Mar/2025 19:13:45] "POST /api/auth/register HTTP/1.1" 201 400
