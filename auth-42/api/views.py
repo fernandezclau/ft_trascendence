@@ -38,8 +38,10 @@ def login_42(request):
 @api_view(['GET'])
 def callback_42(request):
     code = request.GET.get("code")
-    if not code:
-        return JsonResponse({"error": "No code provided"}, status=400)
+    error = request.GET.get("error")
+
+    if error or not code:
+        return redirect("https://localhost:8443") 
 
     token_url = "https://api.intra.42.fr/oauth/token"
     token_data = {
