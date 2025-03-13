@@ -10,6 +10,34 @@ async function registerUser() {
         PageManager.load("register", updateNavbar);
         return;
     }
+    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
+        alert("❌ Email inválido.");
+        PageManager.load("register", updateNavbar);
+        return;
+    }
+
+    if (username.length < 4) {
+        alert("❌ El nombre de usuario debe tener al menos 4 caracteres.");
+        PageManager.load("register", updateNavbar);
+        return;
+    }
+
+    if (password.length < 8) {
+        alert("❌ La contraseña debe tener al menos 8 caracteres.");
+        PageManager.load("register", updateNavbar);
+        return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+        alert("❌ La contraseña debe contener al menos una letra mayúscula.");
+        PageManager.load("register", updateNavbar);
+        return;
+    }
+    if (!/[0-9]/.test(password)) {
+        alert("❌ La contraseña debe contener al menos un número.");
+        PageManager.load("register", updateNavbar);
+        return;
+    }
 
     if (password !== confirmPassword) {
         alert("❌ Las contraseñas no coinciden.");
@@ -43,7 +71,6 @@ async function registerUser() {
             alert("⚠️ Error: " + (data.error || "Error desconocido."));
         }
     } catch (error) {
-        console.error("🚨 Error en la solicitud:", error);
     }
 }
 
@@ -53,6 +80,16 @@ async function loginUser() {
 
     if (!email || !password) {
         alert("❌ Email y contraseña son obligatorios.");
+        return;
+    }
+
+    if (!email.includes("@")) {
+        alert("❌ Email inválido. (Debe contener '@')");
+        return;
+    }
+
+    if (password.length < 8) {
+        alert("❌ La contraseña debe tener al menos 8 caracteres.");
         return;
     }
 
@@ -81,39 +118,19 @@ async function loginUser() {
             alert("⚠️ Error: " + (data.error || "Error desconocido." ));
         }
     } catch (error) {
-        console.error("🚨 Error en la solicitud:", error);
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const signUpLink = document.getElementById("signUpLink");
-
-    if (signUpLink) {
-        signUpLink.addEventListener("click", function (event) {
-            event.preventDefault(); // Evita la recarga de la página
-            if (typeof PageManager !== "undefined" && PageManager.load) {
-                PageManager.load("register");
-            } else {
-                console.error("❌ Error: PageManager no está definido o no tiene la función 'load'.");
-            }
-        });
-    }
-});
-
-
-// claudia lo puedes usar para proteger las funciones como LoadPage
-// que solo se puedan ejecutar si el usuario esta autenticado
 async function getCsrfToken() {
     try {
         const response = await fetch("https://localhost:8441/api/auth/csrf/", {
             method: "GET",
-            credentials: "include"  // 🔥 Permitir cookies cross-origin
+            credentials: "include"
         });
 
         const data = await response.json();
         return data.csrfToken;
     } catch (error) {
-        console.error("🚨 No se pudo obtener el CSRF Token:", error);
         return "";
     }
 }

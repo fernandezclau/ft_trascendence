@@ -52,7 +52,6 @@ const PageManager = (() => {
     
             if (callback) callback();
         } catch (error) {
-            console.error("Error loading page:", error);
         }
     }
 
@@ -158,7 +157,6 @@ function loadSettings() {
         backgroundButtons.forEach(button => button.classList.remove('selected'));
         
         const selectedButton = document.querySelector(`.background-option[data-color="${savedBackground}"]`);
-        console.log("Selected button bg" + selectedButton)
         if (selectedButton) {
             selectedButton.classList.add('selected');
         }

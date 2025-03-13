@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from rest_framework.decorators import api_view
 from django.middleware.csrf import get_token
 from django.contrib.auth.hashers import make_password, check_password
@@ -29,7 +29,6 @@ def generate_jwt(user):
 @api_view(["POST"])
 @csrf_protect
 def register_user(request):
-    """Registra un usuario con email obligatorio y devuelve un JWT"""
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
@@ -74,7 +73,6 @@ def register_user(request):
 @api_view(['POST'])
 @csrf_protect 
 def login_user(request):
-    """Autentica un usuario con email y contraseña."""
     email = request.data.get("email")
     password = request.data.get("password")
 
@@ -98,13 +96,13 @@ def login_user(request):
 def get_csrf_token(request):
     response = JsonResponse({"csrfToken": get_token(request)})
     response["Access-Control-Allow-Credentials"] = "true"
-    response["Access-Control-Allow-Origin"] = "https://localhost:8443"  # Asegurar origen correcto
+    response["Access-Control-Allow-Origin"] = "https://localhost:8443"
     response.set_cookie(
         "csrftoken",
         get_token(request),
-        max_age=60 * 60,  # 1 hora
-        secure=True,  # Solo HTTPS
-        httponly=False,  # Accesible por JavaScript
-        samesite="None"  # Permitir en peticiones cross-origin
+        max_age=60 * 60,
+        secure=True,
+        httponly=True,
+        samesite="Lax"
     )
     return response

@@ -18,10 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function getJwtToken() {
-    return localStorage.getItem("jwt_backend") || localStorage.getItem("auth_method_backend");
-}
-
 window.onpopstate = function (event) {
     if (event.state && event.state.page) {
         PageManager.load(event.state.page, null, false);
@@ -182,8 +178,6 @@ function resetNavbar() {
 
 async function logout() {
     const token_backend = localStorage.getItem("jwt_backend");
-    const token_backend2 = localStorage.getItem("jwt_backend2");
-
     try {
         if (token_backend) {
             await fetch("https://localhost:8442/api/auth/logout", {
@@ -195,19 +189,15 @@ async function logout() {
             });
         }
     } catch (error) {
-        console.error("❌ Error al hacer logout:", error);
     }
-    // localStorage.removeItem("jwt_backend");
-    // localStorage.removeItem("username_backend");
-    // localStorage.removeItem("image_url_backend");
-
-    // localStorage.removeItem("jwt_backend2");
-    // localStorage.removeItem("username_backend2");
-    // localStorage.removeItem("image_url_backend2");
     localStorage.clear();
 
     pageHistory = [];
     window.history.pushState({}, "", "#");
     PageManager.load("login");
     window.location.reload();
+}
+
+function getJwtToken() {
+    return localStorage.getItem("jwt_backend") || localStorage.getItem("auth_method_backend");
 }

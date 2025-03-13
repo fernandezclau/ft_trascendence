@@ -22,7 +22,6 @@ REDIRECT_URI = env('REDIRECT_URI')
 encoded_redirect_uri = quote(REDIRECT_URI, safe='')
 
 def generate_jwt(user):
-    """Genera un token JWT para el usuario autenticado incluyendo la imagen"""
     payload = {
         'id': user.id,
         'username': user.username,
@@ -80,13 +79,11 @@ def callback_42(request):
             "token": access_token,
         }
     )
-
     if not created:
         user.email = email
         user.image_url = image_url
         user.token = access_token
         user.save()
-
     jwt_token = generate_jwt(user)
 
     redirect_url = f"https://localhost:8443/?token={jwt_token}&auth=42&username={login}&image_url={image_url}"
@@ -126,7 +123,6 @@ def logout_and_delete_user(request):
         return JsonResponse({"error": "Unauthorized"}, status=401)
 
     token = auth_header.split(" ")[1]
-
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user = User.objects.get(id=payload["id"])
