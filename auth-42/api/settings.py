@@ -8,10 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vq3q_uvd!@8%tb3m&b5^7adki9+x22p*al4v3jc@+%w%3+-j@o'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost']
@@ -103,6 +100,8 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
+
+SECRET_KEY = env('SECRET_KEY')
 
 DATABASES = {
     'default': {

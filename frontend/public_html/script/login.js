@@ -60,6 +60,7 @@ async function registerUser() {
         const data = await response.json();
 
         if (response.ok) {
+            localStorage.clear();
             localStorage.setItem("jwt", data.token);
             localStorage.setItem("username", data.username);
             if (!localStorage.getItem("image_url") || data.image_url !== "https://i.imgur.com/DP2aShH.png") {
@@ -83,7 +84,7 @@ async function loginUser() {
         return;
     }
 
-    if (!email.includes("@")) {
+    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
         alert("❌ Email inválido. (Debe contener '@')");
         return;
     }
