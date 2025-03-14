@@ -6,12 +6,9 @@ import environ
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.getenv("SECRET_KEY")
 
-# Configuración para desarrollo
-DEBUG = True  # Cambiar a True para ver errores detallados durante desarrollo
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["localhost", "auth-42", "auth-local"]
 
 INSTALLED_APPS = [
     'django_prometheus',
@@ -78,7 +75,8 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost:8443",
     "https://localhost:8441",
-    "http://localhost:8080",  # Para desarrollo
+    "https://auth-42:8442",
+    "https://auth-local:8441"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -121,7 +119,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Configuración de la base de datos
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
-
+SECRET_KEY = env("SECRET_KEY")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
