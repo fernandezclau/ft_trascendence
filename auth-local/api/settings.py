@@ -10,9 +10,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
-
-
+ALLOWED_HOSTS = ["localhost", "auth-42", "auth-local"]
 
 INSTALLED_APPS = [
     'django_prometheus',
@@ -65,6 +63,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost:8443",
     "https://localhost:8441",
+    "https://auth-42:8442",
+    "https://auth-local:8441"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
