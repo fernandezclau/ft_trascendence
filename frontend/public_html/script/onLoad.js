@@ -1,13 +1,24 @@
 
-
 document.addEventListener("DOMContentLoaded", function () {
     applySettings();
         const jwtToken = getJwtToken();
+        const jwtTemp = localStorage.getItem("temp_token");
 
-        if (!jwtToken) {
-            PageManager.load("login");
+        console.warn("⚠️ DOMContentLoaded");
+        console.warn("jwtToken", jwtToken);
+        console.warn("temp_token", jwtTemp); // Corregido aquí
+
+        if (jwtTemp) {
+            if (!jwtToken) {
+                console.warn("Redirecting to 2FA verification");
+                PageManager.load("setup_2fa");
+            } else {
+                console.warn("Redirecting to game");
+                PageManager.load("game");
+            }
         } else {
-            PageManager.load("game");
+            console.warn("Redirecting to login");
+            PageManager.load("login");
         }
 
         applySettings();
@@ -15,8 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.addEventListener("resize", mobileGame);
         window.addEventListener("resize", mobileTournament);
-
-});
+    });
 
 function getJwtToken() {
     return localStorage.getItem("jwt_backend") || localStorage.getItem("auth_method_backend");

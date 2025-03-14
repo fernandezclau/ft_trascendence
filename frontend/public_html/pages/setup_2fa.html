@@ -1,0 +1,59 @@
+<!-- Versión simplificada del archivo setup_2fa.html sin scripts embebidos -->
+<div class="login-container">
+    <div class="login-box" style="max-width: 600px;">
+        <h2 class="text-center" data-key="setup_2fa_title">Configuración de Autenticación de Dos Factores</h2>
+        <p class="text-center text-muted" data-key="setup_2fa_message">Configura la autenticación de dos factores para proteger tu cuenta</p>
+
+        <div id="setup-message" class="alert alert-info mb-3" style="display: none;"></div>
+
+        <!-- PASO 1: Generación QR y clave manual -->
+        <div id="step1" class="text-center mb-4">
+            <h4>Paso 1: Generar clave TOTP</h4>
+            <button id="generateKeyBtn" class="btn btn-primary mb-3" onclick="initSetup2FA()">Generar clave TOTP</button>
+            
+            <div id="keyDetails" style="display:none;">
+                <!-- Área donde se mostrará el QR -->
+                <div id="qrCodeContainer" class="mb-3 text-center" style="display:none;">
+                    <p><strong>Código QR:</strong></p>
+                    <div id="qrcode" class="mx-auto d-inline-block p-2 bg-white"></div>
+                </div>
+                
+                <!-- Área donde se mostrará la clave -->
+                <div id="secretKeyContainer" class="mb-3 p-3 bg-light rounded">
+                    <p><strong>Clave secreta:</strong></p>
+                    <code id="secretKey" class="d-block p-2 mb-2" style="font-size: 1.2rem; word-break: break-all;"></code>
+                    <button id="copyBtn" class="btn btn-sm btn-secondary">Copiar clave</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASO 2: Configuración en la app -->
+        <div id="step2" style="display:none;">
+            <h4 class="text-center">Paso 2: Configurar aplicación de autenticación</h4>
+            <ol class="mb-4">
+                <li>Abre tu aplicación de autenticación (Google Authenticator, Authy, etc.)</li>
+                <li>Añade una nueva cuenta mediante uno de estos métodos:
+                    <ul>
+                        <li>Escanea el código QR si está visible</li>
+                        <li>O selecciona "Introducir clave manualmente" y usa la clave secreta mostrada arriba</li>
+                    </ul>
+                </li>
+                <li>Nombra la cuenta como "PongApp" o un nombre que recuerdes fácilmente</li>
+                <li>Guarda la configuración en tu aplicación</li>
+            </ol>
+        </div>
+
+        <!-- PASO 3: Verificación del código -->
+        <div id="step3" style="display:none;">
+            <h4 class="text-center">Paso 3: Verificar configuración</h4>
+            <p class="text-center text-muted">Introduce el código de 6 dígitos que aparece en tu aplicación</p>
+            
+            <div class="mb-3">
+                <input type="text" class="form-control text-center" id="otpCode" placeholder="Código de 6 dígitos"
+                       required maxlength="6" pattern="[0-9]{6}" style="font-size: 1.5rem; letter-spacing: 5px;">
+            </div>
+            
+            <button id="verifyBtn" class="btn btn-success w-100">Verificar y completar configuración</button>
+        </div>
+    </div>
+</div>

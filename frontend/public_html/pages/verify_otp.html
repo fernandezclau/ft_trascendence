@@ -1,0 +1,26 @@
+<!-- Versión simplificada del archivo verify_otp.html sin scripts embebidos -->
+<div class="login-container">
+    <div class="login-box">
+        <h2 class="text-center" data-key="verify_otp_title">Verificación de Seguridad</h2>
+        <p class="text-center text-muted" data-key="verify_otp_message">Introduce el código de verificación de tu aplicación de autenticación</p>
+
+        <div id="otp-message" class="alert alert-info mb-3" style="display: none;"></div>
+
+        <form id="otpForm">
+            <div class="mb-3 login-elem">
+                <label for="otpCode" class="form-label" data-key="otp_code_label">Código de verificación</label>
+                <input type="text" class="register-form-control" id="otpCode" placeholder="Código de 6 dígitos" 
+                       required pattern="[0-9]{6}" autocomplete="one-time-code">
+                <small class="text-muted" data-key="otp_help_text">Introduce el código de 6 dígitos generado por tu aplicación autenticadora</small>
+            </div>
+
+            <input type="hidden" id="tempToken" value="">
+
+            <button type="button" class="btn btn-dark w-100" id="verifyBtn" data-key="verify_button" onclick="initVerifyOtp()">Verificar</button>
+        </form>
+
+        <p class="text-center mt-3">
+            <a href="#" onclick="PageManager.load('login')" data-key="back_to_login">Volver al inicio de sesión</a>
+        </p>
+    </div>
+</div>
