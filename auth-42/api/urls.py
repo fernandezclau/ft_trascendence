@@ -17,6 +17,5 @@ urlpatterns = [
     path("api/auth/get_user_token", views.get_user_token, name="get_user_token"),
     path("api/auth/logout", logout_user, name="logout_user"),
     path("", include("django_prometheus.urls")),
-    path("api/auth/logout", views.logout_and_delete_user, name="logout"),
     path("metrics/", metrics_view, name="metrics"),
 ]

@@ -5,7 +5,7 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-vq3q_uvd!@8%tb3m&b5^7adki9+x22p*al4v3jc@+%w%3+-j@o'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 

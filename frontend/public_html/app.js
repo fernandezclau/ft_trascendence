@@ -9,7 +9,6 @@ const PageManager = (() => {
         const jwt_backend2 = localStorage.getItem("jwt_backend2");
     
         if (!jwt_backend && !jwt_backend2 && !PUBLIC_PAGES.includes(page)) {
-            console.warn("⚠️ Intento de acceso no autorizado. Redirigiendo a login.");
             PageManager.load("login");
             return;
         }
