@@ -40,23 +40,18 @@ MIDDLEWARE = [
 ]
 
 # Configuración de seguridad para producción - desactivado temporalmente para desarrollo
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True 
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    SECURE_HSTS_SECONDS = 31536000 
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_BROWSER_XSS_FILTER = True 
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    CSRF_COOKIE_SECURE = True 
-    SESSION_COOKIE_SECURE = True 
-else:
-    # En desarrollo, permitir conexiones no seguras para pruebas
-    SECURE_SSL_REDIRECT = False
-    CSRF_COOKIE_SECURE = False
-    SESSION_COOKIE_SECURE = False
 
-# Siempre mantener estas configuraciones
+SECURE_SSL_REDIRECT = True 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_HSTS_SECONDS = 31536000 
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True 
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSRF_COOKIE_SECURE = True 
+SESSION_COOKIE_SECURE = True 
+
+
 CSRF_COOKIE_HTTPONLY = False 
 CSRF_COOKIE_SAMESITE = 'None' 
 SESSION_COOKIE_SAMESITE = 'None' 
