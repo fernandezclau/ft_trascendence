@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    applySettings();
+    
         const jwtToken = getJwtToken();
         const jwtTemp = localStorage.getItem("temp_token");
 
@@ -293,10 +293,12 @@ async function logout() {
         } catch (error) {
         }
     }
-
+    let language = localStorage.getItem("preferredLanguage") || "en";
     localStorage.clear();
     sessionStorage.clear();
     pageHistory = [];
+
+    language = localStorage.setItem("preferredLanguage", language);
 
     resetNavbar();
     PageManager.load("login");

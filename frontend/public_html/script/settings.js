@@ -1,4 +1,3 @@
-let translations = {};
 const allowedSizes = [10, 15, 20];
 const allowedSpeeds = [400, 450, 500, 550, 600];
 const allowedColors = ["#B63A4B", "#5A9F6B", "#516A99", "#ECE570", "#9C77C1", "#fff2f2"];
@@ -190,14 +189,15 @@ function applySettings() {
     }
 
     // 6. Sonido
-    if (localStorage.getItem("sound") === "muted") {
-        audioContext.suspend();  // Silencia el sonido
-    } else {
-        audioContext.resume();   // Activa el sonido
+    if (audioContext) {
+        if (localStorage.getItem("sound") === "muted") {
+            audioContext.suspend();  // Silencia el sonido
+        } else {
+            audioContext.resume();   // Activa el sonido
+        }
     }
 
     // 7. Idioma
-    loadTranslations();
     const savedLanguage = localStorage.getItem('preferredLanguage');
     if (allowedLanguages.includes(savedLanguage)) {
         document.querySelector(`.login-language-select`).value = savedLanguage;

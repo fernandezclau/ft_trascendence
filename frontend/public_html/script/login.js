@@ -5,41 +5,41 @@ async function registerUser() {
     const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
     if (!username || !email || !password || !confirmPassword) {
-        alert("❌ Todos los campos son obligatorios.");
+        alert(translations[document.documentElement.lang]?.["fields_required"]);
         PageManager.load("register", updateNavbar);
         return;
     }
     if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
-        alert("❌ Email inválido.");
+        alert(translations[document.documentElement.lang]?.["invalid_mail"]);
         PageManager.load("register", updateNavbar);
         return;
     }
 
     if (username.length < 4) {
-        alert("❌ El nombre de usuario debe tener al menos 4 caracteres.");
+        alert(translations[document.documentElement.lang]?.["invalid_username"]);
         PageManager.load("register", updateNavbar);
         return;
     }
 
     if (password.length < 8) {
-        alert("❌ La contraseña debe tener al menos 8 caracteres.");
+        alert(translations[document.documentElement.lang]?.["invalid_passwd_length"]);
         PageManager.load("register", updateNavbar);
         return;
     }
 
     if (!/[A-Z]/.test(password)) {
-        alert("❌ La contraseña debe contener al menos una letra mayúscula.");
+        alert(translations[document.documentElement.lang]?.["invalid_passwd_upper"]);
         PageManager.load("register", updateNavbar);
         return;
     }
     if (!/[0-9]/.test(password)) {
-        alert("❌ La contraseña debe contener al menos un número.");
+        alert(translations[document.documentElement.lang]?.["invalid_passwd_number"]);
         PageManager.load("register", updateNavbar);
         return;
     }
 
     if (password !== confirmPassword) {
-        alert("❌ Las contraseñas no coinciden.");
+        alert(translations[document.documentElement.lang]?.["invalid_passwd_match"]);
         PageManager.load("register", updateNavbar);
         return;
     }
@@ -59,7 +59,9 @@ async function registerUser() {
         const data = await response.json();
 		
         if (response.ok) {
+            let language = localStorage.getItem("preferredLanguage") || "en";
 			localStorage.clear();
+            language = localStorage.setItem("preferredLanguage", language);
             // Si el regi
 			// tro fue exitoso, pero requiere configuración de 2FA
             if (data.requires_2fa_setup) {
@@ -88,17 +90,17 @@ async function loginUser() {
     const password = document.getElementById("password").value.trim();
 
     if (!email || !password) {
-        alert("❌ Email y contraseña son obligatorios.");
+        alert(translations[document.documentElement.lang]?.["fields_required"]);
         return;
     }
 
     if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
-        alert("❌ Email inválido. (Debe contener '@')");
+        alert(translations[document.documentElement.lang]?.["invalid_mail"]);
         return;
     }
 
     if (password.length < 8) {
-        alert("❌ La contraseña debe tener al menos 8 caracteres.");
+        alert(translations[document.documentElement.lang]?.["invalid_passwd_length"]);
         return;
     }
 

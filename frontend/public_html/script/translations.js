@@ -1,4 +1,4 @@
-{
+let translations = {
     "en": {
         "navbarBrand": "PONG",
         "gameTitle": "Game options",
@@ -148,7 +148,7 @@
         "invalid_passwd_upper": "❌ The password must contain at least one uppercase letter.",
         "invalid_passwd_number": "❌ The password must contain at least one number.",
         "invalid_passwd_match": "❌ Passwords do not match.",
-        "unknown_error": "⚠️ Error: Unknown error."
+        "unknown_error": "⚠️ Error: {error}."
     },
     "es": {
         "navbarBrand": "PONG",
