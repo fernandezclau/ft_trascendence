@@ -4,12 +4,6 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-
 DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "auth-42", "auth-local"]

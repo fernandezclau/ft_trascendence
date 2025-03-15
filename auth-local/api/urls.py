@@ -23,5 +23,3 @@ urlpatterns = [
     path("metrics/", metrics_view, name="metrics"),
 
 ]
-
-    

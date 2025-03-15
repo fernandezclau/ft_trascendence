@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     applySettings();
         const jwtToken = getJwtToken();
@@ -250,7 +249,6 @@ async function verifyToken() {
         logout();
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     resetNavbar();

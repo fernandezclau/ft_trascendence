@@ -1,5 +1,3 @@
-
-
 // Variable global para guardar el token temporal
 let tempToken = localStorage.getItem('temp_token') || '';
 

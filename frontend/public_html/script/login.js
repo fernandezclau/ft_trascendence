@@ -1,4 +1,3 @@
-
 async function registerUser() {
     const username = document.getElementById("newUsername").value.trim();
     const email = document.getElementById("email").value.trim();

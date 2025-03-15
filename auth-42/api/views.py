@@ -20,7 +20,6 @@ CLIENT_SECRET = env('CLIENT_SECRET')
 REDIRECT_URI = env('REDIRECT_URI')
 encoded_redirect_uri = quote(REDIRECT_URI, safe='')
 
-
 LOGGED_IN_USERS = {}
 
 def generate_jwt(user):

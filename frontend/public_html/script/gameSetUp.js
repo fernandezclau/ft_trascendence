@@ -11,7 +11,6 @@ function enableBoost(mode) {
     reloadGame(mode);
 }
 
-
 // Selección número de jugadores
 function selectPlayers(players) {
     let playersButtons = document.querySelectorAll('.players-btn-group');

@@ -11,7 +11,7 @@ const PageManager = (() => {
     
         if (!jwt_backend && !jwt_backend2 && !temp_token && !PUBLIC_PAGES.includes(page)) {
 			return PageManager.load("login");
-}   
+        }   
         if (page === currentPage) {
             return;
         }
@@ -73,9 +73,6 @@ const PageManager = (() => {
         goBack
     };
 })();
-
-
-
 
 /* LOADING GAME */
 function loadGame() {

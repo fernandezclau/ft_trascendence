@@ -1,15 +1,1 @@
 # .env
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-**/migrations/*
-!**/migrations/__init__.py
-
-node_modules/
-*.egg-info/
-
-**/postgres_data/
-.vscode/
-.idea/

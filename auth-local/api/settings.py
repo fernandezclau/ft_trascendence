@@ -7,7 +7,6 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 ALLOWED_HOSTS = ["localhost", "auth-42", "auth-local"]
 
 INSTALLED_APPS = [

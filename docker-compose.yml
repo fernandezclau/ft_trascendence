@@ -3,7 +3,7 @@ services:
     build: ./postgres
     container_name: postgres
     env_file:
-      - ./postgres/conf/.env
+      - ./postgres/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:

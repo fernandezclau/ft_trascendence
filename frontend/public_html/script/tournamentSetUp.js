@@ -13,6 +13,7 @@ function getUsername() {
 
     return "User";
 }
+
 // Seleccionar numero de jugadores por equipo
 function selectTeamPlayers(teamPlayers) {
 
@@ -381,7 +382,7 @@ function generateFights(players) {
             });
         }
     }
-    
+
     return { fights };
 }
 

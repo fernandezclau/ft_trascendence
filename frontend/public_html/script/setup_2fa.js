@@ -1,4 +1,3 @@
-
 // Variables globales
 let secretKey = '';
 let qrUrl = '';

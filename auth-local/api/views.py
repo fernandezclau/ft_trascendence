@@ -14,7 +14,6 @@ import base64
 from django.core.exceptions import ValidationError
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-
 CustomUser = get_user_model()
 env = environ.Env()
 environ.Env.read_env(os.path.join(os.path.dirname(__file__), '../.env'))
