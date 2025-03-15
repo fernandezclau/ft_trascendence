@@ -17,12 +17,10 @@ services:
   auth-42:
     build: ./auth-42
     container_name: auth-42
-    command: sh -c "
-      python manage.py makemigrations api &&
-      python manage.py migrate &&
-      gunicorn --certfile=/certs/cert.crt --keyfile=/certs/cert.key -b 0.0.0.0:8442 api.wsgi"
     env_file:
-    - auth-42/.env
+      - auth-42/.env
+    volumes:
+      - ./certs:/certs
     ports:
       - "8442:8442"
     depends_on:
@@ -30,18 +28,14 @@ services:
         condition: service_healthy
     networks:
       - app_network
-    volumes:
-      - ./frontend/certs:/certs
 
   auth-local:
     build: ./auth-local
     container_name: auth-local
-    command: sh -c "
-      python manage.py makemigrations api &&
-      python manage.py migrate &&
-      gunicorn --certfile=/certs/cert.crt --keyfile=/certs/cert.key -b 0.0.0.0:8441 api.wsgi"
     env_file:
       - auth-local/.env
+    volumes:
+      - ./certs:/certs
     ports:
       - "8441:8441"
     depends_on:
@@ -49,57 +43,53 @@ services:
         condition: service_healthy
     networks:
       - app_network
-    volumes:
-      - ./frontend/certs:/certs
 
   frontend:
     build: ./frontend
     container_name: apache-web
+    volumes:
+      - ./certs:/etc/ssl/certs
+      - apache_logs:/var/log/apache2
     ports:
       - "8443:443"
     depends_on:
-      - auth-42
-      - auth-local
+      auth-42:
+        condition: service_started
+      auth-local:
+        condition: service_started
     networks:
       - app_network
-    volumes:
-      - ./frontend/certs:/etc/ssl/certs
 
   prometheus:
-    image: prom/prometheus:latest
+    build: ./monitoring/prometheus
     container_name: prometheus
     volumes:
-      - ./monitoring/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
     ports:
       - "9090:9090"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.retention.time=30d"
-      - "--storage.tsdb.path=/prometheus"
     networks:
       - app_network
 
   grafana:
-    image: grafana/grafana:latest
+    build: ./monitoring/grafana
     container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
-      - ./monitoring/grafana/.env:/etc/grafana/.env
-    depends_on:
-      - prometheus
-    networks:
-      - app_network
     env_file:
       - ./monitoring/grafana/.env
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      prometheus:
+        condition: service_started
+    networks:
+      - app_network
 
 volumes:
   postgres_data:
   grafana_data:
   prometheus_data:
+  apache_logs:
 
 networks:
   app_network:

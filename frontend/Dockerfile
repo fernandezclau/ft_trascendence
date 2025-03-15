@@ -9,8 +9,6 @@ RUN a2enmod ssl
 RUN mkdir -p /var/log/apache2 && touch /var/log/apache2/error.log
 
 COPY public_html /var/www/html/
-COPY certs/cert.crt /etc/ssl/certs/cert.crt
-COPY certs/cert.key /etc/ssl/certs/cert.key
 COPY pong-ssl.conf /etc/apache2/sites-available/pong-ssl.conf
 
 RUN a2ensite pong-ssl

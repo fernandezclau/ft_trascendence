@@ -2,15 +2,16 @@ FROM python:3.11
 
 ENV PYTHONUNBUFFERED=1
 
-RUN apt update && \
-    apt install -y postgresql-client && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY . /app
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . ./
+EXPOSE 8441
 
-CMD ["gunicorn", "--certfile=/etc/ssl/certs/cert.crt", "--keyfile=/etc/ssl/certs/cert.key", "--bind", "0.0.0.0:8441", "api.wsgi:application"]
+CMD ["sh", "-c", "python manage.py makemigrations api && python manage.py migrate && gunicorn --certfile=/certs/cert.crt --keyfile=/certs/cert.key -b 0.0.0.0:8441 api.wsgi"]

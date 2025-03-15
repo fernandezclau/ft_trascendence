@@ -8,9 +8,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY . /app
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . ./
+EXPOSE 8442
 
-CMD ["gunicorn", "--certfile=/etc/ssl/certs/cert.crt", "--keyfile=/etc/ssl/certs/cert.key", "--bind", "0.0.0.0:8442", "api.wsgi:application"]
+CMD ["sh", "-c", "python manage.py makemigrations api && python manage.py migrate && gunicorn --certfile=/certs/cert.crt --keyfile=/certs/cert.key -b 0.0.0.0:8442 api.wsgi"]
