@@ -19,7 +19,5 @@ urlpatterns = [
 	path("api/auth/verify-otp", verify_otp, name="verify_otp"),
     path("api/auth/2fa-setup", get_2fa_setup, name="get_2fa_setup"),
     path("api/auth/verify-2fa-setup", view=verify_2fa_setup, name="verify_2fa_setup"),
-    path("", include("django_prometheus.urls")),
     path("metrics/", metrics_view, name="metrics"),
-
 ]
