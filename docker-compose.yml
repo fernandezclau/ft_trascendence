@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - app_network
+      - transcendence
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -27,7 +27,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - app_network
+      - transcendence
 
   auth-local:
     build: ./auth-local
@@ -42,7 +42,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - app_network
+      - transcendence
 
   frontend:
     build: ./frontend
@@ -58,7 +58,7 @@ services:
       auth-local:
         condition: service_started
     networks:
-      - app_network
+      - transcendence
 
   prometheus:
     build: ./monitoring/prometheus
@@ -68,7 +68,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - app_network
+      - transcendence
 
   grafana:
     build: ./monitoring/grafana
@@ -83,7 +83,7 @@ services:
       prometheus:
         condition: service_started
     networks:
-      - app_network
+      - transcendence
 
 volumes:
   postgres_data:
@@ -92,5 +92,5 @@ volumes:
   apache_logs:
 
 networks:
-  app_network:
+  transcendence:
     driver: bridge
