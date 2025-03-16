@@ -96,13 +96,14 @@ async function startGame() {
         await runGame();
 
         toggleBoostButtons(true);
-        await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos antes del siguiente partido
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Esperar 5 segundos antes del siguiente partido
         
         // 8. Recargamos juego
-        reloadGame("game");
+        //reloadGame("game");
+        debugMessage.classList.remove('winner');
         
     } else {
-        const error_element = document.getElementById('game-error');
+        const error_element = documMent.getElementById('game-error');
         showElement(error_element)
         error_element.textContent = translations[document.documentElement.lang]?.["noPlayers"];;
     }
@@ -137,13 +138,16 @@ function reloadingGamePage() {
 
         // Disable start button
         const startButton = document.getElementById("startButton");
-        startButton.disabled = true;
+        if (startButton) {
+            startButton.disabled = true;
+        }
     }
 
     /*  Common */
     // Remove error msg
     const error_msg = document.getElementById("game-registration-error");
-    hideElement(error_msg);
+    if (error_msg)
+        hideElement(error_msg);
 
     // Hide player info
     const gameBoosts = document.getElementById("gameBoosts");
@@ -160,6 +164,11 @@ function reloadingGamePage() {
     // Enable boost button
     let spellToggle = document.getElementById("spellToggle");
     spellToggle.disabled = false;
+
+    // Points
+    let playersButtons = document.querySelectorAll('.points-btn-group');
+    playersButtons.forEach(button => button.classList.remove('button-selected'));
+    playersButtons[1].classList.add('button-selected');
 }
 
 // Generación formularios de jugadores

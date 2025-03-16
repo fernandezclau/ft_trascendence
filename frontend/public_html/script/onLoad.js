@@ -3,21 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const jwtToken = getJwtToken();
         const jwtTemp = localStorage.getItem("temp_token");
 
-        console.warn("⚠️ DOMContentLoaded");
-        console.warn("jwtToken", jwtToken);
-        console.warn("temp_token", jwtTemp); // Corregido aquí
-
-        if (jwtTemp) {
-            if (!jwtToken) {
-                console.warn("Redirecting to 2FA verification");
-                PageManager.load("setup_2fa");
-            } else {
-                console.warn("Redirecting to game");
+        if(jwtToken) {
                 PageManager.load("game");
-            }
+        } else if(jwtTemp) {
+                PageManager.load("verify_otp");
         } else {
-            console.warn("Redirecting to login");
-            PageManager.load("login");
+                PageManager.load("login");
         }
 
         applySettings();
@@ -33,19 +24,15 @@ window.onpopstate = function (event) {
     }
 };
 
-// Hacer resize sobre pantalla Juego
 function mobileGame() {
     const button = document.getElementById("startButton")
     if (window.innerWidth <= 768){
 
-        // Activamos botón START
         if (button){
             button.disabled = false;
-            // Mostramos formularios
             generatePlayerForms(2, false, false, truncateName(getUsername())); 
         }
 
-        // 2 jugadores
         if (playersToPlay != 2) {
             playersToPlay = 2;
             drawGameBoard();
@@ -64,7 +51,7 @@ function mobileGame() {
     }
 }
 
-// Hacer resize sobre pantalla Torneo
+
 function mobileTournament() {
     const teamsButton = document.querySelectorAll(".tour-players-btn-group")
     if (window.innerWidth <= 768){
@@ -294,10 +281,8 @@ async function logout() {
         }
     }
     let language = localStorage.getItem("preferredLanguage") || "en";
-    localStorage.clear();
-    sessionStorage.clear();
     pageHistory = [];
-
+    localStorage.clear();
     language = localStorage.setItem("preferredLanguage", language);
 
     resetNavbar();

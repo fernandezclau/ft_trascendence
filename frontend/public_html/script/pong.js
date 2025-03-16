@@ -307,9 +307,11 @@ function reloadGame(page) {
     winner = 0;
     pauseTime = 0.0;                                    // Tiempo transcurrido desde la pausa
     debugMessage.textContent = "";
+    debugMessage.classList.add('winner');
     debugMessage.style.color = 'white';
     player1Score.textContent = 0;
     player2Score.textContent = 0;
+    pointsToWin = 10;
     
     const savedSpeed = localStorage.getItem("ballSpeed");
     if (allowedSpeeds.includes(savedSpeed)) {

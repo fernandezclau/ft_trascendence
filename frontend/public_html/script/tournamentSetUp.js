@@ -200,6 +200,10 @@ function reloadingGameTournament() {
     // Enable boost button
     let spellToggle = document.getElementById("spellToggle");
     spellToggle.disabled = false;
+
+    let teamPlayersButtons = document.querySelectorAll('.tour-points-btn-group');
+    teamPlayersButtons.forEach(button => button.classList.remove('button-selected'));
+    teamPlayersButtons[1].classList.add('button-selected');
 }
 
 // Lógica de enfrentamientos
@@ -219,6 +223,7 @@ async function startFights(matches) {
             // Iniciar el juego
             started = true;
             playSound('resume');
+            debugMessage.classList.add('winner');
             debugMessage.textContent = truncateName(match.player1.username) + " vs " + truncateName(match.player2.username);
             
             // Espera a que el juego termine y obtén el ganador

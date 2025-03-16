@@ -60,11 +60,9 @@ def register_user(request):
         return JsonResponse({"error": "Email inválido."}, status=400)
 
     try:
-        # Intentar obtener datos del cuerpo de la solicitud
         if isinstance(request.data, dict):
             data = request.data
         else:
-            # Si request.data no es un diccionario, intentar parsear el cuerpo como JSON
             try:
                 data = json.loads(request.body.decode('utf-8'))
             except json.JSONDecodeError:
@@ -100,10 +98,8 @@ def register_user(request):
                 image_url="https://i.imgur.com/DP2aShH.png",
                 two_factor_setup_required=True
             )
-            # Generar token temporal para la configuración de 2FA
             temp_token = generate_temp_token(user)
-            
-            # Crear dispositivo TOTP
+
             device = user.get_or_create_totp_device()
             
             return JsonResponse({
@@ -116,41 +112,18 @@ def register_user(request):
         except ValidationError as e:
             return JsonResponse({"error": str(e)}, status=400)
         except Exception as e:
-            print(f"Error inesperado en registro: {str(e)}")
-            traceback.print_exc()
             return JsonResponse({"error": "Error interno del servidor."}, status=500)
             
     except Exception as e:
-        print(f"Error general en register_user: {str(e)}")
-        traceback.print_exc()
         return JsonResponse({"error": "Error interno del servidor."}, status=500)
-
-
-@api_view(["GET"])
-def get_csrf_token(request):
-    response = JsonResponse({"csrfToken": get_token(request)})
-    response["Access-Control-Allow-Credentials"] = "true"
-    response["Access-Control-Allow-Origin"] = "https://localhost:8443"
-    response.set_cookie(
-        "csrftoken",
-        get_token(request),
-        max_age=60 * 60,
-        secure=True,
-        httponly=True,
-        samesite="Lax"
-    )
-    return response
 
 @api_view(["POST"])
 @csrf_protect
 def login_user(request):
-    """Autentica un usuario con email y contraseña"""
     try:
-        # Intentar obtener datos del cuerpo de la solicitud
         if isinstance(request.data, dict):
             data = request.data
         else:
-            # Si request.data no es un diccionario, intentar parsear el cuerpo como JSON
             try:
                 data = json.loads(request.body.decode('utf-8'))
             except json.JSONDecodeError:
@@ -165,7 +138,6 @@ def login_user(request):
         user = CustomUser.objects.filter(email=email).first()
         
         if user and check_password(password, user.password):
-            # Primera fase de autenticación exitosa
             temp_token = generate_temp_token(user)
             
             return JsonResponse({
@@ -177,19 +149,14 @@ def login_user(request):
         
         return JsonResponse({"error": "Credenciales inválidas"}, status=401)
     except Exception as e:
-        print(f"Error en login_user: {str(e)}")
-        traceback.print_exc()
         return JsonResponse({"error": "Error interno del servidor."}, status=500)
 
 @api_view(["POST"])
 def verify_otp(request):
-    """Verifica el código OTP para completar la autenticación"""
     try:
-        # Intentar obtener datos del cuerpo de la solicitud
         if isinstance(request.data, dict):
             data = request.data
         else:
-            # Si request.data no es un diccionario, intentar parsear el cuerpo como JSON
             try:
                 data = json.loads(request.body.decode('utf-8'))
             except json.JSONDecodeError:
@@ -206,9 +173,9 @@ def verify_otp(request):
             return JsonResponse({"error": "Token temporal inválido o expirado."}, status=401)
         
         if verify_otp_code(user, otp_code):
-            # Verificación 2FA exitosa, generar JWT completo
             token = generate_jwt(user)
-            
+
+            LOGGED_IN_USERS[user.id] = token
             return JsonResponse({
                 "token": token,
                 "username": user.username,
@@ -218,13 +185,10 @@ def verify_otp(request):
         
         return JsonResponse({"error": "Código OTP inválido."}, status=401)
     except Exception as e:
-        print(f"Error en verify_otp: {str(e)}")
-        traceback.print_exc()
         return JsonResponse({"error": "Error interno del servidor."}, status=500)
 
 @api_view(["GET"])
 def get_2fa_setup(request):
-    """Obtiene los datos para la configuración de 2FA"""
     try:
         temp_token = request.GET.get("temp_token")
         
@@ -244,37 +208,26 @@ def get_2fa_setup(request):
                 "username": user.username
             }, status=200)
         except Exception as e:
-            traceback.print_exc()
             return JsonResponse({"error": f"Error al generar configuración 2FA: {str(e)}"}, status=500)
     except Exception as e:
-        print(f"Error en get_2fa_setup: {str(e)}")
-        traceback.print_exc()
         return JsonResponse({"error": "Error interno del servidor."}, status=500)
 
 @api_view(["POST"])
 def verify_2fa_setup(request):
-    """Verifica la configuración inicial de 2FA y completa el registro"""
-    print("Recibida solicitud verify_2fa_setup")
     try:
-        print("1")
-        # Intentar obtener datos del cuerpo de la solicitud
         if isinstance(request.data, dict):
             data = request.data
         else:
-            # Si request.data no es un diccionario, intentar parsear el cuerpo como JSON
-            print("2")
             try:
                 data = json.loads(request.body.decode('utf-8'))
                 print(f"Datos decodificados: {json.dumps(data)}")
             except json.JSONDecodeError as e:
                 print(f"Error decodificando JSON: {str(e)}")
                 return JsonResponse({"error": "Formato de solicitud inválido."}, status=400)
-        print("3")
+
         temp_token = data.get("temp_token")
         otp_code = data.get("otp_code")
-        client_secret_key = data.get("secret_key")  # Nueva: clave generada por el cliente
-        
-        print(f"Token recibido: {temp_token[:15]}... OTP: {otp_code}, Secret key: {client_secret_key[:5]}...")
+        client_secret_key = data.get("secret_key")
         
         if not temp_token or not otp_code:
             return JsonResponse({"error": "Token temporal y código OTP son requeridos."}, status=400)
@@ -283,45 +236,33 @@ def verify_2fa_setup(request):
         if not user:
             return JsonResponse({"error": "Token temporal inválido o expirado."}, status=401)
         
-        # Si recibimos una clave secreta del cliente, la usamos para crear/actualizar el dispositivo TOTP
         if client_secret_key:
             try:
-                print("Creando nuevo dispositivo TOTP con clave del cliente")
-                
-                # Buscar dispositivos existentes
                 devices = TOTPDevice.objects.devices_for_user(user)
-                # Eliminar dispositivos existentes
                 for device in devices:
                     device.delete()
                 
-                # Convertir la clave Base32 a bytes, luego a hexadecimal para almacenar
-                # Primero añadir padding si es necesario
                 padded_key = client_secret_key + '=' * ((8 - len(client_secret_key) % 8) % 8)
                 binary_key = base64.b32decode(padded_key)
-                hex_key = binary_key.hex()  # Convertir a hexadecimal
+                hex_key = binary_key.hex()
                 
-                # Crear nuevo dispositivo con la clave hexadecimal
+
                 device = TOTPDevice.objects.create(
                     user=user,
                     name="default",
                     confirmed=True,
-                    key=hex_key  # Guardar como string hexadecimal
+                    key=hex_key
                 )
-                
-                print(f"Dispositivo creado. Verificando código: {otp_code}")
-                
-                # Verificamos el código directamente
+
                 if device.verify_token(otp_code):
-                    # Actualizar estado 2FA del usuario
                     user.two_factor_enabled = True
                     user.two_factor_setup_required = False
                     user.temp_token = None
                     user.save()
                     
-                    # Generar JWT completo
                     token = generate_jwt(user)
                     
-                    print("Verificación exitosa. Generando token JWT.")
+                    LOGGED_IN_USERS[user.id] = token
                     
                     return JsonResponse({
                         "token": token,
@@ -330,19 +271,15 @@ def verify_2fa_setup(request):
                         "message": "Configuración 2FA completada exitosamente"
                     }, status=200)
                 else:
-                    print("Código OTP inválido")
                     return JsonResponse({"error": "Código OTP inválido."}, status=401)
                     
             except Exception as e:
-                print(f"Error al configurar dispositivo TOTP: {str(e)}")
-                traceback.print_exc()
-                return JsonResponse({"error": f"Error al configurar dispositivo TOTP: {str(e)}"}, status=500)  # Código de estado corregido
+                return JsonResponse({"error": f"Error al configurar dispositivo TOTP: {str(e)}"}, status=500)
         
-        # Comportamiento original (solo como fallback)
         if verify_otp_code(user, otp_code):
-            # Verificación 2FA exitosa, generar JWT completo
             token = generate_jwt(user)
             
+            LOGGED_IN_USERS[user.id] = token
             return JsonResponse({
                 "token": token,
                 "username": user.username,
@@ -352,30 +289,27 @@ def verify_2fa_setup(request):
         
         return JsonResponse({"error": "Código OTP inválido."}, status=401)
     except Exception as e:
-        print(f"Error general en verify_2fa_setup: {str(e)}")
-        traceback.print_exc()
         return JsonResponse({"error": "Error interno del servidor."}, status=500)
 
 @api_view(["GET"])
 def get_csrf_token(request):
     response = JsonResponse({"csrfToken": get_token(request)})
     response["Access-Control-Allow-Credentials"] = "true"
-    # Permitir los orígenes específicos
     origin = request.headers.get('Origin', '')
     allowed_origins = ["https://localhost:8443", "https://localhost:8441"]
     
     if origin in allowed_origins:
         response["Access-Control-Allow-Origin"] = origin
     else:
-        response["Access-Control-Allow-Origin"] = "https://localhost:8443"  # Por defecto
+        response["Access-Control-Allow-Origin"] = "https://localhost:8443"
         
     response.set_cookie(
         "csrftoken",
         get_token(request),
-        max_age=60 * 60,  # 1 hora
-        secure=True,  # Solo HTTPS
-        httponly=False,  # Accesible por JavaScript
-        samesite="None"  # Permitir en peticiones cross-origin
+        max_age=60 * 60,
+        secure=True,
+        httponly=False,
+        samesite="Lax"
     )
     return response
 
@@ -393,27 +327,14 @@ def generate_temp_token(user):
         'username': user.username,
         'email': user.email,
         'temp_auth': True,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=15)  # Expira en 15 minutos
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
     }
     temp_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     
-    # Guardar el token temporal en el usuario
     user.temp_token = temp_token
     user.save()
     
     return temp_token
-
-def generate_jwt(user):
-    """Genera un JWT completo para el usuario autenticado con 2FA"""
-    payload = {
-        'id': user.id,
-        'username': user.username,
-        'email': user.email,
-        'image_url': user.image_url,
-        'two_factor_verified': True,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
-    }
-    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 def get_user_by_temp_token(token):
     """Obtiene un usuario a partir de un token temporal"""
@@ -444,12 +365,10 @@ def generate_qr_code_for_user(user):
     try:
         device = user.get_or_create_totp_device()
         
-        # Configurar el dispositivo si no está confirmado
         if not device.confirmed:
             device.confirmed = True
             device.save()
         
-        # Generar la URL para aplicaciones de autenticación
         url = device.config_url
         
         return {
@@ -457,8 +376,6 @@ def generate_qr_code_for_user(user):
             'secret_key': base64.b32encode(device.bin_key).decode('utf-8')
         }
     except Exception as e:
-        print(f"Error generando QR para usuario: {str(e)}")
-        traceback.print_exc()
         raise
 
 def verify_otp_code(user, otp_code):
@@ -477,8 +394,6 @@ def verify_otp_code(user, otp_code):
                 
         return False
     except Exception as e:
-        print(f"Error verificando código OTP: {str(e)}")
-        traceback.print_exc()
         return False
     user = CustomUser.objects.filter(email=email).first()
     
@@ -508,8 +423,6 @@ def get_user_token(request):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user_id = payload.get("id")
-
-        # 🔹 Validar que el usuario sigue autenticado
         if user_id not in LOGGED_IN_USERS or LOGGED_IN_USERS[user_id] != token:
             return JsonResponse({"error": "Unauthorized"}, status=401)
 
